@@ -44,9 +44,9 @@ public class GameMenuSkipButton extends Actor {
         this.height = height;
         this.width = width;
 
-        outlinedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/skip-button/Skip Button.png"));
-        hoverButtonTexture = new Texture(Gdx.files.internal("./custom-ui/skip-button/Skip Button Hover.png"));
-        focusedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/skip-button/Skip Button Pressed.png"));
+        outlinedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/skip-button/Skip-Button.png"));
+        hoverButtonTexture = new Texture(Gdx.files.internal("./custom-ui/skip-button/Skip-Button-Hovered.png"));
+        focusedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/skip-button/Skip-Button-Pressed.png"));
 
         super.setBounds(positionX + 10f, positiveY + 10f, outlinedButtonTexture.getWidth(), hoverButtonTexture.getHeight());
         super.addListener(new ClickListener(){
@@ -85,17 +85,17 @@ public class GameMenuSkipButton extends Actor {
 
         if (focused) {
             batch.draw(focusedButtonTexture, positionX + 10f, positiveY + 10f,
-                    height * 200f/75f,
+                    height * 8f/5f,
                     height);
         }
         else if (hover) {
             batch.draw(hoverButtonTexture, positionX + 10f, positiveY + 10f,
-                    height * 200f/75f,
+                    height * 8f/5f,
                     height);
         }
         else {
             batch.draw(outlinedButtonTexture, positionX + 10f, positiveY + 10f,
-                    height * 200f/75f,
+                    height * 8f/5f,
                     height);
         }
 
@@ -108,7 +108,7 @@ public class GameMenuSkipButton extends Actor {
     public void setPositionX(float positionX) {
         this.positionX = positionX;
         super.setBounds(positionX + 10f, positiveY + 10f,
-                height * 200f/75f,
+                height * 8f/5f,
                 height);
     }
 
@@ -119,7 +119,7 @@ public class GameMenuSkipButton extends Actor {
     public void setPositiveY(float positiveY) {
         this.positiveY = positiveY;
         super.setBounds(positionX + 10f, positiveY + 10f,
-                height * 200f/75f,
+                height * 8f/5f,
                 height);
     }
 
@@ -132,7 +132,7 @@ public class GameMenuSkipButton extends Actor {
     public void setHeight(float height) {
         this.height = height;
         super.setBounds(positionX + 10f, positiveY + 10f,
-                height * 200f/75f,
+                height * 8f/5f,
                 height);
     }
 
@@ -145,7 +145,7 @@ public class GameMenuSkipButton extends Actor {
     public void setWidth(float width) {
         this.width = width;
         super.setBounds(positionX + 10f, positiveY + 10f,
-                height * 200f/75f,
+                height * 8f/5f,
                 height);
     }
 

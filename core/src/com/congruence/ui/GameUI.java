@@ -134,16 +134,16 @@ public class GameUI implements Screen {
 
         gameMenuBackground = new GameMenuBackground(
                 10f,
-                3 * tileHeight + 30f,
+                2 * tileHeight + 30f,
                 tileHeight,
                 ((GameConfiguration.width) - (GameConfiguration.height)) / 2f - 20f
         );
         stage.addActor(gameMenuBackground);
         skipButton = new GameMenuSkipButton(
                 10f,
-                3.5f * tileHeight + 30f,
-                0.5f * tileHeight,
-                ((GameConfiguration.width) - (GameConfiguration.height)) / 2f - 20f
+                2 * tileHeight + 30f,
+                0.33f * ( 2* tileHeight + 10f)-5f,
+                ((GameConfiguration.width) - (GameConfiguration.height)) / 2f
         );
         stage.addActor(skipButton);
         treasureDeckPile = new TreasureDeckPile(
@@ -253,14 +253,14 @@ public class GameUI implements Screen {
         }
 
         gameMenuBackground.setPositionX(10f);
-        gameMenuBackground.setPositiveY(2*tileHeight + 30f);
+        gameMenuBackground.setPositiveY(2 * tileHeight + 30f);
         gameMenuBackground.setHeight(2*tileHeight + 10f);
         gameMenuBackground.setWidth(((GameConfiguration.width) - (GameConfiguration.height)) / 2f - 20f);
 
         skipButton.setPositionX(10f);
-        skipButton.setPositiveY(3.5f*tileHeight + 40f);
-        skipButton.setHeight(0.5f * tileHeight);
-        skipButton.setWidth(((GameConfiguration.width) - (GameConfiguration.height)) / 2f - 20f);
+        skipButton.setPositiveY(2 * tileHeight + 30f);
+        skipButton.setHeight(0.33f * ( 2* tileHeight + 10f)-5f);
+        skipButton.setWidth(((GameConfiguration.width) - (GameConfiguration.height)) / 2f);
 
         treasureDeckPile.setPositionX(((GameConfiguration.width - 10f) + ((GameConfiguration.width - 10f) - ((GameConfiguration.width) - (GameConfiguration.height)) / 2f)) /2f - tileHeight * 8f / 10f);
         treasureDeckPile.setPositionY( 2 * tileHeight + 30f );
