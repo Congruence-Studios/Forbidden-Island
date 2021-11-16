@@ -6,24 +6,20 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.congruence.GameConfiguration;
-import com.congruence.state.GameState;
 
-public class GameMenuSkipButton extends Actor {
+public class GameMenuTurnInfo extends Actor {
 
     private boolean hover;
 
     private boolean focused;
 
-    private Texture outlinedButtonTexture;
+    private BitmapFont font;
 
-    private Texture hoverButtonTexture;
-
-    private Texture focusedButtonTexture;
+    private String text;
 
     private float positionX;
 
@@ -33,25 +29,25 @@ public class GameMenuSkipButton extends Actor {
 
     private float width;
 
-    public GameMenuSkipButton(
+    public GameMenuTurnInfo(
             float positionX,
             float positionY,
             float height,
-            float width
+            float width,
+            String text
     ) {
         this.positionX = positionX;
         this.positiveY = positionY;
         this.height = height;
         this.width = width;
+        this.text = text;
 
-        outlinedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/skip-button/Skip-Button.png"));
-        hoverButtonTexture = new Texture(Gdx.files.internal("./custom-ui/skip-button/Skip-Button-Hovered.png"));
-        focusedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/skip-button/Skip-Button-Pressed.png"));
-        outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Abel-Regular.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 20;
+        font = generator.generateFont(parameter);
+        generator.dispose();
 
-        super.setBounds(positionX + 10f, positiveY + 10f, outlinedButtonTexture.getWidth(), hoverButtonTexture.getHeight());
         super.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -86,21 +82,9 @@ public class GameMenuSkipButton extends Actor {
         batch.end();
         batch.begin();
 
-        if (focused) {
-            batch.draw(focusedButtonTexture, positionX + 10f, positiveY + 10f,
-                    height * 8f/5f,
-                    height);
-        }
-        else if (hover) {
-            batch.draw(hoverButtonTexture, positionX + 10f, positiveY + 10f,
-                    height * 8f/5f,
-                    height);
-        }
-        else {
-            batch.draw(outlinedButtonTexture, positionX + 10f, positiveY + 10f,
-                    height * 8f/5f,
-                    height);
-        }
+        GlyphLayout layout = new GlyphLayout(font, text);
+
+        //font.draw(batch, text, positionX, positiveY);
 
     }
 

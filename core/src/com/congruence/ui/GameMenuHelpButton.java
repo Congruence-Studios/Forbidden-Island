@@ -3,17 +3,11 @@ package com.congruence.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.congruence.GameConfiguration;
-import com.congruence.state.GameState;
 
-public class GameMenuSkipButton extends Actor {
+public class GameMenuHelpButton extends Actor {
 
     private boolean hover;
 
@@ -33,7 +27,7 @@ public class GameMenuSkipButton extends Actor {
 
     private float width;
 
-    public GameMenuSkipButton(
+    public GameMenuHelpButton(
             float positionX,
             float positionY,
             float height,
@@ -44,9 +38,9 @@ public class GameMenuSkipButton extends Actor {
         this.height = height;
         this.width = width;
 
-        outlinedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/skip-button/Skip-Button.png"));
-        hoverButtonTexture = new Texture(Gdx.files.internal("./custom-ui/skip-button/Skip-Button-Hovered.png"));
-        focusedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/skip-button/Skip-Button-Pressed.png"));
+        outlinedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/help-button/Help-Button.png"));
+        hoverButtonTexture = new Texture(Gdx.files.internal("./custom-ui/help-button/Help-Button-Hovered.png"));
+        focusedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/help-button/Help-Button-Pressed.png"));
         outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);

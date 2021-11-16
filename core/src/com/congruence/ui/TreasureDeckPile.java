@@ -4,12 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class TreasureDeckPile extends Actor {
 
-    private boolean hovered;
+    private boolean hover;
 
     private boolean focused;
+
+    private boolean enabled;
 
     private float positionX;
 
@@ -19,9 +23,13 @@ public class TreasureDeckPile extends Actor {
 
     private float treasureDeckHeight;
 
-    private Texture treasureDeckTexture;
+    private Texture outlinedButtonTexture;
 
-    private Texture hoveredTreasureDeckTreasure;
+    private Texture hoverButtonTexture;
+
+    private Texture focusedButtonTexture;
+
+    private Texture disabledButtonTexture;
 
     public TreasureDeckPile(
             float positionX,
@@ -33,24 +41,70 @@ public class TreasureDeckPile extends Actor {
         this.positionY = positionY;
         this.treasureDeckWidth = width;
         this.treasureDeckHeight = height;
-        treasureDeckTexture = new Texture(Gdx.files.internal("./treasure-deck/Treasure-Deck.png"));
-        hoveredTreasureDeckTreasure = new Texture(Gdx.files.internal("./treasure-deck/Treasure-Deck-Hovered.png"));
+        outlinedButtonTexture = new Texture(Gdx.files.internal("./treasure-deck/Treasure-Deck.png"));
+        hoverButtonTexture = new Texture(Gdx.files.internal("./treasure-deck/Treasure-Deck-Hovered.png"));
+        focusedButtonTexture = new Texture(Gdx.files.internal("./treasure-deck/Treasure-Deck-Pressed.png"));
+        disabledButtonTexture = new Texture(Gdx.files.internal("./treasure-deck/Treasure-Deck-Disabled.png"));
+        outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         super.setBounds(this.positionX, this.positionY, this.treasureDeckWidth, this.treasureDeckHeight);
+        super.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //focused = !focused;
+            }
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                focused = true;
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                focused = false;
+            }
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                hover = true;
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                hover = false;
+            }
+        });
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.end();
         batch.begin();
-        if (focused) {
-            batch.draw(treasureDeckTexture, positionX, positionY, treasureDeckHeight * 8f/5f, treasureDeckHeight);
+
+        if (!enabled) {
+            batch.draw(disabledButtonTexture, positionX + 10f, positionY + 10f,
+                    treasureDeckHeight * 8f/5f,
+                    treasureDeckHeight);
         }
-        else if (hovered) {
-            batch.draw(hoveredTreasureDeckTreasure, positionX, positionY, treasureDeckHeight * 8f/5f, treasureDeckHeight);
+        else if (focused) {
+            batch.draw(focusedButtonTexture, positionX + 10f, positionY + 10f,
+                    treasureDeckHeight * 8f/5f,
+                    treasureDeckHeight);
+        }
+        else if (hover) {
+            batch.draw(hoverButtonTexture, positionX + 10f, positionY + 10f,
+                    treasureDeckHeight * 8f/5f,
+                    treasureDeckHeight);
         }
         else {
-            batch.draw(treasureDeckTexture, positionX, positionY, treasureDeckHeight * 8f/5f, treasureDeckHeight);
+            batch.draw(outlinedButtonTexture, positionX + 10f, positionY + 10f,
+                    treasureDeckHeight * 8f/5f,
+                    treasureDeckHeight);
         }
+
     }
 
     public float getPositionX() {
@@ -89,12 +143,12 @@ public class TreasureDeckPile extends Actor {
         super.setBounds(this.positionX, this.positionY,treasureDeckHeight * 8f/5f, this.treasureDeckHeight);
     }
 
-    public boolean isHovered() {
-        return hovered;
+    public boolean isHover() {
+        return hover;
     }
 
-    public void setHovered(boolean hovered) {
-        this.hovered = hovered;
+    public void setHover(boolean hover) {
+        this.hover = hover;
     }
 
     public boolean isFocused() {
@@ -103,6 +157,14 @@ public class TreasureDeckPile extends Actor {
 
     public void setFocused(boolean focused) {
         this.focused = focused;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
 }

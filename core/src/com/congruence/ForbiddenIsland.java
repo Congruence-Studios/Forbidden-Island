@@ -81,7 +81,7 @@ public class ForbiddenIsland extends Game {
 				for (int j = 0; j < 6; j++) {
 					if (Resources.DefaultTileOrdering.contains(i + "" + j)) {
 						islandTiles[i][j] = pickedIslandTiles.pop();
-						islandTileState[i][j] = GameState.NORMAL_ISLAND_TILE;
+						islandTileState[i][j] = GameState.FLOODED_ISLAND_TILE;
 					}
 					else {
 						islandTiles[i][j] = null;

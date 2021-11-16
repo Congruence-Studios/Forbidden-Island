@@ -1,50 +1,48 @@
 package com.congruence.ui;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.congruence.GameConfiguration;
 import com.congruence.state.GameState;
 import com.congruence.state.Resources;
 
-import java.util.ArrayList;
 import java.util.Map;
-import java.util.Objects;
 import java.util.TreeMap;
 
 public class GameUI implements Screen {
 
-    private GameState gameState;
+    private final GameState gameState;
 
     private OrthographicCamera camera;
 
-    private Texture backgroundImage;
-
     private Stage stage;
 
-    private BitmapFont startFont;
-
-    private Map<String, IslandTile> islandTiles;
+    private Map<Pair, IslandTile> islandTiles;
 
     private Map<String, Artifact> artifacts;
 
-    private String currentFocusedTile = "";
+    private Pair currentFocusedTile = Pair.INVALID;
 
     private GameMenuSkipButton skipButton;
+
+    private GameMenuShoreUpButton shoreUpButton;
+
+    private GameMenuCollectButton collectButton;
+
+    private GameMenuSwapButton swapButton;
+
+    private GameMenuWaterButton waterButton;
+
+    private GameMenuTurnInfo turnInfo;
 
     private GameMenuBackground gameMenuBackground;
 
@@ -52,7 +50,7 @@ public class GameUI implements Screen {
 
     private FloodDeckPile floodDeckPile;
 
-    public GameUI( GameState gameState ) {
+    public GameUI(GameState gameState) {
         this.gameState = gameState;
     }
 
@@ -65,8 +63,6 @@ public class GameUI implements Screen {
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         ScreenViewport viewport = new ScreenViewport(camera);
-
-        backgroundImage = new Texture("NewWorld_Island.jpg");
 
         stage = new Stage();
         stage.setViewport(viewport);
@@ -85,8 +81,8 @@ public class GameUI implements Screen {
             for (int j = 0; j < gameState.getIslandTiles()[i].length; j++) {
                 positionX -= tileWidth;
                 if (gameState.getIslandTiles()[i][j] != null) {
-                    final IslandTile islandTile = new IslandTile(positionX, positionY, tileWidth, tileHeight, gameState.getIslandTiles()[i][j],i+""+j ,  gameState.getIslandTileState()[i][j]);
-                    islandTiles.put(i + "" + j, islandTile);
+                    final IslandTile islandTile = new IslandTile(positionX, positionY, tileWidth, tileHeight, gameState.getIslandTiles()[i][j], new Pair(i, j), gameState.getIslandTileState()[i][j]);
+                    islandTiles.put(new Pair(i, j), islandTile);
 
                     //Logic for the Actor Events
                     islandTile.addListener(new ClickListener() {
@@ -94,14 +90,15 @@ public class GameUI implements Screen {
                         public void clicked(InputEvent event, float x, float y) {
                             if (GameUI.this.currentFocusedTile.equals(islandTile.getCoordinates())) {
                                 islandTile.setFocused(false);
-                                currentFocusedTile = "";
-                            }
-                            else {
+                                disableShoreUpButton();
+                                currentFocusedTile = Pair.INVALID;
+                            } else {
                                 islandTile.setFocused(true);
-                                if (!GameUI.this.currentFocusedTile.equals("")) {
+                                if (!GameUI.this.currentFocusedTile.isInvalid()) {
                                     GameUI.this.islandTiles.get(currentFocusedTile).setFocused(false);
                                 }
                                 GameUI.this.currentFocusedTile = islandTile.getCoordinates();
+                                enableShoreUpButton(islandTile);
                             }
                         }
 
@@ -115,9 +112,8 @@ public class GameUI implements Screen {
                             islandTile.setHovered(false);
                         }
                     });
-                }
-                else if (Resources.DefaultArtifactMapPlacement.containsKey(i+""+j)) {
-                    artifacts.put(i+""+j, new Artifact(positionX, positionY, tileWidth, tileHeight, Resources.DefaultArtifactMapPlacement.get(i+""+j)));
+                } else if (Resources.DefaultArtifactMapPlacement.containsKey(i + "" + j)) {
+                    artifacts.put(i + "" + j, new Artifact(positionX, positionY, tileWidth, tileHeight, Resources.DefaultArtifactMapPlacement.get(i + "" + j)));
                 }
                 positionX -= 10f;
             }
@@ -125,10 +121,10 @@ public class GameUI implements Screen {
             positionX = (GameConfiguration.width - 10f) - ((GameConfiguration.width) - (GameConfiguration.height)) / 2f;
         }
 
-        for (IslandTile e: islandTiles.values()) {
+        for (IslandTile e : islandTiles.values()) {
             stage.addActor(e);
         }
-        for (Artifact e: artifacts.values()) {
+        for (Artifact e : artifacts.values()) {
             stage.addActor(e);
         }
 
@@ -142,62 +138,75 @@ public class GameUI implements Screen {
         skipButton = new GameMenuSkipButton(
                 10f,
                 2 * tileHeight + 30f,
-                0.33f * ( 2* tileHeight + 10f)-5f,
+                0.33f * (2 * tileHeight + 10f) - 5f,
                 ((GameConfiguration.width) - (GameConfiguration.height)) / 2f
         );
         stage.addActor(skipButton);
-        treasureDeckPile = new TreasureDeckPile(
-                ((GameConfiguration.width - 10f) + ((GameConfiguration.width - 10f) - ((GameConfiguration.width) - (GameConfiguration.height)) / 2f)) /2f - tileHeight * 8f / 10f,
-                2 * tileHeight + 30f,
-                tileHeight,
-                tileHeight
+        shoreUpButton = new GameMenuShoreUpButton(
+                10f,
+                2 * tileHeight + 30f + 0.33f * (2 * tileHeight + 10f) - 5f,
+                0.33f * (2 * tileHeight + 10f) - 5f,
+                ((GameConfiguration.width) - (GameConfiguration.height)) / 2f
         );
-        treasureDeckPile.addListener(new ClickListener() {
+        shoreUpButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                treasureDeckPile.setFocused(!treasureDeckPile.isFocused());
-            }
-
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                treasureDeckPile.setHovered(true);
-            }
-
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                treasureDeckPile.setHovered(false);
+                onShoreUpButtonClick();
             }
         });
+        stage.addActor(shoreUpButton);
+        collectButton = new GameMenuCollectButton(
+                10f + (0.33f * (2 * tileHeight + 10f) - 5f) * 8f / 5f,
+                2 * tileHeight + 30f + 0.33f * (2 * tileHeight + 10f) - 5f,
+                0.33f * (2 * tileHeight + 10f) - 5f,
+                ((GameConfiguration.width) - (GameConfiguration.height)) / 2f
+        );
+        stage.addActor(collectButton);
+        swapButton = new GameMenuSwapButton(
+                10f + (0.33f * (2 * tileHeight + 10f) - 5f) * 8f / 5f,
+                2 * tileHeight + 30f,
+                0.33f * (2 * tileHeight + 10f) - 5f,
+                ((GameConfiguration.width) - (GameConfiguration.height)) / 2f
+        );
+        stage.addActor(swapButton);
+        waterButton = new GameMenuWaterButton(
+                10f + (0.33f * (2 * tileHeight + 10f) - 5f) * 8f / 5f,
+                2 * tileHeight + 30f + 0.66f * (2 * tileHeight + 10f) - 10f,
+                0.33f * (2 * tileHeight + 10f) - 5f,
+                ((GameConfiguration.width) - (GameConfiguration.height)) / 2f
+        );
+        stage.addActor(waterButton);
+        turnInfo = new GameMenuTurnInfo(
+                10f,
+                2 * tileHeight + 30f + 0.66f * (2 * tileHeight + 10f) - 10f,
+                0.33f * (2 * tileHeight + 10f) - 5f,
+                ((GameConfiguration.width) - (GameConfiguration.height)) / 2f,
+                getCurrentPlayerName()
+        );
+        stage.addActor(turnInfo);
+        treasureDeckPile = new TreasureDeckPile(
+                ((GameConfiguration.width - 10f) + ((GameConfiguration.width - 10f) - ((GameConfiguration.width) - (GameConfiguration.height)) / 2f)) / 2f - tileHeight * 8f / 10f,
+                2 * tileHeight + 30f,
+                tileWidth,
+                tileHeight
+        );
         stage.addActor(treasureDeckPile);
         floodDeckPile = new FloodDeckPile(
-                ((GameConfiguration.width - 10f) + ((GameConfiguration.width - 10f) - ((GameConfiguration.width) - (GameConfiguration.height)) / 2f)) /2f - tileHeight * 8f / 10f,
+                ((GameConfiguration.width - 10f) + ((GameConfiguration.width - 10f) - ((GameConfiguration.width) - (GameConfiguration.height)) / 2f)) / 2f - tileHeight * 8f / 10f,
                 3 * tileHeight + 40f,
-                tileHeight,
+                tileWidth,
                 tileHeight
         );
-        floodDeckPile.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                floodDeckPile.setFocused(!treasureDeckPile.isFocused());
-            }
-
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                floodDeckPile.setHovered(true);
-            }
-
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                floodDeckPile.setHovered(false);
-            }
-        });
         stage.addActor(floodDeckPile);
+
+        floodDeckPile.setEnabled(true);
+        treasureDeckPile.setEnabled(true);
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(18/255f, 18/255f, 18/255f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling?GL20.GL_COVERAGE_BUFFER_BIT_NV:0));
+        Gdx.gl.glClearColor(18 / 255f, 18 / 255f, 18 / 255f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
         stage.act();
         stage.getBatch().begin();
         stage.getBatch().end();
@@ -208,8 +217,7 @@ public class GameUI implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.F) || Gdx.input.isKeyJustPressed(Input.Keys.F11)) {
             if (!Gdx.graphics.isFullscreen()) {
                 Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-            }
-            else {
+            } else {
                 Gdx.graphics.setWindowedMode(1280, 720);
             }
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
@@ -233,13 +241,12 @@ public class GameUI implements Screen {
             for (int j = 0; j < 6; j++) {
                 positionX -= tileWidth;
                 if (gameState.getIslandTiles()[i][j] != null) {
-                    IslandTile e = islandTiles.get(i + "" + j);
+                    IslandTile e = islandTiles.get(new Pair(i, j));
                     e.setPositionX(positionX);
                     e.setPositionY(positionY);
                     e.setIslandWidth(tileWidth);
                     e.setIslandHeight(tileHeight);
-                }
-                else if (Resources.DefaultArtifactMapPlacement.containsKey(i+""+j)) {
+                } else if (Resources.DefaultArtifactMapPlacement.containsKey(i + "" + j)) {
                     Artifact e = artifacts.get(i + "" + j);
                     e.setPositionX(positionX);
                     e.setPositionY(positionY);
@@ -254,21 +261,46 @@ public class GameUI implements Screen {
 
         gameMenuBackground.setPositionX(10f);
         gameMenuBackground.setPositiveY(2 * tileHeight + 30f);
-        gameMenuBackground.setHeight(2*tileHeight + 10f);
+        gameMenuBackground.setHeight(2 * tileHeight + 10f);
         gameMenuBackground.setWidth(((GameConfiguration.width) - (GameConfiguration.height)) / 2f - 20f);
 
         skipButton.setPositionX(10f);
         skipButton.setPositiveY(2 * tileHeight + 30f);
-        skipButton.setHeight(0.33f * ( 2* tileHeight + 10f)-5f);
+        skipButton.setHeight(0.33f * (2 * tileHeight + 10f) - 5f);
         skipButton.setWidth(((GameConfiguration.width) - (GameConfiguration.height)) / 2f);
 
-        treasureDeckPile.setPositionX(((GameConfiguration.width - 10f) + ((GameConfiguration.width - 10f) - ((GameConfiguration.width) - (GameConfiguration.height)) / 2f)) /2f - tileHeight * 8f / 10f);
-        treasureDeckPile.setPositionY( 2 * tileHeight + 30f );
+        shoreUpButton.setPositionX(10f);
+        shoreUpButton.setPositiveY(2 * tileHeight + 30f + 0.33f * (2 * tileHeight + 10f) - 5f);
+        shoreUpButton.setHeight(0.33f * (2 * tileHeight + 10f) - 5f);
+        shoreUpButton.setWidth(((GameConfiguration.width) - (GameConfiguration.height)) / 2f);
+
+        collectButton.setPositionX(10f + (0.33f * (2 * tileHeight + 10f) - 5f) * 8f / 5f);
+        collectButton.setPositiveY(2 * tileHeight + 30f + 0.33f * (2 * tileHeight + 10f) - 5f);
+        collectButton.setHeight(0.33f * (2 * tileHeight + 10f) - 5f);
+        collectButton.setWidth(((GameConfiguration.width) - (GameConfiguration.height)) / 2f);
+
+        swapButton.setPositionX(10f + (0.33f * (2 * tileHeight + 10f) - 5f) * 8f / 5f);
+        swapButton.setPositiveY(2 * tileHeight + 30f);
+        swapButton.setHeight(0.33f * (2 * tileHeight + 10f) - 5f);
+        swapButton.setWidth(((GameConfiguration.width) - (GameConfiguration.height)) / 2f);
+
+        waterButton.setPositionX(10f + (0.33f * (2 * tileHeight + 10f) - 5f) * 8f / 5f);
+        waterButton.setPositiveY(2 * tileHeight + 30f + 0.66f * (2 * tileHeight + 10f) - 10f);
+        waterButton.setHeight(0.33f * (2 * tileHeight + 10f) - 5f);
+        waterButton.setWidth(((GameConfiguration.width) - (GameConfiguration.height)) / 2f);
+
+        turnInfo.setPositionX(10f);
+        turnInfo.setPositiveY(2 * tileHeight + 30f + 0.66f * (2 * tileHeight + 10f) - 10f);
+        turnInfo.setHeight(0.33f * (2 * tileHeight + 10f) - 5f);
+        turnInfo.setWidth(((GameConfiguration.width) - (GameConfiguration.height)) / 2f);
+
+        treasureDeckPile.setPositionX(((GameConfiguration.width - 10f) + ((GameConfiguration.width - 10f) - ((GameConfiguration.width) - (GameConfiguration.height)) / 2f)) / 2f - tileHeight * 8f / 10f);
+        treasureDeckPile.setPositionY(2 * tileHeight + 30f);
         treasureDeckPile.setTreasureDeckHeight(tileHeight);
         treasureDeckPile.setTreasureDeckWidth(tileHeight);
 
-        floodDeckPile.setPositionX(((GameConfiguration.width - 10f) + ((GameConfiguration.width - 10f) - ((GameConfiguration.width) - (GameConfiguration.height)) / 2f)) /2f - tileHeight * 8f / 10f);
-        floodDeckPile.setPositionY( 3 * tileHeight + 40f );
+        floodDeckPile.setPositionX(((GameConfiguration.width - 10f) + ((GameConfiguration.width - 10f) - ((GameConfiguration.width) - (GameConfiguration.height)) / 2f)) / 2f - tileHeight * 8f / 10f);
+        floodDeckPile.setPositionY(3 * tileHeight + 40f);
         floodDeckPile.setFloodDeckHeight(tileHeight);
         floodDeckPile.setFloodDeckHeight(tileHeight);
 
@@ -294,7 +326,37 @@ public class GameUI implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        backgroundImage.dispose();
+    }
+
+    public void enableShoreUpButton(IslandTile e) {
+        int x = e.getCoordinates().x;
+        int y = e.getCoordinates().y;
+        if (gameState.getIslandTileState()[x][y] == GameState.FLOODED_ISLAND_TILE) {
+            shoreUpButton.setEnabled(true);
+        }
+        else {
+            shoreUpButton.setEnabled(false);
+        }
+    }
+
+    public void disableShoreUpButton() {
+        shoreUpButton.setEnabled(false);
+    }
+
+    public void onShoreUpButtonClick() {
+        int x = currentFocusedTile.x;
+        int y = currentFocusedTile.y;
+        gameState.getIslandTileState()[x][y] = GameState.NORMAL_ISLAND_TILE;
+        islandTiles.get(currentFocusedTile).setTileState(GameState.NORMAL_ISLAND_TILE);
+        shoreUpButton.setEnabled(false);
+    }
+
+    public String getCurrentPlayerName() {
+        String pName = gameState.getPlayerOrder().get(gameState.getTurnNumber());
+        if (pName == null) {
+            return "Player " + gameState.getTurnNumber();
+        }
+        else return pName;
     }
 
 }

@@ -20,7 +20,7 @@ public class IslandTile extends Actor {
 
     private String tileName;
 
-    private String coordinates;
+    private Pair coordinates;
 
     private int tileState;
 
@@ -52,7 +52,7 @@ public class IslandTile extends Actor {
             float width,
             float height,
             String tileName,
-            String coordinates,
+            Pair coordinates,
             int tileState
     ) {
         this.positionX = positionX;
@@ -195,11 +195,11 @@ public class IslandTile extends Actor {
         this.islandTileNormalImage = islandTileNormalImage;
     }
 
-    public String getCoordinates() {
+    public Pair getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(String coordinates) {
+    public void setCoordinates(Pair coordinates) {
         this.coordinates = coordinates;
     }
 

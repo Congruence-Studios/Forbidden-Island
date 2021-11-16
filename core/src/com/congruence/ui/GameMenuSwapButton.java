@@ -3,27 +3,25 @@ package com.congruence.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.congruence.GameConfiguration;
-import com.congruence.state.GameState;
 
-public class GameMenuSkipButton extends Actor {
+public class GameMenuSwapButton extends Actor {
 
     private boolean hover;
 
     private boolean focused;
+
+    private boolean enabled;
 
     private Texture outlinedButtonTexture;
 
     private Texture hoverButtonTexture;
 
     private Texture focusedButtonTexture;
+
+    private Texture disabledButtonTexture;
 
     private float positionX;
 
@@ -33,7 +31,7 @@ public class GameMenuSkipButton extends Actor {
 
     private float width;
 
-    public GameMenuSkipButton(
+    public GameMenuSwapButton(
             float positionX,
             float positionY,
             float height,
@@ -44,12 +42,14 @@ public class GameMenuSkipButton extends Actor {
         this.height = height;
         this.width = width;
 
-        outlinedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/skip-button/Skip-Button.png"));
-        hoverButtonTexture = new Texture(Gdx.files.internal("./custom-ui/skip-button/Skip-Button-Hovered.png"));
-        focusedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/skip-button/Skip-Button-Pressed.png"));
+        outlinedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/give-button/Give-Button.png"));
+        hoverButtonTexture = new Texture(Gdx.files.internal("./custom-ui/give-button/Give-Button-Hovered.png"));
+        focusedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/give-button/Give-Button-Pressed.png"));
+        disabledButtonTexture = new Texture(Gdx.files.internal("./custom-ui/give-button/Give-Button-Disabled.png"));
         outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         super.setBounds(positionX + 10f, positiveY + 10f, outlinedButtonTexture.getWidth(), hoverButtonTexture.getHeight());
         super.addListener(new ClickListener(){
@@ -86,7 +86,12 @@ public class GameMenuSkipButton extends Actor {
         batch.end();
         batch.begin();
 
-        if (focused) {
+        if (!enabled) {
+            batch.draw(disabledButtonTexture, positionX + 10f, positiveY + 10f,
+                    height * 8f/5f,
+                    height);
+        }
+        else if (focused) {
             batch.draw(focusedButtonTexture, positionX + 10f, positiveY + 10f,
                     height * 8f/5f,
                     height);
@@ -150,6 +155,14 @@ public class GameMenuSkipButton extends Actor {
         super.setBounds(positionX + 10f, positiveY + 10f,
                 height * 8f/5f,
                 height);
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
 }

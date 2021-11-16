@@ -33,8 +33,8 @@ public class Artifact extends Actor {
         this.artifactWidth = width;
         this.artifactHeight = height;
         this.artifactName = artifactName;
-        artifactTexture = new Texture(Gdx.files.internal("./artifacts/" + artifactName + ".png"), true);
-        artifactTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        artifactTexture = new Texture(Gdx.files.internal("./artifacts/" + artifactName + ".png"));
+        artifactTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         super.setBounds(this.positionX, this.positionY, this.artifactWidth, this.artifactHeight);
     }
 
