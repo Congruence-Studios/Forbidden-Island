@@ -80,6 +80,7 @@ public class StartMenu implements Screen {
         difficultlySelect = new SelectBox<String>(neonUISkin);
         difficultlySelect.setItems("Novice", "Expert", "FGI");
         difficultlySelect.setSelected("Novice");
+        difficultlySelect.setSize(120, 50);
         stage.addActor(difficultlySelect);
     }
 
