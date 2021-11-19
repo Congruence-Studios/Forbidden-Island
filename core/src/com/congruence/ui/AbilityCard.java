@@ -28,13 +28,13 @@ public class AbilityCard extends Actor {
 
     private Texture islandTileSunkenImage;
 
-    private static final Texture islandTileMovementImage = new Texture(Gdx.files.internal("./island-tiles/Tile_Movement_Icon@2x.png"));
+    private static final Texture islandTileMovementImage = new Texture(Gdx.files.internal("./ability/Tile_Movement_Icon@2x.png"));
 
-    private static final Texture islandTileHoverImage = new Texture(Gdx.files.internal("./island-tiles/Tile_Hover_Icon@2x.png"));
+    private static final Texture islandTileHoverImage = new Texture(Gdx.files.internal("./ability/Tile_Hover_Icon@2x.png"));
 
-    private static final Texture islandTileFocusedImage = new Texture(Gdx.files.internal("./island-tiles/Tile_Focused_Icon@2x.png"));
+    private static final Texture islandTileFocusedImage = new Texture(Gdx.files.internal("./ability/Tile_Focused_Icon@2x.png"));
 
-    private static final Texture islandTileSpecialMovementImage = new Texture(Gdx.files.internal("./island-tiles/Tile_Special_Movement_Icon@2x.png"));
+    private static final Texture islandTileSpecialMovementImage = new Texture(Gdx.files.internal("./ability/Tile_Special_Movement_Icon@2x.png"));
 
     private boolean focused;
 
@@ -60,9 +60,9 @@ public class AbilityCard extends Actor {
         this.tileName = tileName;
         this.coordinates = coordinates;
         this.tileState = tileState;
-        islandTileNormalImage = new Texture(Gdx.files.internal("./island-tiles/" + tileName + "@2x.png"));
-        islandTileFloodedImage = new Texture(Gdx.files.internal("./island-tiles/" + tileName + "_flood@2x.png"));
-        islandTileSunkenImage = new Texture(Gdx.files.internal("./island-tiles/Sunken-Tile.png"));
+        islandTileNormalImage = new Texture(Gdx.files.internal("./ability/" + tileName + "@2x.png"));
+        islandTileFloodedImage = new Texture(Gdx.files.internal("./ability/" + tileName + "_flood@2x.png"));
+        islandTileSunkenImage = new Texture(Gdx.files.internal("./ability/Sunken-Tile.png"));
         islandTileNormalImage.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         islandTileFloodedImage.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         islandTileSunkenImage.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -117,32 +117,6 @@ public class AbilityCard extends Actor {
     public void setPositionY(float positionY) {
         this.positionY = positionY;
         super.setBounds(this.positionX, this.positionY, this.islandWidth, this.islandHeight);
-    }
-
-    public float getIslandWidth() {
-        return islandWidth;
-    }
-
-    public void setIslandWidth(float islandWidth) {
-        this.islandWidth = islandWidth;
-        super.setBounds(this.positionX, this.positionY, this.islandWidth, this.islandHeight);
-    }
-
-    public float getIslandHeight() {
-        return islandHeight;
-    }
-
-    public void setIslandHeight(float islandHeight) {
-        this.islandHeight = islandHeight;
-        super.setBounds(this.positionX, this.positionY, this.islandWidth, this.islandHeight);
-    }
-
-    public int getTileState() {
-        return tileState;
-    }
-
-    public void setTileState(int tileState) {
-        this.tileState = tileState;
     }
 
     public boolean isFocused() {
