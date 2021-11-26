@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.congruence.state.GameState;
+import com.congruence.state.Player;
 
 public class PlayerHand extends Actor {
 
@@ -14,66 +15,42 @@ public class PlayerHand extends Actor {
 
     private float positionY;
 
-    private float islandWidth;
+    private float height;
 
-    private float islandHeight;
+    private float width;
 
-    private String tileName;
-
-    private Pair coordinates;
-
-    private int tileState;
-
-    private Texture islandTileNormalImage;
-
-    private Texture islandTileFloodedImage;
-
-    private Texture islandTileSunkenImage;
-
-    private static final Texture islandTileMovementImage = new Texture(Gdx.files.internal("./island-tiles/Tile_Movement_Icon@2x.png"));
-
-    private static final Texture islandTileHoverImage = new Texture(Gdx.files.internal("./island-tiles/Tile_Hover_Icon@2x.png"));
-
-    private static final Texture islandTileFocusedImage = new Texture(Gdx.files.internal("./island-tiles/Tile_Focused_Icon@2x.png"));
-
-    private static final Texture islandTileSpecialMovementImage = new Texture(Gdx.files.internal("./island-tiles/Tile_Special_Movement_Icon@2x.png"));
-
-    private boolean focused;
+    private Player player;
 
     private boolean hovered;
 
-    private boolean canMove;
+    private boolean focused;
 
-    private boolean canMoveSpecialAction;
+    private boolean enabled;
+
+    private Texture outlinedButtonTexture;
+
+    private Texture hoverButtonTexture;
+
+    private Texture focusedButtonTexture;
+
+    private boolean[] collectedTreasures;
 
     public PlayerHand(
             float positionX,
             float positionY,
-            float width,
-            float height,
-            String tileName,
-            Pair coordinates,
-            int tileState
+            Player player
     ) {
         this.positionX = positionX;
         this.positionY = positionY;
-        this.islandWidth = width;
-        this.islandHeight = height;
-        this.tileName = tileName;
-        this.coordinates = coordinates;
-        this.tileState = tileState;
-        islandTileNormalImage = new Texture(Gdx.files.internal("./island-tiles/" + tileName + "@2x.png"));
-        islandTileFloodedImage = new Texture(Gdx.files.internal("./island-tiles/" + tileName + "_flood@2x.png"));
-        islandTileSunkenImage = new Texture(Gdx.files.internal("./island-tiles/Sunken-Tile.png"));
-        islandTileNormalImage.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        islandTileFloodedImage.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        islandTileSunkenImage.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        islandTileMovementImage.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        islandTileHoverImage.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        islandTileFocusedImage.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        islandTileSpecialMovementImage.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        this.player = player;
+        outlinedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/player-hand/Player-Hand-Button.png"));
+        hoverButtonTexture = new Texture(Gdx.files.internal("./custom-ui/player-hand/Player-Hand-Button-Hovered.png"));
+        focusedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/player-hand/Player-Hand-Button-Pressed.png"));
+        outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
-        super.setBounds(this.positionX, this.positionY, this.islandWidth, this.islandHeight);
+        super.setBounds(this.positionX, this.positionY, this.width, this.height);
     }
 
     @Override
@@ -81,10 +58,12 @@ public class PlayerHand extends Actor {
         batch.end();
         batch.begin();
         if (hovered) {
-            batch.draw(islandTileHoverImage, positionX-2, positionY+3, islandWidth, islandHeight);
+            batch.draw(hoverButtonTexture, positionX, positionY, width, height);
         }
         else if (focused) {
-            batch.draw(islandTileFocusedImage, positionX-2, positionY+3, islandWidth, islandHeight);
+            batch.draw(focusedButtonTexture, positionX, positionY, width, height);
+        } else {
+            batch.draw(outlinedButtonTexture, positionX, positionY, width, height);
         }
     }
 
@@ -94,7 +73,7 @@ public class PlayerHand extends Actor {
 
     public void setPositionX(float positionX) {
         this.positionX = positionX;
-        super.setBounds(this.positionX, this.positionY, this.islandWidth, this.islandHeight);
+        super.setBounds(this.positionX, this.positionY, this.width, this.height);
     }
 
     public float getPositionY() {
@@ -103,7 +82,7 @@ public class PlayerHand extends Actor {
 
     public void setPositionY(float positionY) {
         this.positionY = positionY;
-        super.setBounds(this.positionX, this.positionY, this.islandWidth, this.islandHeight);
+        super.setBounds(this.positionX, this.positionY, this.width, this.height);
     }
 
     public boolean isFocused() {
@@ -121,21 +100,4 @@ public class PlayerHand extends Actor {
     public void setHovered(boolean hovered) {
         this.hovered = hovered;
     }
-
-    public Texture getIslandTileNormalImage() {
-        return islandTileNormalImage;
-    }
-
-    public void setIslandTileNormalImage(Texture islandTileNormalImage) {
-        this.islandTileNormalImage = islandTileNormalImage;
-    }
-
-    public Pair getCoordinates() {
-        return coordinates;
-    }
-
-    public void setCoordinates(Pair coordinates) {
-        this.coordinates = coordinates;
-    }
-
 }
