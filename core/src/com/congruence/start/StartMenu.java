@@ -41,6 +41,8 @@ public class StartMenu implements Screen {
 
     private SelectBox<String> difficultlySelect;
 
+    private SelectBox<String> numberOfPlayerSelect;
+
     public StartMenu() {
         gameInitializeListeners = new ArrayList<>();
     }
@@ -77,11 +79,17 @@ public class StartMenu implements Screen {
         startGameButton = new TextButton("Start Game", neonUISkin);
         stage.addActor(startGameButton);
 
-        difficultlySelect = new SelectBox<String>(neonUISkin);
-        difficultlySelect.setItems("Novice", "Expert", "FGI");
+        difficultlySelect = new SelectBox<>(neonUISkin);
+        difficultlySelect.setItems("Novice", "Normal", "Elite", "Legendary");
         difficultlySelect.setSelected("Novice");
-        difficultlySelect.setSize(120, 50);
+        difficultlySelect.setSize(150, 50);
         stage.addActor(difficultlySelect);
+
+        numberOfPlayerSelect = new SelectBox<>(neonUISkin);
+        numberOfPlayerSelect.setItems("2", "3", "4");
+        numberOfPlayerSelect.setSelected("4");
+        numberOfPlayerSelect.setSize(90, 45);
+        stage.addActor(numberOfPlayerSelect);
     }
 
     @Override
@@ -100,16 +108,33 @@ public class StartMenu implements Screen {
 
         titleFont.draw(stage.getBatch(), titleText, fontX, fontY);
 
-        final String startText = "Press Enter to Continue";
+        final String startText = "Please enter the following information";
         final GlyphLayout startLayout = new GlyphLayout(startFont, startText);
 
         fontX = 0 + (GameConfiguration.width - startLayout.width) / 2;
-        fontY = 0 + (GameConfiguration.height + startLayout.height) + titleLayout.height;
+        fontY = 0 + (GameConfiguration.height + startLayout.height) * 2 / 3f;
 
         startFont.draw(stage.getBatch(), startText, fontX, fontY);
 
+        final String numberOfPlayerSelectText = "Number of Players:";
+        final GlyphLayout numberOfPlayerSelectLayout = new GlyphLayout(startFont, numberOfPlayerSelectText);
+
+        fontX = 0 + (GameConfiguration.width /2f - numberOfPlayerSelect.getWidth()/2) - numberOfPlayerSelectLayout.width;
+        fontY = 0 + GameConfiguration.height/2f + numberOfPlayerSelect.getHeight() * 7 / 4;
+
+        startFont.draw(stage.getBatch(), numberOfPlayerSelectText, fontX, fontY);
+
+        final String difficultySelectText = "Difficulty:";
+        final GlyphLayout difficultySelectLayout = new GlyphLayout(startFont, difficultySelectText);
+
+        fontX = 0 + (GameConfiguration.width /2f - difficultlySelect.getWidth()/2) - difficultySelectLayout.width;
+        fontY = 0 + GameConfiguration.height/2f + difficultlySelect.getHeight() * 3 / 4;
+
+        startFont.draw(stage.getBatch(), difficultySelectText, fontX, fontY);
+
         difficultlySelect.setPosition(GameConfiguration.width /2f - difficultlySelect.getWidth()/2, GameConfiguration.height/2f);
         startGameButton.setPosition(GameConfiguration.width /2f - startGameButton.getWidth()/2 , GameConfiguration.height/2f - difficultlySelect.getHeight());
+        numberOfPlayerSelect.setPosition(GameConfiguration.width /2f - numberOfPlayerSelect.getWidth()/2 , GameConfiguration.height/2f + numberOfPlayerSelect.getHeight());
 
         stage.getBatch().end();
         stage.draw();

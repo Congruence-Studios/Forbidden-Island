@@ -50,6 +50,8 @@ public class GameUI implements Screen {
 
     private FloodDeckPile floodDeckPile;
 
+    private PlayerHand[] playerHands;
+
     public GameUI(GameState gameState) {
         this.gameState = gameState;
     }
