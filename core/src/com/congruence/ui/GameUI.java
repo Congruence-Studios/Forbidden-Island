@@ -1,5 +1,6 @@
 package com.congruence.ui;
 
+import ch.qos.logback.classic.util.StatusViaSLF4JLoggerFactory;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
@@ -15,12 +16,15 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.congruence.GameConfiguration;
 import com.congruence.state.GameState;
 import com.congruence.state.Resources;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class GameUI implements Screen {
+    private static final Logger logger = LoggerFactory.getLogger(GameUI.class);
 
     private final GameState gameState;
 
@@ -65,6 +69,8 @@ public class GameUI implements Screen {
         if (!Gdx.graphics.setFullscreenMode(displayMode)) {
             // switching to full-screen mode failed
         }
+
+        logger.info("GameUI show called.");
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -384,9 +390,11 @@ public class GameUI implements Screen {
     public void onShoreUpButtonClick() {
         int x = currentFocusedTile.x;
         int y = currentFocusedTile.y;
-        gameState.getIslandTileState()[x][y] = GameState.NORMAL_ISLAND_TILE;
-        islandTiles.get(currentFocusedTile).setTileState(GameState.NORMAL_ISLAND_TILE);
-        shoreUpButton.setEnabled(false);
+        if (x >= 0 && y >= 0 && shoreUpButton.isEnabled()) {
+            gameState.getIslandTileState()[x][y] = GameState.NORMAL_ISLAND_TILE;
+            islandTiles.get(currentFocusedTile).setTileState(GameState.NORMAL_ISLAND_TILE);
+            shoreUpButton.setEnabled(false);
+        }
     }
 
     public String getCurrentPlayerName() {

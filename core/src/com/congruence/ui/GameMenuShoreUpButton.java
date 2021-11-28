@@ -6,8 +6,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GameMenuShoreUpButton extends Actor {
+    private static final Logger logger = LoggerFactory.getLogger(GameMenuShoreUpButton.class);
 
     private boolean hover;
 
@@ -55,11 +58,13 @@ public class GameMenuShoreUpButton extends Actor {
         super.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                logger.info("X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
                 //focused = !focused;
             }
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                logger.info("touchDown: X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
                 focused = true;
                 return true;
             }
@@ -71,6 +76,7 @@ public class GameMenuShoreUpButton extends Actor {
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                logger.info("enter: X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
                 hover = true;
             }
 
