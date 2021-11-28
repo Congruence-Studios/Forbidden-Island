@@ -10,7 +10,7 @@ public class DesktopLauncher {
 		config.title = "Forbidden Island";
 		config.width = 1280;
 		config.height = 720;
-		config.resizable = true;
+		config.resizable = false;
 		new LwjglApplication(new ForbiddenIsland(), config);
 	}
 }

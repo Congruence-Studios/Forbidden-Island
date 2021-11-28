@@ -38,11 +38,15 @@ public class PlayerHand extends Actor {
     public PlayerHand(
             float positionX,
             float positionY,
+            float width,
+            float height,
             Player player
     ) {
         this.positionX = positionX;
         this.positionY = positionY;
         this.player = player;
+        this.width = width;
+        this.height = height;
         outlinedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/player-hand/Player-Hand-Button.png"));
         hoverButtonTexture = new Texture(Gdx.files.internal("./custom-ui/player-hand/Player-Hand-Button-Hovered.png"));
         focusedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/player-hand/Player-Hand-Button-Pressed.png"));
@@ -51,6 +55,33 @@ public class PlayerHand extends Actor {
         focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         super.setBounds(this.positionX, this.positionY, this.width, this.height);
+        super.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //focused = !focused;
+            }
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                focused = true;
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                focused = false;
+            }
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                hovered = true;
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                hovered = false;
+            }
+        });
     }
 
     @Override

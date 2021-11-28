@@ -1,6 +1,7 @@
 package com.congruence.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -15,6 +16,7 @@ import com.congruence.GameConfiguration;
 import com.congruence.state.GameState;
 import com.congruence.state.Resources;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -50,7 +52,7 @@ public class GameUI implements Screen {
 
     private FloodDeckPile floodDeckPile;
 
-    private PlayerHand[] playerHands;
+    private ArrayList<PlayerHand> playerHands = new ArrayList<>();
 
     public GameUI(GameState gameState) {
         this.gameState = gameState;
@@ -58,8 +60,11 @@ public class GameUI implements Screen {
 
     @Override
     public void show() {
-        GameConfiguration.width = Gdx.graphics.getWidth();
-        GameConfiguration.height = Gdx.graphics.getHeight();
+        Graphics.Monitor currMonitor = Gdx.graphics.getMonitor();
+        Graphics.DisplayMode displayMode = Gdx.graphics.getDisplayMode(currMonitor);
+        if (!Gdx.graphics.setFullscreenMode(displayMode)) {
+            // switching to full-screen mode failed
+        }
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -200,6 +205,16 @@ public class GameUI implements Screen {
                 tileHeight
         );
         stage.addActor(floodDeckPile);
+        playerHands.add(new PlayerHand(
+                10f,
+                10f,
+                (tileHeight * 2 + 10f) * 7 / 10,
+                tileHeight * 2 + 10f,
+                gameState.getPlayers().get(gameState.getPlayerOrder().get(0))
+        ));
+        for (PlayerHand ph : playerHands) {
+            stage.addActor(ph);
+        }
 
         floodDeckPile.setEnabled(true);
         treasureDeckPile.setEnabled(true);
@@ -230,8 +245,24 @@ public class GameUI implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        GameConfiguration.width = width;
-        GameConfiguration.height = height;
+        if (width < 1280) {
+            GameConfiguration.width = 1280;
+        } else {
+            GameConfiguration.width = width;
+        }
+        if (height < 720) {
+            GameConfiguration.height = 720;
+        } else {
+            GameConfiguration.height = height;
+        }
+
+        double ratio = (double) GameConfiguration.height / (double) GameConfiguration.width;
+
+        if (ratio > 9.0 / 16.0) {
+            GameConfiguration.height = (int)(GameConfiguration.width * 9.0 / 16.0);
+        } else {
+            GameConfiguration.width = (int)(GameConfiguration.height * 16.0 / 9.0);
+        }
 
         float tileHeight = (GameConfiguration.height - 70f) / 6f;
         float tileWidth = (GameConfiguration.height - 70f) / 6f;
@@ -305,6 +336,11 @@ public class GameUI implements Screen {
         floodDeckPile.setPositionY(3 * tileHeight + 40f);
         floodDeckPile.setFloodDeckHeight(tileHeight);
         floodDeckPile.setFloodDeckHeight(tileHeight);
+
+        playerHands.get(0).setPositionX(10f);
+        playerHands.get(0).setPositionY(10f);
+        playerHands.get(0).setHeight((tileHeight * 2 + 10f) * 7 / 10);
+        playerHands.get(0).setWidth(tileHeight * 2 + 10f);
 
         camera.setToOrtho(false, width, height);
         stage.getViewport().update(width, height, true);
