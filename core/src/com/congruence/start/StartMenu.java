@@ -9,11 +9,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.congruence.GameConfiguration;
 import com.congruence.util.GameInitializeListener;
@@ -78,6 +80,14 @@ public class StartMenu implements Screen {
         neonUISkin = new Skin(Gdx.files.internal("./ui/neon/neon-ui.json"));
         startGameButton = new TextButton("Start Game", neonUISkin);
         stage.addActor(startGameButton);
+        stage.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                for (GameInitializeListener e : StartMenu.this.gameInitializeListeners) {
+                    e.onInitialize();
+                }
+            }
+        });
 
         difficultlySelect = new SelectBox<>(neonUISkin);
         difficultlySelect.setItems("Novice", "Normal", "Elite", "Legendary");
@@ -148,12 +158,6 @@ public class StartMenu implements Screen {
             }
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             Gdx.graphics.setWindowedMode(1280, 720);
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            for (GameInitializeListener e: gameInitializeListeners) {
-                e.onInitialize();
-            }
         }
 
     }
