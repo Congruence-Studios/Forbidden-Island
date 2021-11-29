@@ -214,10 +214,35 @@ public class GameUI implements Screen {
         playerHands.add(new PlayerHand(
                 10f,
                 10f,
-                (tileHeight * 2 + 10f) * 7 / 10,
+                (tileHeight * 2 + 10f) / 2,
                 tileHeight * 2 + 10f,
                 gameState.getPlayers().get(gameState.getPlayerOrder().get(0))
         ));
+        playerHands.add(new PlayerHand(
+                10f,
+                GameConfiguration.height - (tileHeight * 2 + 10f) - 10f,
+                (tileHeight * 2 + 10f) / 2,
+                tileHeight * 2 + 10f,
+                gameState.getPlayers().get(gameState.getPlayerOrder().get(1))
+        ));
+        if (gameState.getMaxTurnLoops() >= 3) {
+            playerHands.add(new PlayerHand(
+                    GameConfiguration.width - ((tileHeight * 2 + 10f) / 2) - 10f,
+                    GameConfiguration.height - (tileHeight * 2 + 10f) - 10f,
+                    (tileHeight * 2 + 10f) / 2,
+                    tileHeight * 2 + 10f,
+                    gameState.getPlayers().get(gameState.getPlayerOrder().get(2))
+            ));
+        }
+        if (gameState.getMaxTurnLoops() >= 4) {
+            playerHands.add(new PlayerHand(
+                    GameConfiguration.width - ((tileHeight * 2 + 10f) / 2) - 10f,
+                    10f,
+                    (tileHeight * 2 + 10f) / 2,
+                    tileHeight * 2 + 10f,
+                    gameState.getPlayers().get(gameState.getPlayerOrder().get(3))
+            ));
+        }
         for (PlayerHand ph : playerHands) {
             stage.addActor(ph);
         }
@@ -345,11 +370,32 @@ public class GameUI implements Screen {
 
         playerHands.get(0).setPositionX(10f);
         playerHands.get(0).setPositionY(10f);
-        playerHands.get(0).setHeight((tileHeight * 2 + 10f) * 7 / 10);
-        playerHands.get(0).setWidth(tileHeight * 2 + 10f);
+        playerHands.get(0).setHeight(tileHeight * 2 + 10f);
+        playerHands.get(0).setWidth((tileHeight * 2 + 10f) / 2);
 
-        camera.setToOrtho(false, width, height);
-        stage.getViewport().update(width, height, true);
+        playerHands.get(1).setPositionX(10f);
+        playerHands.get(1).setPositionY(GameConfiguration.height - (tileHeight * 2 + 10f) - 10f);
+        playerHands.get(1).setHeight(tileHeight * 2 + 10f);
+        playerHands.get(1).setWidth((tileHeight * 2 + 10f) / 2);
+
+        if (gameState.getMaxTurnLoops() >= 3) {
+            playerHands.get(2).setPositionX(GameConfiguration.width - ((tileHeight * 2 + 10f) / 2) - 10f);
+            playerHands.get(2).setPositionY(GameConfiguration.height - (tileHeight * 2 + 10f) - 10f);
+            playerHands.get(2).setHeight(tileHeight * 2 + 10f);
+            playerHands.get(2).setWidth((tileHeight * 2 + 10f) / 2);
+        }
+
+        if (gameState.getMaxTurnLoops() >= 4) {
+            playerHands.get(3).setPositionX(GameConfiguration.width - ((tileHeight * 2 + 10f) / 2) - 10f);
+            playerHands.get(3).setPositionY(10f);
+            playerHands.get(3).setHeight(tileHeight * 2 + 10f);
+            playerHands.get(3).setWidth((tileHeight * 2 + 10f) / 2);
+        }
+
+        logger.info("playerHand 0, height: " + playerHands.get(0).getHeight());
+
+        camera.setToOrtho(false, GameConfiguration.width, GameConfiguration.height);
+        stage.getViewport().update(GameConfiguration.width, GameConfiguration.height, true);
     }
 
     @Override

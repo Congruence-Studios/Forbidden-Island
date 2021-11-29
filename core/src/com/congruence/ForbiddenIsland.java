@@ -58,6 +58,11 @@ public class ForbiddenIsland extends Game {
 			Stack<FloodCard> floodCardDeck = new Stack<>();
 			Stack<TreasureCard> treasureCardDeck = new Stack<>();
 
+			playerOrder.put(0, "Player 1");
+			playerOrder.put(1, "Player 2");
+			playerOrder.put(2, "Player 3");
+			playerOrder.put(3, "Player 4");
+
 			LinkedList<String> pickedIslandTiles = new LinkedList<>();
 			pickedIslandTiles.add("Fools Landing");
 			pickedIslandTiles.add("Temple of the Moon");
