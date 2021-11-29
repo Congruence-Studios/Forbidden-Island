@@ -104,6 +104,29 @@ public class PlayerHand extends Actor {
         }
     }
 
+
+    @Override
+    public float getHeight() {
+        return height;
+    }
+
+    @Override
+    public void setHeight(float height) {
+        this.height = height;
+        super.setBounds(this.positionX, this.positionY, this.width, this.height);
+    }
+
+    @Override
+    public float getWidth() {
+        return width;
+    }
+
+    @Override
+    public void setWidth(float width) {
+        this.width = width;
+        super.setBounds(this.positionX, this.positionY, this.width, this.height);
+    }
+
     public float getPositionX() {
         return positionX;
     }
