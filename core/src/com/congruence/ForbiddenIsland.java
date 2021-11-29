@@ -82,11 +82,12 @@ public class ForbiddenIsland extends Game {
 				}
 			}
 			Collections.shuffle(pickedIslandTiles);
+
 			for (int i = 0; i < 6; i++) {
 				for (int j = 0; j < 6; j++) {
 					if (Resources.DefaultTileOrdering.contains(i + "" + j)) {
 						islandTiles[i][j] = pickedIslandTiles.pop();
-						islandTileState[i][j] = GameState.FLOODED_ISLAND_TILE;
+						islandTileState[i][j] = GameState.NORMAL_ISLAND_TILE;
 					}
 					else {
 						islandTiles[i][j] = null;
