@@ -28,8 +28,6 @@ public class PlayerHand extends Actor {
 
     private boolean focused;
 
-    private boolean enabled;
-
     private Texture outlinedButtonTexture;
 
     private Texture hoverButtonTexture;
