@@ -63,6 +63,40 @@ public class ForbiddenIsland extends Game {
 			playerOrder.put(2, "Player 3");
 			playerOrder.put(3, "Player 4");
 
+			//placeholder test data for now
+			players.put("Player 1", new Player(
+					"Player 1",
+					"idk lmao",
+					new ArrayList<>(),
+					2,
+					2,
+					Player.EXPLORER
+			));
+			players.put("Player 2", new Player(
+					"Player 2",
+					"idk lmao",
+					new ArrayList<>(),
+					3,
+					2,
+					Player.PILOT
+			));
+			players.put("Player 3", new Player(
+					"Player 3",
+					"idk lmao",
+					new ArrayList<>(),
+					2,
+					3,
+					Player.NAVIGATOR
+			));
+			players.put("Player 4", new Player(
+					"Player 4",
+					"idk lmao",
+					new ArrayList<>(),
+					3,
+					3,
+					Player.MESSENGER
+			));
+
 			LinkedList<String> pickedIslandTiles = new LinkedList<>();
 			pickedIslandTiles.add("Fools Landing");
 			pickedIslandTiles.add("Temple of the Moon");

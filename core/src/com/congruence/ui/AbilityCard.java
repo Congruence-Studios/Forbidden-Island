@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.congruence.state.GameState;
 import com.congruence.state.Player;
@@ -48,9 +50,9 @@ public class AbilityCard extends Actor {
         this.width = width;
         this.height = height;
         this.ability = ability;
-        outlinedButtonTexture = new Texture(Gdx.files.internal("./ability-button/Ability-Button"));
-        hoverButtonTexture = new Texture(Gdx.files.internal("./ability-button/Ability-Button-Hovered"));
-        focusedButtonTexture = new Texture(Gdx.files.internal("./ability-button/Ability-Button-Focused"));
+        outlinedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/ability-button/Ability-Button.png"));
+        hoverButtonTexture = new Texture(Gdx.files.internal("./custom-ui/ability-button/Ability-Button-Hovered.png"));
+        focusedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/ability-button/Ability-Button-Focused.png"));
         outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -82,6 +84,19 @@ public class AbilityCard extends Actor {
                 logger.info("touchDown: X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
                 focused = true;
                 //pop up new window with more details
+                /*
+                Skin neonUISkin = new Skin(Gdx.files.internal("./ui/neon/neon-ui.json"));
+                Dialog dialog = new Dialog("Info", neonUISkin, "dialog") {
+                    public void result(Object obj) {
+                        System.out.println("result "+obj);
+                    }
+                };
+                dialog.text("Are you sure you want to yada yada?");
+                dialog.button("Yes", true); //sends "true" as the result
+                dialog.button("No", false); //sends "false" as the result
+                dialog.show(AbilityCard.super.getStage());
+
+                 */
                 return true;
             }
 
@@ -107,16 +122,38 @@ public class AbilityCard extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         batch.end();
         batch.begin();
-        if (hovered) {
-            batch.draw(outlinedButtonTexture, positionX, positionY, width, height);
+        if (focused) {
+            batch.draw(focusedButtonTexture, positionX, positionY, width, height);
         }
-        else if (focused) {
+        else if (hovered) {
             batch.draw(hoverButtonTexture, positionX, positionY, width, height);
         }
         else {
-            batch.draw(focusedButtonTexture, positionX, positionY, width, height);
+            batch.draw(outlinedButtonTexture, positionX, positionY, width, height);
         }
-        batch.draw(abilityIcon, (positionX - abilityIcon.getWidth()) / 2, (positionY - abilityIcon.getHeight()) - 2, abilityIcon.getWidth(), abilityIcon.getHeight());
+        batch.draw(abilityIcon, positionX + (width - abilityIcon.getWidth()) / 2, positionY + (height - abilityIcon.getHeight()) / 2, abilityIcon.getWidth(), abilityIcon.getHeight());
+    }
+
+    @Override
+    public float getHeight() {
+        return height;
+    }
+
+    @Override
+    public void setHeight(float height) {
+        this.height = height;
+        super.setBounds(this.positionX, this.positionY, this.width, this.height);
+    }
+
+    @Override
+    public float getWidth() {
+        return width;
+    }
+
+    @Override
+    public void setWidth(float width) {
+        this.width = width;
+        super.setBounds(this.positionX, this.positionY, this.width, this.height);
     }
 
     public float getPositionX() {

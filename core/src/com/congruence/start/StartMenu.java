@@ -80,7 +80,7 @@ public class StartMenu implements Screen {
         neonUISkin = new Skin(Gdx.files.internal("./ui/neon/neon-ui.json"));
         startGameButton = new TextButton("Start Game", neonUISkin);
         stage.addActor(startGameButton);
-        stage.addListener(new ClickListener(){
+        startGameButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 for (GameInitializeListener e : StartMenu.this.gameInitializeListeners) {
@@ -200,4 +200,11 @@ public class StartMenu implements Screen {
         gameInitializeListeners.add(gameStartListener);
     }
 
+    public String getNumPlayers() {
+        return difficultlySelect.getSelected();
+    }
+
+    public String getDifficulty() {
+        return difficultlySelect.getSelected();
+    }
 }

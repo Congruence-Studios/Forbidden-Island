@@ -58,6 +58,8 @@ public class GameUI implements Screen {
 
     private ArrayList<PlayerHand> playerHands = new ArrayList<>();
 
+    private ArrayList<AbilityCard> abilityCards = new ArrayList<>();
+
     public GameUI(GameState gameState) {
         this.gameState = gameState;
     }
@@ -246,6 +248,41 @@ public class GameUI implements Screen {
         for (PlayerHand ph : playerHands) {
             stage.addActor(ph);
         }
+        abilityCards.add(new AbilityCard(
+                10f + ((tileHeight * 2 + 10f) / 2),
+                10f,
+                (tileHeight * 2 + 10f) / 2,
+                tileHeight * 2 + 10f,
+                gameState.getPlayers().get(gameState.getPlayerOrder().get(0)).getAbility()
+        ));
+        abilityCards.add(new AbilityCard(
+                10f + ((tileHeight * 2 + 10f) / 2),
+                GameConfiguration.height - (tileHeight * 2 + 10f) - 10f,
+                (tileHeight * 2 + 10f) / 2,
+                tileHeight * 2 + 10f,
+                gameState.getPlayers().get(gameState.getPlayerOrder().get(1)).getAbility()
+        ));
+        if (gameState.getMaxTurnLoops() >= 3) {
+            abilityCards.add(new AbilityCard(
+                    GameConfiguration.width - ((tileHeight * 2 + 10f) / 2) - 10f - ((tileHeight * 2 + 10f) / 2),
+                    GameConfiguration.height - (tileHeight * 2 + 10f) - 10f,
+                    (tileHeight * 2 + 10f) / 2,
+                    tileHeight * 2 + 10f,
+                    gameState.getPlayers().get(gameState.getPlayerOrder().get(2)).getAbility()
+            ));
+        }
+        if (gameState.getMaxTurnLoops() >= 4) {
+            abilityCards.add(new AbilityCard(
+                    GameConfiguration.width - ((tileHeight * 2 + 10f) / 2) - 10f - ((tileHeight * 2 + 10f) / 2),
+                    10f,
+                    (tileHeight * 2 + 10f) / 2,
+                    tileHeight * 2 + 10f,
+                    gameState.getPlayers().get(gameState.getPlayerOrder().get(3)).getAbility()
+            ));
+        }
+        for (AbilityCard ac : abilityCards) {
+            stage.addActor(ac);
+        }
 
         floodDeckPile.setEnabled(true);
         treasureDeckPile.setEnabled(true);
@@ -276,16 +313,8 @@ public class GameUI implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        if (width < 1280) {
-            GameConfiguration.width = 1280;
-        } else {
-            GameConfiguration.width = width;
-        }
-        if (height < 720) {
-            GameConfiguration.height = 720;
-        } else {
-            GameConfiguration.height = height;
-        }
+        GameConfiguration.width = Math.max(width, 1280);
+        GameConfiguration.height = Math.max(height, 720);
 
         double ratio = (double) GameConfiguration.height / (double) GameConfiguration.width;
 
@@ -390,6 +419,30 @@ public class GameUI implements Screen {
             playerHands.get(3).setPositionY(10f);
             playerHands.get(3).setHeight(tileHeight * 2 + 10f);
             playerHands.get(3).setWidth((tileHeight * 2 + 10f) / 2);
+        }
+
+        abilityCards.get(0).setPositionX(10f + ((tileHeight * 2 + 10f) / 2));
+        abilityCards.get(0).setPositionY(10f);
+        abilityCards.get(0).setHeight(tileHeight * 2 + 10f);
+        abilityCards.get(0).setWidth((tileHeight * 2 + 10f) / 2);
+
+        abilityCards.get(1).setPositionX(10f + ((tileHeight * 2 + 10f) / 2));
+        abilityCards.get(1).setPositionY(GameConfiguration.height - (tileHeight * 2 + 10f) - 10f);
+        abilityCards.get(1).setHeight(tileHeight * 2 + 10f);
+        abilityCards.get(1).setWidth((tileHeight * 2 + 10f) / 2);
+
+        if (gameState.getMaxTurnLoops() >= 3) {
+            abilityCards.get(2).setPositionX(GameConfiguration.width - ((tileHeight * 2 + 10f) / 2) - 10f - ((tileHeight * 2 + 10f) / 2));
+            abilityCards.get(2).setPositionY(GameConfiguration.height - (tileHeight * 2 + 10f) - 10f);
+            abilityCards.get(2).setHeight(tileHeight * 2 + 10f);
+            abilityCards.get(2).setWidth((tileHeight * 2 + 10f) / 2);
+        }
+
+        if (gameState.getMaxTurnLoops() >= 4) {
+            abilityCards.get(3).setPositionX(GameConfiguration.width - ((tileHeight * 2 + 10f) / 2) - 10f - ((tileHeight * 2 + 10f) / 2));
+            abilityCards.get(3).setPositionY(10f);
+            abilityCards.get(3).setHeight(tileHeight * 2 + 10f);
+            abilityCards.get(3).setWidth((tileHeight * 2 + 10f) / 2);
         }
 
         logger.info("playerHand 0, height: " + playerHands.get(0).getHeight());
