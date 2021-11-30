@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.congruence.ForbiddenIsland;
 
 public class TreasureDeckPile extends Actor {
 
@@ -41,10 +42,10 @@ public class TreasureDeckPile extends Actor {
         this.positionY = positionY;
         this.treasureDeckWidth = width;
         this.treasureDeckHeight = height;
-        outlinedButtonTexture = new Texture(Gdx.files.internal("./treasure-deck/Treasure-Deck.png"));
-        hoverButtonTexture = new Texture(Gdx.files.internal("./treasure-deck/Treasure-Deck-Hovered.png"));
-        focusedButtonTexture = new Texture(Gdx.files.internal("./treasure-deck/Treasure-Deck-Pressed.png"));
-        disabledButtonTexture = new Texture(Gdx.files.internal("./treasure-deck/Treasure-Deck-Disabled.png"));
+        outlinedButtonTexture = ForbiddenIsland.assetManager.get("treasure-deck/Treasure-Deck.png", Texture.class);
+        hoverButtonTexture = ForbiddenIsland.assetManager.get("treasure-deck/Treasure-Deck-Hovered.png", Texture.class);
+        focusedButtonTexture = ForbiddenIsland.assetManager.get("treasure-deck/Treasure-Deck-Pressed.png", Texture.class);
+        disabledButtonTexture = ForbiddenIsland.assetManager.get("treasure-deck/Treasure-Deck-Disabled.png", Texture.class);
         outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);

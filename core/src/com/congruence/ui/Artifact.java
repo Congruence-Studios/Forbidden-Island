@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.congruence.ForbiddenIsland;
 
 public class Artifact extends Actor {
 
@@ -33,7 +34,7 @@ public class Artifact extends Actor {
         this.artifactWidth = width;
         this.artifactHeight = height;
         this.artifactName = artifactName;
-        artifactTexture = new Texture(Gdx.files.internal("./artifacts/" + artifactName + ".png"));
+        artifactTexture = ForbiddenIsland.assetManager.get("artifacts/" + artifactName + ".png", Texture.class);
         artifactTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         super.setBounds(this.positionX, this.positionY, this.artifactWidth, this.artifactHeight);
     }

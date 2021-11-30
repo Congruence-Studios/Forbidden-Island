@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.congruence.ForbiddenIsland;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,10 +46,10 @@ public class GameMenuShoreUpButton extends Actor {
         this.height = height;
         this.width = width;
 
-        outlinedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/shore-up/Shore-Up-Button.png"));
-        hoverButtonTexture = new Texture(Gdx.files.internal("./custom-ui/shore-up/Shore-Up-Button-Hovered.png"));
-        focusedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/shore-up/Shore-Up-Button-Pressed.png"));
-        disabledButtonTexture = new Texture(Gdx.files.internal("./custom-ui/shore-up/Shore-Up-Button-Disabled.png"));
+        outlinedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/shore-up/Shore-Up-Button.png", Texture.class);
+        hoverButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/shore-up/Shore-Up-Button-Hovered.png", Texture.class);
+        focusedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/shore-up/Shore-Up-Button-Pressed.png", Texture.class);
+        disabledButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/shore-up/Shore-Up-Button-Disabled.png", Texture.class);
         outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);

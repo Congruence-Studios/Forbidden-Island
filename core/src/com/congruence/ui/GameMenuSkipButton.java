@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.congruence.ForbiddenIsland;
 import com.congruence.GameConfiguration;
 import com.congruence.state.GameState;
 
@@ -44,9 +45,9 @@ public class GameMenuSkipButton extends Actor {
         this.height = height;
         this.width = width;
 
-        outlinedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/skip-button/Skip-Button.png"));
-        hoverButtonTexture = new Texture(Gdx.files.internal("./custom-ui/skip-button/Skip-Button-Hovered.png"));
-        focusedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/skip-button/Skip-Button-Pressed.png"));
+        outlinedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/skip-button/Skip-Button.png", Texture.class);
+        hoverButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/skip-button/Skip-Button-Hovered.png", Texture.class);
+        focusedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/skip-button/Skip-Button-Pressed.png", Texture.class);
         outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);

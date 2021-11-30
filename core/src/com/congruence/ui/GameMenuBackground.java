@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.congruence.ForbiddenIsland;
 
 public class GameMenuBackground extends Actor {
 
@@ -30,7 +31,7 @@ public class GameMenuBackground extends Actor {
         this.height = height;
         this.width = width;
 
-        outlinedBackground = new Texture(Gdx.files.internal("./island-tiles/Tile_Hover_Icon@2x.png"));
+        outlinedBackground = ForbiddenIsland.assetManager.get("island-tiles/Tile_Hover_Icon@2x.png", Texture.class);
     }
 
     @Override

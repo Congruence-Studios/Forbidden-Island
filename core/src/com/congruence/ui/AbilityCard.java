@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.congruence.ForbiddenIsland;
 import com.congruence.state.GameState;
 import com.congruence.state.Player;
 import org.slf4j.Logger;
@@ -50,25 +51,25 @@ public class AbilityCard extends Actor {
         this.width = width;
         this.height = height;
         this.ability = ability;
-        outlinedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/ability-button/Ability-Button.png"));
-        hoverButtonTexture = new Texture(Gdx.files.internal("./custom-ui/ability-button/Ability-Button-Hovered.png"));
-        focusedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/ability-button/Ability-Button-Focused.png"));
+        outlinedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/ability-button/Ability-Button.png", Texture.class);
+        hoverButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/ability-button/Ability-Button-Hovered.png", Texture.class);
+        focusedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/ability-button/Ability-Button-Focused.png", Texture.class);
         outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         if (ability == Player.PILOT) {
-            abilityIcon = new Texture(Gdx.files.internal("./ability-icon/RoleTable_Icon_Pilot@2x.png"));
+            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Pilot@2x.png", Texture.class);
         } else if (ability == Player.ENGINEER) {
-            abilityIcon = new Texture(Gdx.files.internal("./ability-icon/RoleTable_Icon_Engineer@2x.png"));
+            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Engineer@2x.png", Texture.class);
         } else if (ability == Player.MESSENGER) {
-            abilityIcon = new Texture(Gdx.files.internal("./ability-icon/RoleTable_Icon_Messenger@2x.png"));
+            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Messenger@2x.png", Texture.class);
         } else if (ability == Player.EXPLORER) {
-            abilityIcon = new Texture(Gdx.files.internal("./ability-icon/RoleTable_Icon_Explorer@2x.png"));
+            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Explorer@2x.png", Texture.class);
         } else if (ability == Player.DIVER) {
-            abilityIcon = new Texture(Gdx.files.internal("./ability-icon/RoleTable_Icon_Diver@2x.png"));
+            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Diver@2x.png", Texture.class);
         } else if (ability == Player.NAVIGATOR) {
-            abilityIcon = new Texture(Gdx.files.internal("./ability-icon/RoleTable_Icon_Navigator@2x.png"));
+            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Navigator@2x.png", Texture.class);
         }
 
         super.setBounds(this.positionX, this.positionY, this.width, this.height);

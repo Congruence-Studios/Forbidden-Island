@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.congruence.ForbiddenIsland;
 
 public class GameMenuHelpButton extends Actor {
 
@@ -38,9 +39,9 @@ public class GameMenuHelpButton extends Actor {
         this.height = height;
         this.width = width;
 
-        outlinedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/help-button/Help-Button.png"));
-        hoverButtonTexture = new Texture(Gdx.files.internal("./custom-ui/help-button/Help-Button-Hovered.png"));
-        focusedButtonTexture = new Texture(Gdx.files.internal("./custom-ui/help-button/Help-Button-Pressed.png"));
+        outlinedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/help-button/Help-Button.png", Texture.class);
+        hoverButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/help-button/Help-Button-Hovered.png", Texture.class);
+        focusedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/help-button/Help-Button-Pressed.png", Texture.class);
         outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);

@@ -43,9 +43,9 @@ public class ForbiddenIsland extends Game {
 
 	private StartMenu startMenu;
 
-	public static Random random;
+	public static Random random = new Random();;
 
-	private AssetManager assetManager;
+	public static AssetManager assetManager;
 
 	private GameInitializeListener gameInitializeListener = new GameInitializeListener() {
 		@Override
@@ -107,12 +107,19 @@ public class ForbiddenIsland extends Game {
 			pickedIslandTiles.add("Coral Palace");
 			pickedIslandTiles.add("Tidal Palace");
 			int tilesLeft = 15;
-			ArrayList<String> tempIslandTiles = (ArrayList<String>) Resources.IslandTiles.clone();
+			LinkedList<String> tempIslandTiles = ((LinkedList<String>) Resources.IslandTiles.clone());
+			tempIslandTiles.remove("Fools Landing");
+			tempIslandTiles.remove("Temple of the Moon");
+			tempIslandTiles.remove("Temple of the Sun");
+			tempIslandTiles.remove("Whispering Garden");
+			tempIslandTiles.remove("Howling Garden");
+			tempIslandTiles.remove("Cave of Embers");
+			tempIslandTiles.remove("Cave of Shadows");
+			tempIslandTiles.remove("Coral Palace");
+			tempIslandTiles.remove("Tidal Palace");
+			Collections.shuffle(tempIslandTiles);
 			while (tilesLeft > 0) {
-				logger.info("tempIslandTiles.size(): " + tempIslandTiles.size() + " tilesLeft: " + tilesLeft);
-				int rand = random.nextInt(tempIslandTiles.size());
-				logger.info("rand: " + rand);
-				pickedIslandTiles.add(tempIslandTiles.remove(rand));
+				pickedIslandTiles.add(tempIslandTiles.pop());
 				tilesLeft--;
 			}
 			LinkedList<String> floodedTileCards = new LinkedList<>();
@@ -145,11 +152,13 @@ public class ForbiddenIsland extends Game {
 			assetManager = new AssetManager(new InternalFileHandleResolver());
 			Array<String> assetDirectories = new Array<>();
 			FileHandleResolver resolver = new InternalFileHandleResolver();
+			assetDirectories.add("artifacts");
 			assetDirectories.add("ability-icon");
 			assetDirectories.add("artifacts");
 			assetDirectories.add("custom-ui");
 			assetDirectories.add("flood-deck");
 			assetDirectories.add("treasure-deck");
+			assetDirectories.add("island-tiles");
 			for (String folder : assetDirectories) {
 				logger.info("Path" + resolver.resolve(folder).path());
 				for (FileHandle asset : resolver.resolve(folder).list()) {
@@ -157,13 +166,13 @@ public class ForbiddenIsland extends Game {
 					logger.info(asset.name());
 					if (folderSub.isDirectory()) {
 						for (FileHandle assetSub : folderSub.list()) {
-							logger.info(assetSub.name());
+							logger.info(assetSub.path());
 							assetManager.load(assetSub.path(), Texture.class);
 							logger.info(assetManager.getProgress() + "");
 						}
 					}
 					else {
-						logger.info(asset.name());
+						logger.info(asset.path());
 						assetManager.load(asset.path(), Texture.class);
 						logger.info(assetManager.getProgress() + "");
 					}

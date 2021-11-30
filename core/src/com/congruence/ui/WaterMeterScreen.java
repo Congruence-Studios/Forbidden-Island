@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.congruence.ForbiddenIsland;
 import com.congruence.GameConfiguration;
 import com.congruence.state.GameState;
 
@@ -45,12 +46,14 @@ public class WaterMeterScreen extends Actor {
         this.width = width;
         this.state = state;
 
+        super.setBounds(0, 0, 0, 0);
+
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Abel-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 50;
         titleFont = generator.generateFont(parameter);
         generator.dispose();
-        background = new Texture(Gdx.files.internal("./custom-ui/dialog-background/Dialog.png"));
+        background = ForbiddenIsland.assetManager.get("custom-ui/dialog-background/Dialog.png", Texture.class);
 
         titleLayout = new GlyphLayout(titleFont, "");
     }
@@ -77,9 +80,6 @@ public class WaterMeterScreen extends Actor {
 
     public void setPositionX(float positionX) {
         this.positionX = positionX;
-        super.setBounds(positionX + 10f, positiveY + 10f,
-                height * 8f/5f,
-                height);
     }
 
     public float getPositiveY() {
@@ -88,9 +88,6 @@ public class WaterMeterScreen extends Actor {
 
     public void setPositiveY(float positiveY) {
         this.positiveY = positiveY;
-        super.setBounds(positionX + 10f, positiveY + 10f,
-                height * 8f/5f,
-                height);
     }
 
     @Override
@@ -101,9 +98,6 @@ public class WaterMeterScreen extends Actor {
     @Override
     public void setHeight(float height) {
         this.height = height;
-        super.setBounds(positionX + 10f, positiveY + 10f,
-                height * 8f/5f,
-                height);
     }
 
     @Override
@@ -114,9 +108,6 @@ public class WaterMeterScreen extends Actor {
     @Override
     public void setWidth(float width) {
         this.width = width;
-        super.setBounds(positionX + 10f, positiveY + 10f,
-                height * 8f/5f,
-                height);
     }
 
     public boolean isOpen() {
@@ -125,5 +116,11 @@ public class WaterMeterScreen extends Actor {
 
     public void setOpen(boolean open) {
         isOpen = open;
+        if (isOpen) {
+            super.setBounds(positionX, positiveY, width, height);
+        }
+        else {
+            super.setBounds(0, 0, 0, 0);
+        }
     }
 }

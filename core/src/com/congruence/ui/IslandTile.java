@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.congruence.ForbiddenIsland;
 import com.congruence.state.GameState;
 
 public class IslandTile extends Actor {
@@ -30,13 +31,13 @@ public class IslandTile extends Actor {
 
     private Texture islandTileSunkenImage;
 
-    private Texture islandTileMovementImage = new Texture(Gdx.files.internal("./island-tiles/Tile_Movement_Icon@2x.png"));
+    private Texture islandTileMovementImage = ForbiddenIsland.assetManager.get("island-tiles/Tile_Movement_Icon@2x.png", Texture.class);
 
-    private Texture islandTileHoverImage = new Texture(Gdx.files.internal("./island-tiles/Tile_Hover_Icon@2x.png"));
+    private Texture islandTileHoverImage = ForbiddenIsland.assetManager.get("island-tiles/Tile_Hover_Icon@2x.png", Texture.class);
 
-    private Texture islandTileFocusedImage = new Texture(Gdx.files.internal("./island-tiles/Tile_Focused_Icon@2x.png"));
+    private Texture islandTileFocusedImage = ForbiddenIsland.assetManager.get("island-tiles/Tile_Focused_Icon@2x.png", Texture.class);
 
-    private Texture islandTileSpecialMovementImage = new Texture(Gdx.files.internal("./island-tiles/Tile_Special_Movement_Icon@2x.png"));
+    private Texture islandTileSpecialMovementImage = ForbiddenIsland.assetManager.get("island-tiles/Tile_Special_Movement_Icon@2x.png", Texture.class);
 
     private boolean focused;
 
@@ -62,9 +63,9 @@ public class IslandTile extends Actor {
         this.tileName = tileName;
         this.coordinates = coordinates;
         this.tileState = tileState;
-        islandTileNormalImage = new Texture(Gdx.files.internal("./island-tiles/" + tileName + "@2x.png"));
-        islandTileFloodedImage = new Texture(Gdx.files.internal("./island-tiles/" + tileName + "_flood@2x.png"));
-        islandTileSunkenImage = new Texture(Gdx.files.internal("./island-tiles/Sunken-Tile.png"));
+        islandTileNormalImage = ForbiddenIsland.assetManager.get("island-tiles/" + tileName + "@2x.png", Texture.class);
+        islandTileFloodedImage = ForbiddenIsland.assetManager.get("island-tiles/" + tileName + "_flood@2x.png", Texture.class);
+        islandTileSunkenImage = ForbiddenIsland.assetManager.get("island-tiles/Sunken-Tile.png", Texture.class);
         islandTileNormalImage.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         islandTileFloodedImage.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         islandTileSunkenImage.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);

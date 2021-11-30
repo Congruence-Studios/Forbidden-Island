@@ -68,8 +68,6 @@ public class GameUI implements Screen {
 
     @Override
     public void show() {
-        Graphics.Monitor currMonitor = Gdx.graphics.getMonitor();
-        Graphics.DisplayMode displayMode = Gdx.graphics.getDisplayMode(currMonitor);
         //if (!Gdx.graphics.setFullscreenMode(displayMode)) {
             // switching to full-screen mode failed
         //}
