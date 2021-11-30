@@ -1,34 +1,50 @@
 package com.congruence;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.assets.AssetDescriptor;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.AssetLoader;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.congruence.start.StartMenu;
 import com.congruence.start.StartScreen;
 import com.congruence.state.*;
 import com.congruence.ui.GameUI;
 import com.congruence.ui.IslandTile;
+import com.congruence.ui.PlayerHand;
 import com.congruence.util.GameInitializeListener;
 import com.congruence.util.GameStartListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public class ForbiddenIsland extends Game {
+
+	private static final Logger logger = LoggerFactory.getLogger(ForbiddenIsland.class);
 
 	private StartScreen startScreen;
 
 	private StartMenu startMenu;
 
 	public static Random random = new Random();
+
+	private AssetManager assetManager;
 
 	public static String[][] TEST_ISLAND_TILE_DATA = {
 			{ null, null, "Misty-Marsh", "Misty-Marsh", null, null },
@@ -47,6 +63,16 @@ public class ForbiddenIsland extends Game {
 			{ -1, -1, 1, 1, -1, -1 },
 			{ -1, -1, 1, 1, -1, -1 },
 	};
+
+	public class AssetDescriptor {
+		public String folder;
+		public Class<?> assetType;
+
+		public AssetDescriptor(String folder, Class<?> assetType) {
+			this.folder = folder;
+			this.assetType = assetType;
+		}
+	}
 
 	private GameInitializeListener gameInitializeListener = new GameInitializeListener() {
 		@Override
@@ -128,6 +154,75 @@ public class ForbiddenIsland extends Game {
 				}
 			}
 
+
+			assetManager = new AssetManager(new InternalFileHandleResolver());
+			Array<String> assetDirectories = new Array<>();
+			FileHandleResolver resolver = new InternalFileHandleResolver();
+			assetDirectories.add("ability-icon");
+			assetDirectories.add("artifacts");
+			assetDirectories.add("custom-ui");
+			assetDirectories.add("flood-deck");
+			assetDirectories.add("treasure-deck");
+			for (String folder : assetDirectories) {
+				logger.info("Path" + resolver.resolve(folder).path());
+				for (FileHandle asset : resolver.resolve(folder).list()) {
+					FileHandle folderSub = resolver.resolve(asset.path());
+					logger.info(asset.name());
+					if (folderSub.isDirectory()) {
+						for (FileHandle assetSub : folderSub.list()) {
+							logger.info(assetSub.name());
+							assetManager.load(assetSub.path(), Texture.class);
+							logger.info(assetManager.getProgress() + "");
+						}
+					}
+					else {
+						logger.info(asset.name());
+						assetManager.load(asset.path(), Texture.class);
+						logger.info(assetManager.getProgress() + "");
+					}
+				}
+			}
+
+			Screen LoadingScreen = new Screen() {
+				@Override
+				public void show() {
+
+				}
+
+				@Override
+				public void render(float delta) {
+					assetManager.update();
+					logger.info(assetManager.getProgress()+"");
+				}
+
+				@Override
+				public void resize(int width, int height) {
+
+				}
+
+				@Override
+				public void pause() {
+
+				}
+
+				@Override
+				public void resume() {
+
+				}
+
+				@Override
+				public void hide() {
+
+				}
+
+				@Override
+				public void dispose() {
+
+				}
+			};
+			setScreen(LoadingScreen);
+			assetManager.finishLoading();
+
 			gameUI = new GameUI(new GameState(
 					GameState.NOVICE,
 					players,
@@ -160,6 +255,11 @@ public class ForbiddenIsland extends Game {
 	@Override
 	public void create() {
 		setScreen(startScreen);
+	}
+
+	@Override
+	public void dispose() {
+		assetManager.dispose();
 	}
 
 }

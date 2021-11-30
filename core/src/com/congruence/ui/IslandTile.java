@@ -30,13 +30,13 @@ public class IslandTile extends Actor {
 
     private Texture islandTileSunkenImage;
 
-    private static final Texture islandTileMovementImage = new Texture(Gdx.files.internal("./island-tiles/Tile_Movement_Icon@2x.png"));
+    private Texture islandTileMovementImage = new Texture(Gdx.files.internal("./island-tiles/Tile_Movement_Icon@2x.png"));
 
-    private static final Texture islandTileHoverImage = new Texture(Gdx.files.internal("./island-tiles/Tile_Hover_Icon@2x.png"));
+    private Texture islandTileHoverImage = new Texture(Gdx.files.internal("./island-tiles/Tile_Hover_Icon@2x.png"));
 
-    private static final Texture islandTileFocusedImage = new Texture(Gdx.files.internal("./island-tiles/Tile_Focused_Icon@2x.png"));
+    private Texture islandTileFocusedImage = new Texture(Gdx.files.internal("./island-tiles/Tile_Focused_Icon@2x.png"));
 
-    private static final Texture islandTileSpecialMovementImage = new Texture(Gdx.files.internal("./island-tiles/Tile_Special_Movement_Icon@2x.png"));
+    private Texture islandTileSpecialMovementImage = new Texture(Gdx.files.internal("./island-tiles/Tile_Special_Movement_Icon@2x.png"));
 
     private boolean focused;
 
