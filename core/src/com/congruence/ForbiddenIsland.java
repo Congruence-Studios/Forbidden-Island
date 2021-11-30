@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ForbiddenIsland extends Game {
 
@@ -45,34 +46,6 @@ public class ForbiddenIsland extends Game {
 	public static Random random = new Random();
 
 	private AssetManager assetManager;
-
-	public static String[][] TEST_ISLAND_TILE_DATA = {
-			{ null, null, "Misty-Marsh", "Misty-Marsh", null, null },
-			{ null, null, "Misty-Marsh", "Misty-Marsh", null, null },
-			{ "Misty-Marsh", "Misty-Marsh", "Misty-Marsh", "Misty-Marsh", "Misty-Marsh", "Misty-Marsh" },
-			{ "Misty-Marsh", "Misty-Marsh", "Misty-Marsh", "Misty-Marsh", "Misty-Marsh", "Misty-Marsh" },
-			{ null, null, "Misty-Marsh", "Misty-Marsh", null, null },
-			{ null, null, "Misty-Marsh", "Misty-Marsh", null, null },
-	};
-
-	public static int[][] TEST_ISLAND_TILE_STATE = {
-			{ -1, -1, 1, 1, -1, -1 },
-			{ -1, -1, 1, 1, -1, -1 },
-			{ 1, 1, 0, 1, 2, 1 },
-			{ 1, 1, 1, 1, 0, 1 },
-			{ -1, -1, 1, 1, -1, -1 },
-			{ -1, -1, 1, 1, -1, -1 },
-	};
-
-	public class AssetDescriptor {
-		public String folder;
-		public Class<?> assetType;
-
-		public AssetDescriptor(String folder, Class<?> assetType) {
-			this.folder = folder;
-			this.assetType = assetType;
-		}
-	}
 
 	private GameInitializeListener gameInitializeListener = new GameInitializeListener() {
 		@Override
@@ -140,12 +113,24 @@ public class ForbiddenIsland extends Game {
 					tilesLeft--;
 				}
 			}
+			LinkedList<String> floodedTileCards = new LinkedList<>();
+			List<String> tileIslandCardTemp = new ArrayList<>(Resources.DefaultTileOrdering);
+			Iterator<String> setIterator = tileIslandCardTemp.iterator();
+			Collections.shuffle(tileIslandCardTemp);
+			for (int i = 0; i < 6; i++) {
+				floodedTileCards.add( setIterator.next() );
+			}
 			Collections.shuffle(pickedIslandTiles);
+			logger.info(floodedTileCards.toString());
+			Collections.shuffle(floodedTileCards);
+			logger.info(floodedTileCards.toString());
 			for (int i = 0; i < 6; i++) {
 				for (int j = 0; j < 6; j++) {
 					if (Resources.DefaultTileOrdering.contains(i + "" + j)) {
 						islandTiles[i][j] = pickedIslandTiles.pop();
-						islandTileState[i][j] = GameState.FLOODED_ISLAND_TILE;
+						if (floodedTileCards.contains(i + "" + j)) {
+							islandTileState[i][j] = GameState.FLOODED_ISLAND_TILE;
+						}
 					}
 					else {
 						islandTiles[i][j] = null;

@@ -60,6 +60,8 @@ public class GameUI implements Screen {
 
     private ArrayList<AbilityCard> abilityCards = new ArrayList<>();
 
+    private WaterMeterScreen waterMeterScreen;
+
     public GameUI(GameState gameState) {
         this.gameState = gameState;
     }
@@ -68,9 +70,9 @@ public class GameUI implements Screen {
     public void show() {
         Graphics.Monitor currMonitor = Gdx.graphics.getMonitor();
         Graphics.DisplayMode displayMode = Gdx.graphics.getDisplayMode(currMonitor);
-        if (!Gdx.graphics.setFullscreenMode(displayMode)) {
+        //if (!Gdx.graphics.setFullscreenMode(displayMode)) {
             // switching to full-screen mode failed
-        }
+        //}
 
         logger.info("GameUI show called.");
 
@@ -191,6 +193,12 @@ public class GameUI implements Screen {
                 ((GameConfiguration.width) - (GameConfiguration.height)) / 2f
         );
         stage.addActor(waterButton);
+        waterButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                waterMeterScreen.setOpen(!waterMeterScreen.isOpen());
+            }
+        });
         turnInfo = new GameMenuTurnInfo(
                 10f,
                 2 * tileHeight + 30f + 0.66f * (2 * tileHeight + 10f) - 10f,
@@ -283,6 +291,15 @@ public class GameUI implements Screen {
         for (AbilityCard ac : abilityCards) {
             stage.addActor(ac);
         }
+
+        waterMeterScreen = new WaterMeterScreen(
+                (GameConfiguration.width - (GameConfiguration.height * 3/4f))*0.5f,
+                (GameConfiguration.height - (GameConfiguration.height * 3/4f))*0.5f,
+                GameConfiguration.height * 3/4f,
+                GameConfiguration.height * 3/4f,
+                gameState
+        );
+        stage.addActor(waterMeterScreen);
 
         floodDeckPile.setEnabled(true);
         treasureDeckPile.setEnabled(true);
@@ -420,6 +437,11 @@ public class GameUI implements Screen {
             playerHands.get(3).setHeight(tileHeight * 2 + 10f);
             playerHands.get(3).setWidth((tileHeight * 2 + 10f) / 2);
         }
+
+        waterMeterScreen.setPositionX((GameConfiguration.width - (GameConfiguration.height * 3/4f))*0.5f);
+        waterMeterScreen.setPositiveY((GameConfiguration.height - (GameConfiguration.height * 3/4f))*0.5f);
+        waterMeterScreen.setHeight(GameConfiguration.height * 3/4f);
+        waterMeterScreen.setWidth(GameConfiguration.height * 3/4f);
 
         abilityCards.get(0).setPositionX(10f + ((tileHeight * 2 + 10f) / 2));
         abilityCards.get(0).setPositionY(10f);

@@ -47,6 +47,25 @@ public class Player {
         this.cardsAtHand = cardsAtHand;
         this.tileX = tileX;
         this.tileY = tileY;
+
+        if (playerName.equals("Pilot")) {
+            ability = Player.PILOT;
+        }
+        else if (playerName.equals("Engineer")) {
+            ability = Player.ENGINEER;
+        }
+        else if (playerName.equals("Messenger")) {
+            ability = Player.MESSENGER;
+        }
+        else if (playerName.equals("Explorer")) {
+            ability = Player.EXPLORER;
+        }
+        else if (playerName.equals("Diver")) {
+            ability = Player.DIVER;
+        }
+        else if (playerName.equals("Navigator")) {
+            ability = Player.NAVIGATOR;
+        }
     }
 
     public String getPlayerName() {
