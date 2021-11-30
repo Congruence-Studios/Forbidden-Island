@@ -50,6 +50,7 @@ public class ForbiddenIsland extends Game {
 	private GameInitializeListener gameInitializeListener = new GameInitializeListener() {
 		@Override
 		public void onInitialize(int NumberOfPlayers, int Difficulty) {
+			random = new Random();
 			HashMap<String, Player> players = new HashMap<>();
 			HashMap<Integer, String> playerOrder = new HashMap<>();
 			String[][] islandTiles = new String[6][6];
@@ -108,8 +109,10 @@ public class ForbiddenIsland extends Game {
 			int tilesLeft = 15;
 			ArrayList<String> tempIslandTiles = (ArrayList<String>) Resources.IslandTiles.clone();
 			while (tilesLeft > 0) {
+				logger.info("tempIslandTiles.size(): " + tempIslandTiles.size() + " tilesLeft: " + tilesLeft);
 				int rand = random.nextInt(tempIslandTiles.size());
-				pickedIslandTiles.add(tempIslandTiles.get(rand));
+				logger.info("rand: " + rand);
+				pickedIslandTiles.add(tempIslandTiles.remove(rand));
 				tilesLeft--;
 			}
 			LinkedList<String> floodedTileCards = new LinkedList<>();
