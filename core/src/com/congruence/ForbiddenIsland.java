@@ -50,7 +50,7 @@ public class ForbiddenIsland extends Game {
 
 	private GameInitializeListener gameInitializeListener = new GameInitializeListener() {
 		@Override
-		public void onInitialize() {
+		public void onInitialize(int NumberOfPlayers, int Difficulty) {
 			HashMap<String, Player> players = new HashMap<>();
 			HashMap<Integer, String> playerOrder = new HashMap<>();
 			String[][] islandTiles = new String[6][6];
@@ -58,10 +58,43 @@ public class ForbiddenIsland extends Game {
 			Stack<FloodCard> floodCardDeck = new Stack<>();
 			Stack<TreasureCard> treasureCardDeck = new Stack<>();
 
-			playerOrder.put(0, "Player 1");
-			playerOrder.put(1, "Player 2");
-			playerOrder.put(2, "Player 3");
-			playerOrder.put(3, "Player 4");
+			Stack<String> TEMP_PLAYER_CARDS = new Stack<>();
+			List<String> TEMP_PLAYER_CARDS_LIST = Arrays.asList(Resources.PLAYER_NAMES);
+			Collections.shuffle(TEMP_PLAYER_CARDS_LIST);
+			TEMP_PLAYER_CARDS.addAll(TEMP_PLAYER_CARDS_LIST);
+
+			playerOrder.put(0, TEMP_PLAYER_CARDS.peek());
+			players.put(TEMP_PLAYER_CARDS.peek(), new Player(
+					TEMP_PLAYER_CARDS.pop(),
+					null,
+					null,
+					0,
+					0
+			));
+			playerOrder.put(1, TEMP_PLAYER_CARDS.peek());
+			players.put(TEMP_PLAYER_CARDS.peek(), new Player(
+					TEMP_PLAYER_CARDS.pop(),
+					null,
+					null,
+					0,
+					0
+			));
+			playerOrder.put(2, TEMP_PLAYER_CARDS.peek());
+			players.put(TEMP_PLAYER_CARDS.peek(), new Player(
+					TEMP_PLAYER_CARDS.pop(),
+					null,
+					null,
+					0,
+					0
+			));
+			playerOrder.put(3, TEMP_PLAYER_CARDS.peek());
+			players.put(TEMP_PLAYER_CARDS.peek(), new Player(
+					TEMP_PLAYER_CARDS.pop(),
+					null,
+					null,
+					0,
+					0
+			));
 
 			LinkedList<String> pickedIslandTiles = new LinkedList<>();
 			pickedIslandTiles.add("Fools Landing");

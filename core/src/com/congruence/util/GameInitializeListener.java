@@ -2,6 +2,6 @@ package com.congruence.util;
 
 public interface GameInitializeListener {
 
-    void onInitialize();
+    void onInitialize( int NumberOfPlayers, int Difficulty );
 
 }

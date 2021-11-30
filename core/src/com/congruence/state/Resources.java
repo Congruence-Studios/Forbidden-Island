@@ -9,6 +9,15 @@ import static java.util.List.*;
 
 public class Resources {
 
+    public static final String[] PLAYER_NAMES = {
+            "Engineer",
+            "Diver",
+            "Navigator",
+            "Explorer",
+            "Messenger",
+            "Pilot"
+    };
+
     public static final String[] IslandTiles = {
             "Breakers Bridge",
             "Bronze Gate",

@@ -41,13 +41,12 @@ public class Player {
     private int ability;
 
     public Player(String playerName, String rName, ArrayList<TreasureCard> cardsAtHand,
-                  int tileX, int tileY, int ability) {
+                  int tileX, int tileY) {
         this.playerName = playerName;
         this.rName = rName;
         this.cardsAtHand = cardsAtHand;
         this.tileX = tileX;
         this.tileY = tileY;
-        this.ability = ability;
     }
 
     public String getPlayerName() {

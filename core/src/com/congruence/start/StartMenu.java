@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.congruence.GameConfiguration;
+import com.congruence.state.GameState;
 import com.congruence.util.GameInitializeListener;
 import com.congruence.util.GameStartListener;
 
@@ -84,7 +85,22 @@ public class StartMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 for (GameInitializeListener e : StartMenu.this.gameInitializeListeners) {
-                    e.onInitialize();
+                    int NumberOfPlayers = Integer.parseInt(StartMenu.this.numberOfPlayerSelect.getList().getSelected());
+                    int Difficulty = 0;
+                    String SelectedDifficulty = StartMenu.this.difficultlySelect.getSelected();
+                    if (SelectedDifficulty.equals("Novice")) {
+                        Difficulty = GameState.NOVICE;
+                    }
+                    else if (SelectedDifficulty.equals("Normal")){
+                        Difficulty = GameState.NORMAL;
+                    }
+                    else if (SelectedDifficulty.equals("Elite")) {
+                        Difficulty = GameState.ELITE;
+                    }
+                    else if (SelectedDifficulty.equals("Legendary")) {
+                        Difficulty = GameState.LEGENDARY;
+                    }
+                    e.onInitialize(NumberOfPlayers, Difficulty);
                 }
             }
         });
