@@ -1,9 +1,6 @@
 package com.congruence.state;
 
-import java.util.List;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 
 import static java.util.List.*;
 
@@ -18,7 +15,7 @@ public class Resources {
             "Pilot"
     };
 
-    public static final String[] IslandTiles = {
+    public static final ArrayList<String> IslandTiles = new ArrayList<>(Arrays.asList(
             "Breakers Bridge",
             "Bronze Gate",
             "Cave of Embers",
@@ -43,7 +40,7 @@ public class Resources {
             "Twilight Hollow",
             "Watchtower",
             "Whispering Garden"
-    };
+    ));
 
     public static final TreeSet<String> DefaultTileOrdering = new TreeSet<>();
 

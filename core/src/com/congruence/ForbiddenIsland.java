@@ -43,7 +43,7 @@ public class ForbiddenIsland extends Game {
 
 	private StartMenu startMenu;
 
-	public static Random random = new Random();
+	public static Random random;
 
 	private AssetManager assetManager;
 
@@ -106,12 +106,11 @@ public class ForbiddenIsland extends Game {
 			pickedIslandTiles.add("Coral Palace");
 			pickedIslandTiles.add("Tidal Palace");
 			int tilesLeft = 15;
+			ArrayList<String> tempIslandTiles = (ArrayList<String>) Resources.IslandTiles.clone();
 			while (tilesLeft > 0) {
-				int rand = random.nextInt(Resources.IslandTiles.length);
-				if (!pickedIslandTiles.contains(Resources.IslandTiles[rand])) {
-					pickedIslandTiles.add(Resources.IslandTiles[rand]);
-					tilesLeft--;
-				}
+				int rand = random.nextInt(tempIslandTiles.size());
+				pickedIslandTiles.add(tempIslandTiles.get(rand));
+				tilesLeft--;
 			}
 			LinkedList<String> floodedTileCards = new LinkedList<>();
 			List<String> tileIslandCardTemp = new ArrayList<>(Resources.DefaultTileOrdering);
@@ -209,7 +208,7 @@ public class ForbiddenIsland extends Game {
 			assetManager.finishLoading();
 
 			gameUI = new GameUI(new GameState(
-					GameState.NOVICE,
+					Difficulty,
 					players,
 					playerOrder,
 					islandTiles,
