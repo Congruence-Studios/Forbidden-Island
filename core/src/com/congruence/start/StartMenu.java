@@ -11,10 +11,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.congruence.GameConfiguration;
@@ -44,6 +41,10 @@ public class StartMenu implements Screen {
     private SelectBox<String> difficultlySelect;
 
     private SelectBox<String> numberOfPlayerSelect;
+
+    private TextField seedTextField;
+
+    private Button howToPlayButton;
 
     public StartMenu() {
         gameInitializeListeners = new ArrayList<>();
@@ -100,6 +101,19 @@ public class StartMenu implements Screen {
         numberOfPlayerSelect.setSelected("4");
         numberOfPlayerSelect.setSize(90, 45);
         stage.addActor(numberOfPlayerSelect);
+
+        seedTextField = new TextField("Seed", neonUISkin);
+        seedTextField.setSize(150, 50);
+        stage.addActor(seedTextField);
+
+        howToPlayButton = new TextButton("How to Play", neonUISkin);
+        stage.addActor(howToPlayButton);
+        howToPlayButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+            }
+        });
     }
 
     @Override
@@ -142,9 +156,19 @@ public class StartMenu implements Screen {
 
         startFont.draw(stage.getBatch(), difficultySelectText, fontX, fontY);
 
+        final String seedTextFieldText = "Seed #:";
+        final GlyphLayout seedTextFieldLayout = new GlyphLayout(startFont, seedTextFieldText);
+
+        fontX = 0 + (GameConfiguration.width /2f - seedTextField.getWidth()/2) - seedTextFieldLayout.width;
+        fontY = 0 + GameConfiguration.height/2f - seedTextField.getHeight();
+
+        startFont.draw(stage.getBatch(), seedTextFieldText, fontX, fontY);
+
         difficultlySelect.setPosition(GameConfiguration.width /2f - difficultlySelect.getWidth()/2, GameConfiguration.height/2f);
         startGameButton.setPosition(GameConfiguration.width /2f - startGameButton.getWidth()/2 , GameConfiguration.height/2f - difficultlySelect.getHeight());
         numberOfPlayerSelect.setPosition(GameConfiguration.width /2f - numberOfPlayerSelect.getWidth()/2 , GameConfiguration.height/2f + numberOfPlayerSelect.getHeight());
+        seedTextField.setPosition(GameConfiguration.width /2f - numberOfPlayerSelect.getWidth() * 3/4, GameConfiguration.height/2f - seedTextField.getHeight() * 9 / 5);
+        howToPlayButton.setPosition(GameConfiguration.width /2f - howToPlayButton.getWidth()/2, GameConfiguration.height/4f);
 
         stage.getBatch().end();
         stage.draw();
@@ -201,10 +225,14 @@ public class StartMenu implements Screen {
     }
 
     public String getNumPlayers() {
-        return difficultlySelect.getSelected();
+        return numberOfPlayerSelect.getSelected();
     }
 
     public String getDifficulty() {
         return difficultlySelect.getSelected();
+    }
+
+    public String getSeed() {
+        return seedTextField.getText();
     }
 }

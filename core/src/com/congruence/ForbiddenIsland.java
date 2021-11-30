@@ -58,6 +58,10 @@ public class ForbiddenIsland extends Game {
 			Stack<FloodCard> floodCardDeck = new Stack<>();
 			Stack<TreasureCard> treasureCardDeck = new Stack<>();
 
+			int numPlayers = Integer.parseInt(startMenu.getNumPlayers());
+			String difficulty = startMenu.getDifficulty();
+			int seed = Integer.parseInt(startMenu.getSeed());
+
 			playerOrder.put(0, "Player 1");
 			playerOrder.put(1, "Player 2");
 			playerOrder.put(2, "Player 3");
