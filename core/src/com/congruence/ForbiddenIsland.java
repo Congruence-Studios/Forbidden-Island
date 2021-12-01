@@ -43,7 +43,7 @@ public class ForbiddenIsland extends Game {
 
 	private StartMenu startMenu;
 
-	public static Random random = new Random();;
+	public static Random random = new Random();
 
 	public static AssetManager assetManager;
 
@@ -70,58 +70,42 @@ public class ForbiddenIsland extends Game {
 					TEMP_PLAYER_CARDS.pop(),
 					null,
 					null,
-					0,
-					0
+					2,
+					2
 			));
 			playerOrder.put(1, TEMP_PLAYER_CARDS.peek());
 			players.put(TEMP_PLAYER_CARDS.peek(), new Player(
 					TEMP_PLAYER_CARDS.pop(),
 					null,
 					null,
-					0,
-					0
+					2,
+					2
 			));
 			playerOrder.put(2, TEMP_PLAYER_CARDS.peek());
 			players.put(TEMP_PLAYER_CARDS.peek(), new Player(
 					TEMP_PLAYER_CARDS.pop(),
 					null,
 					null,
-					0,
-					0
+					2,
+					2
 			));
 			playerOrder.put(3, TEMP_PLAYER_CARDS.peek());
 			players.put(TEMP_PLAYER_CARDS.peek(), new Player(
 					TEMP_PLAYER_CARDS.pop(),
 					null,
 					null,
-					0,
-					0
+					2,
+					2
 			));
 
 			LinkedList<String> pickedIslandTiles = new LinkedList<>();
-			pickedIslandTiles.add("Fools Landing");
-			pickedIslandTiles.add("Temple of the Moon");
-			pickedIslandTiles.add("Temple of the Sun");
-			pickedIslandTiles.add("Whispering Garden");
-			pickedIslandTiles.add("Howling Garden");
-			pickedIslandTiles.add("Cave of Embers");
-			pickedIslandTiles.add("Cave of Shadows");
-			pickedIslandTiles.add("Coral Palace");
-			pickedIslandTiles.add("Tidal Palace");
-			int tilesLeft = 15;
-			LinkedList<String> tempIslandTiles = ((LinkedList<String>) Resources.IslandTiles.clone());
-			tempIslandTiles.remove("Fools Landing");
-			tempIslandTiles.remove("Temple of the Moon");
-			tempIslandTiles.remove("Temple of the Sun");
-			tempIslandTiles.remove("Whispering Garden");
-			tempIslandTiles.remove("Howling Garden");
-			tempIslandTiles.remove("Cave of Embers");
-			tempIslandTiles.remove("Cave of Shadows");
-			tempIslandTiles.remove("Coral Palace");
-			tempIslandTiles.remove("Tidal Palace");
-			Collections.shuffle(tempIslandTiles);
+			int tilesLeft = 24;
+			ArrayList<String> tempIslandTiles = (ArrayList<String>) Resources.IslandTiles.clone();
 			while (tilesLeft > 0) {
-				pickedIslandTiles.add(tempIslandTiles.pop());
+				logger.info("tempIslandTiles.size(): " + tempIslandTiles.size() + " tilesLeft: " + tilesLeft);
+				int rand = random.nextInt(tempIslandTiles.size());
+				logger.info("rand: " + rand + " tile: " + tempIslandTiles.get(rand));
+				pickedIslandTiles.add(tempIslandTiles.remove(rand));
 				tilesLeft--;
 			}
 			LinkedList<String> floodedTileCards = new LinkedList<>();
@@ -132,7 +116,7 @@ public class ForbiddenIsland extends Game {
 				floodedTileCards.add( setIterator.next() );
 			}
 			Collections.shuffle(pickedIslandTiles);
-			logger.info(floodedTileCards.toString());
+			logger.info(pickedIslandTiles.toString());
 			Collections.shuffle(floodedTileCards);
 			logger.info(floodedTileCards.toString());
 			for (int i = 0; i < 6; i++) {
@@ -163,8 +147,9 @@ public class ForbiddenIsland extends Game {
 			assetDirectories.add("island-tiles");
 			assetDirectories.add("water-meter");
 			for (String folder : assetDirectories) {
-				logger.info("Path" + resolver.resolve(folder).path());
-				for (FileHandle asset : resolver.resolve(folder).list()) {
+				FileHandle handle = Gdx.files.internal("./desktop/assets/" + resolver.resolve(folder).path());
+				logger.info("Path " + resolver.resolve(folder).path() + " List size " + handle.path());
+				for (FileHandle asset : handle.list()) {
 					FileHandle folderSub = resolver.resolve(asset.path());
 					logger.info(asset.name());
 					if (folderSub.isDirectory()) {

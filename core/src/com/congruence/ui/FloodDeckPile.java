@@ -42,10 +42,10 @@ public class FloodDeckPile extends Actor {
         this.positionY = positionY;
         this.floodDeckWidth = width;
         this.floodDeckHeight = height;
-        outlinedButtonTexture = ForbiddenIsland.assetManager.get("flood-deck/Flood-Deck.png", Texture.class);
-        hoverButtonTexture = ForbiddenIsland.assetManager.get("flood-deck/Flood-Deck-Hovered.png", Texture.class);
-        focusedButtonTexture = ForbiddenIsland.assetManager.get("flood-deck/Flood-Deck-Pressed.png", Texture.class);
-        disabledButtonTexture = ForbiddenIsland.assetManager.get("flood-deck/Flood-Deck-Disabled.png", Texture.class);
+        outlinedButtonTexture = ForbiddenIsland.assetManager.get("./desktop/assets/flood-deck/Flood-Deck.png", Texture.class);
+        hoverButtonTexture = ForbiddenIsland.assetManager.get("./desktop/assets/flood-deck/Flood-Deck-Hovered.png", Texture.class);
+        focusedButtonTexture = ForbiddenIsland.assetManager.get("./desktop/assets/flood-deck/Flood-Deck-Pressed.png", Texture.class);
+        disabledButtonTexture = ForbiddenIsland.assetManager.get("./desktop/assets/flood-deck/Flood-Deck-Disabled.png", Texture.class);
         outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);

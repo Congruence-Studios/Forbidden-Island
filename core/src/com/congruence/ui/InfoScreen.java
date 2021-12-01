@@ -55,7 +55,7 @@ public class InfoScreen extends Actor {
         parameter.color = Color.BLACK;
         titleFont = generator.generateFont(parameter);
         generator.dispose();
-        background = ForbiddenIsland.assetManager.get("custom-ui/dialog-background/Dialog.png", Texture.class);
+        background = ForbiddenIsland.assetManager.get("./desktop/assets/custom-ui/dialog-background/Dialog.png", Texture.class);
 
         turnLayout = new GlyphLayout(titleFont, "");
         actionCountLayout = new GlyphLayout(titleFont, "");

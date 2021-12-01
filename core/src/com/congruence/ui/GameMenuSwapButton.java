@@ -43,10 +43,10 @@ public class GameMenuSwapButton extends Actor {
         this.height = height;
         this.width = width;
 
-        outlinedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/give-button/Give-Button.png", Texture.class);
-        hoverButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/give-button/Give-Button-Hovered.png", Texture.class);
-        focusedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/give-button/Give-Button-Pressed.png", Texture.class);
-        disabledButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/give-button/Give-Button-Disabled.png", Texture.class);
+        outlinedButtonTexture = ForbiddenIsland.assetManager.get("./desktop/assets/custom-ui/give-button/Give-Button.png", Texture.class);
+        hoverButtonTexture = ForbiddenIsland.assetManager.get("./desktop/assets/custom-ui/give-button/Give-Button-Hovered.png", Texture.class);
+        focusedButtonTexture = ForbiddenIsland.assetManager.get("./desktop/assets/custom-ui/give-button/Give-Button-Pressed.png", Texture.class);
+        disabledButtonTexture = ForbiddenIsland.assetManager.get("./desktop/assets/custom-ui/give-button/Give-Button-Disabled.png", Texture.class);
         outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);

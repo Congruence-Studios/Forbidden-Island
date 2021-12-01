@@ -31,7 +31,7 @@ public class GameMenuBackground extends Actor {
         this.height = height;
         this.width = width;
 
-        outlinedBackground = ForbiddenIsland.assetManager.get("island-tiles/Tile_Hover_Icon@2x.png", Texture.class);
+        outlinedBackground = ForbiddenIsland.assetManager.get("./desktop/assets/island-tiles/Tile_Hover_Icon@2x.png", Texture.class);
     }
 
     @Override

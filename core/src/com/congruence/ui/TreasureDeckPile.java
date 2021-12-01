@@ -42,10 +42,10 @@ public class TreasureDeckPile extends Actor {
         this.positionY = positionY;
         this.treasureDeckWidth = width;
         this.treasureDeckHeight = height;
-        outlinedButtonTexture = ForbiddenIsland.assetManager.get("treasure-deck/Treasure-Deck.png", Texture.class);
-        hoverButtonTexture = ForbiddenIsland.assetManager.get("treasure-deck/Treasure-Deck-Hovered.png", Texture.class);
-        focusedButtonTexture = ForbiddenIsland.assetManager.get("treasure-deck/Treasure-Deck-Pressed.png", Texture.class);
-        disabledButtonTexture = ForbiddenIsland.assetManager.get("treasure-deck/Treasure-Deck-Disabled.png", Texture.class);
+        outlinedButtonTexture = ForbiddenIsland.assetManager.get("./desktop/assets/treasure-deck/Treasure-Deck.png", Texture.class);
+        hoverButtonTexture = ForbiddenIsland.assetManager.get("./desktop/assets/treasure-deck/Treasure-Deck-Hovered.png", Texture.class);
+        focusedButtonTexture = ForbiddenIsland.assetManager.get("./desktop/assets/treasure-deck/Treasure-Deck-Pressed.png", Texture.class);
+        disabledButtonTexture = ForbiddenIsland.assetManager.get("./desktop/assets/treasure-deck/Treasure-Deck-Disabled.png", Texture.class);
         outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);

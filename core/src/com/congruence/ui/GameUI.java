@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.congruence.GameConfiguration;
 import com.congruence.state.GameState;
+import com.congruence.state.Player;
 import com.congruence.state.Resources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +65,8 @@ public class GameUI implements Screen {
 
     private InfoScreen infoScreen;
 
+    private ArrayList<Pawn> pawns = new ArrayList<>();
+
     public GameUI(GameState gameState) {
         this.gameState = gameState;
     }
@@ -99,6 +102,7 @@ public class GameUI implements Screen {
                 positionX -= tileWidth;
                 if (gameState.getIslandTiles()[i][j] != null) {
                     final IslandTile islandTile = new IslandTile(positionX, positionY, tileWidth, tileHeight, gameState.getIslandTiles()[i][j], new Pair(i, j), gameState.getIslandTileState()[i][j]);
+                    logger.info("new islandTile: x: " + positionX + " y: " + positionY + " i: " + i + " j: " + j);
                     islandTiles.put(new Pair(i, j), islandTile);
 
                     //Logic for the Actor Events
@@ -122,6 +126,7 @@ public class GameUI implements Screen {
                         @Override
                         public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                             islandTile.setHovered(true);
+                            logger.info("enter: " + islandTile.getCoordinates().x + " " + islandTile.getCoordinates().y + " x: " + x + " y: " + y);
                         }
 
                         @Override
@@ -295,6 +300,46 @@ public class GameUI implements Screen {
         }
         for (AbilityCard ac : abilityCards) {
             stage.addActor(ac);
+        }
+        Player tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(0));
+        logger.info(tempPlayer.toString());
+        pawns.add(new Pawn(
+                islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX(),
+                islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY(),
+                tileWidth / 2,
+                tileHeight / 2,
+                tempPlayer.getAbility()
+        ));
+        tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(1));
+        pawns.add(new Pawn(
+                islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX(),
+                islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY(),
+                tileWidth / 2,
+                tileHeight / 2,
+                tempPlayer.getAbility()
+        ));
+        if (gameState.getMaxTurnLoops() >= 3) {
+            tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(2));
+            pawns.add(new Pawn(
+                    islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX(),
+                    islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY(),
+                    tileWidth / 2,
+                    tileHeight / 2,
+                    tempPlayer.getAbility()
+            ));
+        }
+        if (gameState.getMaxTurnLoops() >= 4) {
+            tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(3));
+            pawns.add(new Pawn(
+                    islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX(),
+                    islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY(),
+                    tileWidth / 2,
+                    tileHeight / 2,
+                    tempPlayer.getAbility()
+            ));
+        }
+        for (Pawn p : pawns) {
+            stage.addActor(p);
         }
 
         waterMeterScreen = new WaterMeterScreen(
@@ -486,7 +531,34 @@ public class GameUI implements Screen {
             abilityCards.get(3).setWidth((tileHeight * 2 + 10f) / 2);
         }
 
-        logger.info("playerHand 0, height: " + playerHands.get(0).getHeight());
+        Player tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(0));
+        pawns.get(0).setX(islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX());
+        pawns.get(0).setY(islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY());
+        pawns.get(0).setWidth(tileWidth / 2);
+        pawns.get(0).setHeight(tileHeight / 2);
+        logger.info(pawns.get(0).toString());
+        tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(1));
+        pawns.get(1).setX(islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX());
+        pawns.get(1).setY(islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY());
+        pawns.get(1).setWidth(tileWidth / 2);
+        pawns.get(1).setHeight(tileHeight / 2);
+        logger.info(pawns.get(1).toString());
+        if (gameState.getMaxTurnLoops() >= 3) {
+            tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(2));
+            pawns.get(2).setX(islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX());
+            pawns.get(2).setY(islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY());
+            pawns.get(2).setWidth(tileWidth / 2);
+            pawns.get(2).setHeight(tileHeight / 2);
+            logger.info(pawns.get(2).toString());
+        }
+        if (gameState.getMaxTurnLoops() >= 4) {
+            tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(3));
+            pawns.get(3).setX(islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX());
+            pawns.get(3).setY(islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY());
+            pawns.get(3).setWidth(tileWidth / 2);
+            pawns.get(3).setHeight(tileHeight / 2);
+            logger.info(pawns.get(3).toString());
+        }
 
         camera.setToOrtho(false, GameConfiguration.width, GameConfiguration.height);
         stage.getViewport().update(GameConfiguration.width, GameConfiguration.height, true);
