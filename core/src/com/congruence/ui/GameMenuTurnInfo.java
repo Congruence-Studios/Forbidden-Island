@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.congruence.ForbiddenIsland;
 import com.congruence.GameConfiguration;
 
 public class GameMenuTurnInfo extends Actor {
@@ -17,9 +18,13 @@ public class GameMenuTurnInfo extends Actor {
 
     private boolean focused;
 
-    private BitmapFont font;
+    private Texture outlinedButtonTexture;
 
-    private String text;
+    private Texture hoverButtonTexture;
+
+    private Texture focusedButtonTexture;
+
+    private Texture disabledButtonTexture;
 
     private float positionX;
 
@@ -33,20 +38,19 @@ public class GameMenuTurnInfo extends Actor {
             float positionX,
             float positionY,
             float height,
-            float width,
-            String text
+            float width
     ) {
         this.positionX = positionX;
         this.positiveY = positionY;
         this.height = height;
         this.width = width;
-        this.text = text;
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Abel-Regular.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 20;
-        font = generator.generateFont(parameter);
-        generator.dispose();
+        outlinedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/info-button/Info-Button.png", Texture.class);
+        hoverButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/info-button/Info-Button-Hovered.png", Texture.class);
+        focusedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/info-button/Info-Button-Pressed.png", Texture.class);
+        outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         super.addListener(new ClickListener(){
             @Override
@@ -82,10 +86,21 @@ public class GameMenuTurnInfo extends Actor {
         batch.end();
         batch.begin();
 
-        GlyphLayout layout = new GlyphLayout(font, text);
-
-        //font.draw(batch, text, positionX, positiveY);
-
+        if (focused) {
+            batch.draw(focusedButtonTexture, positionX + 10f, positiveY + 10f,
+                    height * 8f/5f,
+                    height);
+        }
+        else if (hover) {
+            batch.draw(hoverButtonTexture, positionX + 10f, positiveY + 10f,
+                    height * 8f/5f,
+                    height);
+        }
+        else {
+            batch.draw(outlinedButtonTexture, positionX + 10f, positiveY + 10f,
+                    height * 8f/5f,
+                    height);
+        }
     }
 
     public float getPositionX() {

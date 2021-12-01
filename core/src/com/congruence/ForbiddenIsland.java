@@ -63,6 +63,8 @@ public class ForbiddenIsland extends Game {
 			Collections.shuffle(TEMP_PLAYER_CARDS_LIST);
 			TEMP_PLAYER_CARDS.addAll(TEMP_PLAYER_CARDS_LIST);
 
+			int WaterHeight = 1;
+
 			playerOrder.put(0, TEMP_PLAYER_CARDS.peek());
 			players.put(TEMP_PLAYER_CARDS.peek(), new Player(
 					TEMP_PLAYER_CARDS.pop(),
@@ -159,6 +161,7 @@ public class ForbiddenIsland extends Game {
 			assetDirectories.add("flood-deck");
 			assetDirectories.add("treasure-deck");
 			assetDirectories.add("island-tiles");
+			assetDirectories.add("water-meter");
 			for (String folder : assetDirectories) {
 				logger.info("Path" + resolver.resolve(folder).path());
 				for (FileHandle asset : resolver.resolve(folder).list()) {
@@ -226,7 +229,8 @@ public class ForbiddenIsland extends Game {
 					islandTiles,
 					islandTileState,
 					floodCardDeck,
-					treasureCardDeck
+					treasureCardDeck,
+					WaterHeight
 			));
 			setScreen(gameUI);
 		}

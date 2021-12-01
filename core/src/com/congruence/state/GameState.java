@@ -164,7 +164,9 @@ public class GameState {
             String[][] islandTiles,
             int[][] islandTileState,
             Stack<FloodCard> islandTileDeck,
-            Stack<TreasureCard> treasureCardDeck) {
+            Stack<TreasureCard> treasureCardDeck,
+            int waterHeight
+            ) {
         this.difficulty = difficulty;
         this.waterHeight = waterHeight;
         this.cardsToDraw = cardsToDraw;

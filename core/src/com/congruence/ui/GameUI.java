@@ -62,6 +62,8 @@ public class GameUI implements Screen {
 
     private WaterMeterScreen waterMeterScreen;
 
+    private InfoScreen infoScreen;
+
     public GameUI(GameState gameState) {
         this.gameState = gameState;
     }
@@ -201,10 +203,15 @@ public class GameUI implements Screen {
                 10f,
                 2 * tileHeight + 30f + 0.66f * (2 * tileHeight + 10f) - 10f,
                 0.33f * (2 * tileHeight + 10f) - 5f,
-                ((GameConfiguration.width) - (GameConfiguration.height)) / 2f,
-                getCurrentPlayerName()
+                ((GameConfiguration.width) - (GameConfiguration.height)) / 2f
         );
         stage.addActor(turnInfo);
+        turnInfo.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                infoScreen.setOpen(!infoScreen.isOpen());
+            }
+        });
         treasureDeckPile = new TreasureDeckPile(
                 ((GameConfiguration.width - 10f) + ((GameConfiguration.width - 10f) - ((GameConfiguration.width) - (GameConfiguration.height)) / 2f)) / 2f - tileHeight * 8f / 10f,
                 2 * tileHeight + 30f,
@@ -291,13 +298,22 @@ public class GameUI implements Screen {
         }
 
         waterMeterScreen = new WaterMeterScreen(
-                (GameConfiguration.width - (GameConfiguration.height * 3/4f))*0.5f,
-                (GameConfiguration.height - (GameConfiguration.height * 3/4f))*0.5f,
-                GameConfiguration.height * 3/4f,
-                GameConfiguration.height * 3/4f,
+                (GameConfiguration.width - (GameConfiguration.height * 15/16f))*0.5f,
+                (GameConfiguration.height - (GameConfiguration.height * 15/16f))*0.5f,
+                GameConfiguration.height * 15/16f,
+                GameConfiguration.height * 15/16f,
                 gameState
         );
         stage.addActor(waterMeterScreen);
+
+        infoScreen = new InfoScreen(
+                (GameConfiguration.width - (GameConfiguration.height * 15/16f))*0.5f,
+                (GameConfiguration.height - (GameConfiguration.height * 15/16f))*0.5f,
+                GameConfiguration.height * 15/16f,
+                GameConfiguration.height * 15/16f,
+                gameState
+        );
+        stage.addActor(infoScreen);
 
         floodDeckPile.setEnabled(true);
         treasureDeckPile.setEnabled(true);
@@ -436,10 +452,15 @@ public class GameUI implements Screen {
             playerHands.get(3).setWidth((tileHeight * 2 + 10f) / 2);
         }
 
-        waterMeterScreen.setPositionX((GameConfiguration.width - (GameConfiguration.height * 3/4f))*0.5f);
-        waterMeterScreen.setPositiveY((GameConfiguration.height - (GameConfiguration.height * 3/4f))*0.5f);
-        waterMeterScreen.setHeight(GameConfiguration.height * 3/4f);
-        waterMeterScreen.setWidth(GameConfiguration.height * 3/4f);
+        waterMeterScreen.setPositionX((GameConfiguration.width - (GameConfiguration.height * 15/16f))*0.5f);
+        waterMeterScreen.setPositiveY((GameConfiguration.height - (GameConfiguration.height * 15/16f))*0.5f);
+        waterMeterScreen.setHeight(GameConfiguration.height * 15/16f);
+        waterMeterScreen.setWidth(GameConfiguration.height * 15/16f);
+
+        infoScreen.setPositionX((GameConfiguration.width - (GameConfiguration.height * 15/16f))*0.5f);
+        infoScreen.setPositiveY((GameConfiguration.height - (GameConfiguration.height * 15/16f))*0.5f);
+        infoScreen.setHeight(GameConfiguration.height * 15/16f);
+        infoScreen.setWidth(GameConfiguration.height * 15/16f);
 
         abilityCards.get(0).setPositionX(10f + ((tileHeight * 2 + 10f) / 2));
         abilityCards.get(0).setPositionY(10f);
