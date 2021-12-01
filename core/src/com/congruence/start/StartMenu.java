@@ -18,10 +18,14 @@ import com.congruence.GameConfiguration;
 import com.congruence.state.GameState;
 import com.congruence.util.GameInitializeListener;
 import com.congruence.util.GameStartListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
 public class StartMenu implements Screen {
+
+    private static final Logger logger = LoggerFactory.getLogger(StartMenu.class);
 
     private OrthographicCamera camera;
 
@@ -103,9 +107,10 @@ public class StartMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 for (GameInitializeListener e : StartMenu.this.gameInitializeListeners) {
-                    int NumberOfPlayers = Integer.parseInt(StartMenu.this.numberOfPlayerSelect.getList().getSelected());
+                    int NumberOfPlayers = Integer.parseInt(StartMenu.this.numberOfPlayerSelect.getSelected());
                     int Difficulty = GameState.NOVICE;
                     String SelectedDifficulty = StartMenu.this.difficultlySelect.getSelected();
+                    logger.info(SelectedDifficulty);
                     switch (SelectedDifficulty) {
                         case "Normal":
                             Difficulty = GameState.NORMAL;
@@ -117,6 +122,7 @@ public class StartMenu implements Screen {
                             Difficulty = GameState.LEGENDARY;
                             break;
                     }
+                    logger.info(Difficulty + "");
                     e.onInitialize(NumberOfPlayers, Difficulty);
                 }
             }

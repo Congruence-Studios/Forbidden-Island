@@ -81,22 +81,27 @@ public class ForbiddenIsland extends Game {
 					4,
 					1
 			));
-			playerOrder.put(2, TEMP_PLAYER_CARDS.peek());
-			players.put(TEMP_PLAYER_CARDS.peek(), new Player(
-					TEMP_PLAYER_CARDS.pop(),
-					null,
-					null,
-					4,
-					4
-			));
-			playerOrder.put(3, TEMP_PLAYER_CARDS.peek());
-			players.put(TEMP_PLAYER_CARDS.peek(), new Player(
-					TEMP_PLAYER_CARDS.pop(),
-					null,
-					null,
-					1,
-					4
-			));
+			if (NumberOfPlayers > 2) {
+				playerOrder.put(2, TEMP_PLAYER_CARDS.peek());
+				players.put(TEMP_PLAYER_CARDS.peek(), new Player(
+						TEMP_PLAYER_CARDS.pop(),
+						null,
+						null,
+						4,
+						4
+				));
+			}
+			if (NumberOfPlayers > 3) {
+				playerOrder.put(3, TEMP_PLAYER_CARDS.peek());
+				players.put(TEMP_PLAYER_CARDS.peek(), new Player(
+						TEMP_PLAYER_CARDS.pop(),
+						null,
+						null,
+						1,
+						4
+				));
+			}
+			logger.info(NumberOfPlayers + "");
 
 			LinkedList<String> pickedIslandTiles = new LinkedList<>();
 			int tilesLeft = 24;
@@ -207,6 +212,16 @@ public class ForbiddenIsland extends Game {
 			};
 			setScreen(LoadingScreen);
 			assetManager.finishLoading();
+
+			if (Difficulty == GameState.NORMAL) {
+				WaterHeight = 2;
+			}
+			else if (Difficulty == GameState.ELITE) {
+				WaterHeight = 3;
+			}
+			else if (Difficulty == GameState.LEGENDARY) {
+				WaterHeight = 4;
+			}
 
 			gameUI = new GameUI(new GameState(
 					Difficulty,
