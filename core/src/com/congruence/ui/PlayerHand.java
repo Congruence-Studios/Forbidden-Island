@@ -49,9 +49,9 @@ public class PlayerHand extends Actor {
         this.player = player;
         this.width = width;
         this.height = height;
-        outlinedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/player-hand/Player-Hand-Button.png", Texture.class);
-        hoverButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/player-hand/Player-Hand-Button-Hovered.png", Texture.class);
-        focusedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/player-hand/Player-Hand-Button-Pressed.png", Texture.class);
+        outlinedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/player-hand/Player Hand Button.png", Texture.class);
+        hoverButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/player-hand/Player Hand Button Hovered.png", Texture.class);
+        focusedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/player-hand/Player Hand Button Pressed.png", Texture.class);
         outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
