@@ -153,6 +153,9 @@ public class StartMenu implements Screen {
         seedTextField.setX((GameConfiguration.width - seedTextField.getPrefWidth()) / 2f);
         seedTextField.setY(headingHeight - 50f - numberOfPlayerSelect.getPrefHeight() - difficultlySelect.getPrefHeight() - 50f);
 
+        startGameButton.setX((GameConfiguration.width - startGameButton.getPrefWidth()) / 2f);
+        startGameButton.setY(headingHeight - 50f - numberOfPlayerSelect.getPrefHeight() - difficultlySelect.getPrefHeight() - 75f - seedTextField.getPrefHeight() - startGameButton.getPrefHeight());
+
         howToPlayButton = new TextButton("How to Play", neonUISkin);
         stage.addActor(howToPlayButton);
         howToPlayButton.addListener(new ClickListener() {
@@ -238,6 +241,9 @@ public class StartMenu implements Screen {
 
         seedTextField.setX((GameConfiguration.width - seedTextField.getPrefWidth()) / 2f);
         seedTextField.setY(headingHeight - 50f - numberOfPlayerSelect.getPrefHeight() - difficultlySelect.getPrefHeight() - 50f - seedTextField.getPrefHeight());
+
+        startGameButton.setX((GameConfiguration.width - startGameButton.getPrefWidth()) / 2f);
+        startGameButton.setY(headingHeight - 50f - numberOfPlayerSelect.getPrefHeight() - difficultlySelect.getPrefHeight() - 75f - seedTextField.getPrefHeight() - startGameButton.getPrefHeight());
 
     }
 
