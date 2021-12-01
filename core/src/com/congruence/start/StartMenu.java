@@ -35,6 +35,8 @@ public class StartMenu implements Screen {
 
     private BitmapFont titleFont;
 
+    private BitmapFont subtitleFont;
+
     private BitmapFont startFont;
 
     private ArrayList<GameInitializeListener> gameInitializeListeners;
@@ -50,6 +52,10 @@ public class StartMenu implements Screen {
     private TextField seedTextField;
 
     private Button howToPlayButton;
+
+    private GlyphLayout titleLayout;
+
+    private  GlyphLayout subtitleLayout;
 
     public StartMenu() {
         gameInitializeListeners = new ArrayList<>();
@@ -80,8 +86,19 @@ public class StartMenu implements Screen {
         generator = new FreeTypeFontGenerator(Gdx.files.internal("Abel-Regular.ttf"));
         parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 30;
+        subtitleFont = generator.generateFont(parameter);
+        generator.dispose();
+
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("Abel-Regular.ttf"));
+        parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 30;
         startFont = generator.generateFont(parameter);
         generator.dispose();
+
+        titleLayout = new GlyphLayout(titleFont, "Forbidden Island");
+
+        String startText = "Please enter the following information";
+        subtitleLayout = new GlyphLayout(startFont, startText);
 
         neonUISkin = new Skin(Gdx.files.internal("./ui/neon/neon-ui.json"));
         startGameButton = new TextButton("Start Game", neonUISkin);
@@ -93,19 +110,18 @@ public class StartMenu implements Screen {
 
 
                     int NumberOfPlayers = Integer.parseInt(StartMenu.this.numberOfPlayerSelect.getList().getSelected());
-                    int Difficulty = 0;
+                    int Difficulty = GameState.NOVICE;
                     String SelectedDifficulty = StartMenu.this.difficultlySelect.getSelected();
-                    if (SelectedDifficulty.equals("Novice")) {
-                        Difficulty = GameState.NOVICE;
-                    }
-                    else if (SelectedDifficulty.equals("Normal")){
-                        Difficulty = GameState.NORMAL;
-                    }
-                    else if (SelectedDifficulty.equals("Elite")) {
-                        Difficulty = GameState.ELITE;
-                    }
-                    else if (SelectedDifficulty.equals("Legendary")) {
-                        Difficulty = GameState.LEGENDARY;
+                    switch (SelectedDifficulty) {
+                        case "Normal":
+                            Difficulty = GameState.NORMAL;
+                            break;
+                        case "Elite":
+                            Difficulty = GameState.ELITE;
+                            break;
+                        case "Legendary":
+                            Difficulty = GameState.LEGENDARY;
+                            break;
                     }
                     logger.info("Difficulty: " + Difficulty + " NumberOfPlayers: " + NumberOfPlayers);
                     e.onInitialize(NumberOfPlayers, Difficulty);
@@ -113,21 +129,29 @@ public class StartMenu implements Screen {
             }
         });
 
+        float headingHeight =  (GameConfiguration.height * 5 / 6f) - titleLayout.height - subtitleLayout.height - 100f;
+
         difficultlySelect = new SelectBox<>(neonUISkin);
+        stage.addActor(difficultlySelect);
         difficultlySelect.setItems("Novice", "Normal", "Elite", "Legendary");
         difficultlySelect.setSelected("Novice");
-        difficultlySelect.setSize(150, 50);
-        stage.addActor(difficultlySelect);
+        difficultlySelect.setSize(difficultlySelect.getPrefWidth(), difficultlySelect.getPrefWidth());
+        difficultlySelect.setX((GameConfiguration.width - difficultlySelect.getPrefWidth()) / 2f);
+        difficultlySelect.setY(headingHeight - 50f);
 
         numberOfPlayerSelect = new SelectBox<>(neonUISkin);
+        stage.addActor(numberOfPlayerSelect);
         numberOfPlayerSelect.setItems("2", "3", "4");
         numberOfPlayerSelect.setSelected("4");
-        numberOfPlayerSelect.setSize(90, 45);
-        stage.addActor(numberOfPlayerSelect);
+        numberOfPlayerSelect.setSize(numberOfPlayerSelect.getPrefWidth(), numberOfPlayerSelect.getPrefWidth());
+        numberOfPlayerSelect.setX((GameConfiguration.width - numberOfPlayerSelect.getPrefWidth()) / 2f);
+        numberOfPlayerSelect.setY(headingHeight - 50f - difficultlySelect.getPrefHeight() - 25f);
 
         seedTextField = new TextField("Seed", neonUISkin);
-        seedTextField.setSize(150, 50);
         stage.addActor(seedTextField);
+        seedTextField.setSize(seedTextField.getPrefWidth(), seedTextField.getPrefHeight());
+        seedTextField.setX((GameConfiguration.width - seedTextField.getPrefWidth()) / 2f);
+        seedTextField.setY(headingHeight - 50f - numberOfPlayerSelect.getPrefHeight() - difficultlySelect.getPrefHeight() - 50f);
 
         howToPlayButton = new TextButton("How to Play", neonUISkin);
         stage.addActor(howToPlayButton);
@@ -147,29 +171,23 @@ public class StartMenu implements Screen {
         stage.act();
         stage.getBatch().begin();
 
-        final String titleText = "Forbidden Island";
-        final GlyphLayout titleLayout = new GlyphLayout(titleFont, titleText);
+        float titleFontX = 0 + (GameConfiguration.width - titleLayout.width) / 2;
+        float titleFontY = 0 + (GameConfiguration.height * 5 / 6f);
 
-        float fontX = 0 + (GameConfiguration.width - titleLayout.width) / 2;
-        float fontY = 0 + (GameConfiguration.height + titleLayout.height) * 5 / 6f;
+        titleFont.draw(stage.getBatch(), titleLayout, titleFontX, titleFontY);
 
-        titleFont.draw(stage.getBatch(), titleText, fontX, fontY);
+        float subtitleFontX = 0 + (GameConfiguration.width - subtitleLayout.width) / 2;
+        float subtitleFontY = 0 + titleFontY - titleLayout.height - 50f;
 
-        final String startText = "Please enter the following information";
-        final GlyphLayout startLayout = new GlyphLayout(startFont, startText);
-
-        fontX = 0 + (GameConfiguration.width - startLayout.width) / 2;
-        fontY = 0 + (GameConfiguration.height + startLayout.height) * 2 / 3f;
-
-        startFont.draw(stage.getBatch(), startText, fontX, fontY);
+        subtitleFont.draw(stage.getBatch(), subtitleLayout, subtitleFontX, subtitleFontY);
 
         final String numberOfPlayerSelectText = "Number of Players:";
         final GlyphLayout numberOfPlayerSelectLayout = new GlyphLayout(startFont, numberOfPlayerSelectText);
 
-        fontX = 0 + (GameConfiguration.width /2f - numberOfPlayerSelect.getWidth()/2) - numberOfPlayerSelectLayout.width;
-        fontY = 0 + GameConfiguration.height/2f + numberOfPlayerSelect.getHeight() * 7 / 4;
+        float fontX = 0 + (GameConfiguration.width /2f - numberOfPlayerSelect.getWidth()/2) - numberOfPlayerSelectLayout.width;
+        float fontY = 0 + GameConfiguration.height/2f + numberOfPlayerSelect.getHeight() * 7 / 4;
 
-        startFont.draw(stage.getBatch(), numberOfPlayerSelectText, fontX, fontY);
+        //startFont.draw(stage.getBatch(), numberOfPlayerSelectText, fontX, fontY);
 
         final String difficultySelectText = "Difficulty:";
         final GlyphLayout difficultySelectLayout = new GlyphLayout(startFont, difficultySelectText);
@@ -177,7 +195,7 @@ public class StartMenu implements Screen {
         fontX = 0 + (GameConfiguration.width /2f - difficultlySelect.getWidth()/2) - difficultySelectLayout.width;
         fontY = 0 + GameConfiguration.height/2f + difficultlySelect.getHeight() * 3 / 4;
 
-        startFont.draw(stage.getBatch(), difficultySelectText, fontX, fontY);
+        //startFont.draw(stage.getBatch(), difficultySelectText, fontX, fontY);
 
         final String seedTextFieldText = "Seed #:";
         final GlyphLayout seedTextFieldLayout = new GlyphLayout(startFont, seedTextFieldText);
@@ -185,13 +203,7 @@ public class StartMenu implements Screen {
         fontX = 0 + (GameConfiguration.width /2f - seedTextField.getWidth()/2) - seedTextFieldLayout.width;
         fontY = 0 + GameConfiguration.height/2f - seedTextField.getHeight();
 
-        startFont.draw(stage.getBatch(), seedTextFieldText, fontX, fontY);
-
-        difficultlySelect.setPosition(GameConfiguration.width /2f - difficultlySelect.getWidth()/2, GameConfiguration.height/2f);
-        startGameButton.setPosition(GameConfiguration.width /2f - startGameButton.getWidth()/2 , GameConfiguration.height/2f - difficultlySelect.getHeight());
-        numberOfPlayerSelect.setPosition(GameConfiguration.width /2f - numberOfPlayerSelect.getWidth()/2 , GameConfiguration.height/2f + numberOfPlayerSelect.getHeight());
-        seedTextField.setPosition(GameConfiguration.width /2f - numberOfPlayerSelect.getWidth() * 3/4, GameConfiguration.height/2f - seedTextField.getHeight() * 9 / 5);
-        howToPlayButton.setPosition(GameConfiguration.width /2f - howToPlayButton.getWidth()/2, GameConfiguration.height/4f);
+        //startFont.draw(stage.getBatch(), seedTextFieldText, fontX, fontY);
 
         stage.getBatch().end();
         stage.draw();
@@ -215,6 +227,18 @@ public class StartMenu implements Screen {
         GameConfiguration.height = height;
         camera.setToOrtho(false, width, height);
         stage.getViewport().update(width, height);
+
+        float headingHeight =  (GameConfiguration.height * 5 / 6f) - titleLayout.height - subtitleLayout.height - 100f;
+
+        difficultlySelect.setX((GameConfiguration.width - difficultlySelect.getPrefWidth()) / 2f);
+        difficultlySelect.setY(headingHeight - 50f - difficultlySelect.getPrefHeight());
+
+        numberOfPlayerSelect.setX((GameConfiguration.width - numberOfPlayerSelect.getPrefWidth()) / 2f);
+        numberOfPlayerSelect.setY(headingHeight - 50f - difficultlySelect.getPrefHeight() - 25f - numberOfPlayerSelect.getPrefHeight());
+
+        seedTextField.setX((GameConfiguration.width - seedTextField.getPrefWidth()) / 2f);
+        seedTextField.setY(headingHeight - 50f - numberOfPlayerSelect.getPrefHeight() - difficultlySelect.getPrefHeight() - 50f - seedTextField.getPrefHeight());
+
     }
 
     @Override
