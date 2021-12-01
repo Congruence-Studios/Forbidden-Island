@@ -102,7 +102,11 @@ public class Pawn extends Actor {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 logger.info("touchDown: X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
-                pawnState = FOCUSED;
+                if (pawnState != FOCUSED) {
+                    pawnState = FOCUSED;
+                } else if (pawnState == FOCUSED) {
+                    pawnState = NORMAL;
+                }
                 return true;
             }
 

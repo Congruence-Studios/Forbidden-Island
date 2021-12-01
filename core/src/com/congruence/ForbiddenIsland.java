@@ -79,14 +79,14 @@ public class ForbiddenIsland extends Game {
 					null,
 					null,
 					2,
-					2
+					1
 			));
 			playerOrder.put(2, TEMP_PLAYER_CARDS.peek());
 			players.put(TEMP_PLAYER_CARDS.peek(), new Player(
 					TEMP_PLAYER_CARDS.pop(),
 					null,
 					null,
-					2,
+					1,
 					2
 			));
 			playerOrder.put(3, TEMP_PLAYER_CARDS.peek());
@@ -94,8 +94,8 @@ public class ForbiddenIsland extends Game {
 					TEMP_PLAYER_CARDS.pop(),
 					null,
 					null,
-					2,
-					2
+					1,
+					1
 			));
 
 			LinkedList<String> pickedIslandTiles = new LinkedList<>();

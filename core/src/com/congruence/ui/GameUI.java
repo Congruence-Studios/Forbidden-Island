@@ -304,39 +304,43 @@ public class GameUI implements Screen {
         Player tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(0));
         logger.info(tempPlayer.toString());
         pawns.add(new Pawn(
-                islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX(),
-                islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY(),
-                tileWidth / 2,
-                tileHeight / 2,
+                islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX() + (tileWidth / 4) - (tileWidth / 4) / 2,
+                islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY() + (tileHeight / 4) - (tileHeight / 3) / 2,
+                tileWidth / 4,
+                tileHeight / 3,
                 tempPlayer.getAbility()
         ));
+        logger.info("Pawn 1: X: " + tempPlayer.getTileX() + " Y: " + tempPlayer.getTileY());
         tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(1));
         pawns.add(new Pawn(
-                islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX(),
-                islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY(),
-                tileWidth / 2,
-                tileHeight / 2,
+                islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX() + (tileWidth / 4) - (tileWidth / 4) / 2,
+                islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY() + (tileHeight * 3 / 4) - (tileHeight / 3) / 2,
+                tileWidth / 4,
+                tileHeight / 3,
                 tempPlayer.getAbility()
         ));
+        logger.info("Pawn 2: X: " + tempPlayer.getTileX() + " Y: " + tempPlayer.getTileY());
         if (gameState.getMaxTurnLoops() >= 3) {
             tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(2));
             pawns.add(new Pawn(
-                    islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX(),
-                    islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY(),
-                    tileWidth / 2,
-                    tileHeight / 2,
+                    islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX() + (tileWidth * 3 / 4) - (tileWidth / 4) / 2,
+                    islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY() + (tileHeight * 3 / 4) - (tileHeight / 3) / 2,
+                    tileWidth / 4,
+                    tileHeight / 3,
                     tempPlayer.getAbility()
             ));
+            logger.info("Pawn 3: X: " + tempPlayer.getTileX() + " Y: " + tempPlayer.getTileY());
         }
         if (gameState.getMaxTurnLoops() >= 4) {
             tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(3));
             pawns.add(new Pawn(
-                    islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX(),
-                    islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY(),
-                    tileWidth / 2,
-                    tileHeight / 2,
+                    islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX() + (tileWidth * 3 / 4) - (tileWidth / 4) / 2,
+                    islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY() + (tileHeight / 4) - (tileHeight / 3) / 2,
+                    tileWidth / 4,
+                    tileHeight / 3,
                     tempPlayer.getAbility()
             ));
+            logger.info("Pawn 4: X: " + tempPlayer.getTileX() + " Y: " + tempPlayer.getTileY());
         }
         for (Pawn p : pawns) {
             stage.addActor(p);
@@ -530,33 +534,32 @@ public class GameUI implements Screen {
             abilityCards.get(3).setHeight(tileHeight * 2 + 10f);
             abilityCards.get(3).setWidth((tileHeight * 2 + 10f) / 2);
         }
-
         Player tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(0));
-        pawns.get(0).setX(islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX());
-        pawns.get(0).setY(islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY());
-        pawns.get(0).setWidth(tileWidth / 2);
-        pawns.get(0).setHeight(tileHeight / 2);
+        pawns.get(0).setX(islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX() + (tileWidth / 4) - (tileWidth / 4) / 2);
+        pawns.get(0).setY(islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY() + (tileHeight / 4) - (tileHeight / 3) / 2);
+        pawns.get(0).setWidth(tileWidth / 4);
+        pawns.get(0).setHeight(tileHeight / 3);
         logger.info(pawns.get(0).toString());
         tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(1));
-        pawns.get(1).setX(islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX());
-        pawns.get(1).setY(islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY());
-        pawns.get(1).setWidth(tileWidth / 2);
-        pawns.get(1).setHeight(tileHeight / 2);
+        pawns.get(1).setX(islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX() + (tileWidth / 4) - (tileWidth / 4) / 2);
+        pawns.get(1).setY(islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY() + (tileHeight * 3 / 4) - (tileHeight / 3) / 2);
+        pawns.get(1).setWidth(tileWidth / 4);
+        pawns.get(1).setHeight(tileHeight / 3);
         logger.info(pawns.get(1).toString());
         if (gameState.getMaxTurnLoops() >= 3) {
             tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(2));
-            pawns.get(2).setX(islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX());
-            pawns.get(2).setY(islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY());
-            pawns.get(2).setWidth(tileWidth / 2);
-            pawns.get(2).setHeight(tileHeight / 2);
+            pawns.get(2).setX(islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX() + (tileWidth * 3 / 4) - (tileWidth / 4) / 2);
+            pawns.get(2).setY(islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY() + (tileHeight * 3 / 4) - (tileHeight / 3) / 2);
+            pawns.get(2).setWidth(tileWidth / 4);
+            pawns.get(2).setHeight(tileHeight / 3);
             logger.info(pawns.get(2).toString());
         }
         if (gameState.getMaxTurnLoops() >= 4) {
             tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(3));
-            pawns.get(3).setX(islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX());
-            pawns.get(3).setY(islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY());
-            pawns.get(3).setWidth(tileWidth / 2);
-            pawns.get(3).setHeight(tileHeight / 2);
+            pawns.get(3).setX(islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX() + (tileWidth * 3 / 4) - (tileWidth / 4) / 2);
+            pawns.get(3).setY(islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY() + (tileHeight / 4) - (tileHeight / 3) / 2);
+            pawns.get(3).setWidth(tileWidth / 4);
+            pawns.get(3).setHeight(tileHeight / 3);
             logger.info(pawns.get(3).toString());
         }
 
