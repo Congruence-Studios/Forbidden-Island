@@ -146,8 +146,9 @@ public class ForbiddenIsland extends Game {
 			assetDirectories.add("treasure-deck");
 			assetDirectories.add("island-tiles");
 			assetDirectories.add("water-meter");
+			assetDirectories.add("pawn");
 			for (String folder : assetDirectories) {
-				FileHandle handle = Gdx.files.internal("./desktop/assets/" + resolver.resolve(folder).path());
+				FileHandle handle = resolver.resolve(folder);
 				logger.info("Path " + resolver.resolve(folder).path() + " List size " + handle.path());
 				for (FileHandle asset : handle.list()) {
 					FileHandle folderSub = resolver.resolve(asset.path());

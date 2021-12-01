@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.congruence.ForbiddenIsland;
 import com.congruence.state.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,41 +55,41 @@ public class Pawn extends Actor {
         this.pawnWidth = width;
         this.ability = ability;
         if (ability == Player.PILOT) {
-            normalTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Pilot-Pawn.png"));
-            activeTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Pilot-Pawn-Active.png"));
-            giveTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Pilot-Pawn-Give.png"));
-            moveTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Pilot-Pawn-Move.png"));
-            focusedTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Pilot-Pawn-Focused.png"));
+            normalTexture = ForbiddenIsland.assetManager.get("pawn/Pilot-Pawn.png", Texture.class);
+            activeTexture = ForbiddenIsland.assetManager.get("pawn/Pilot-Pawn-Active.png", Texture.class);
+            giveTexture = ForbiddenIsland.assetManager.get("pawn/Pilot-Pawn-Give.png", Texture.class);
+            moveTexture = ForbiddenIsland.assetManager.get("pawn/Pilot-Pawn-Move.png", Texture.class);
+            focusedTexture = ForbiddenIsland.assetManager.get("pawn/Pilot-Pawn-Focused.png", Texture.class);
         } else if (ability == Player.ENGINEER) {
-            normalTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Engineer-Pawn.png"));
-            activeTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Engineer-Pawn-Active.png"));
-            giveTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Engineer-Pawn-Give.png"));
-            moveTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Engineer-Pawn-Move.png"));
-            focusedTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Engineer-Pawn-Focused.png"));
+            normalTexture = ForbiddenIsland.assetManager.get("pawn/Engineer-Pawn.png", Texture.class);
+            activeTexture = ForbiddenIsland.assetManager.get("pawn/Engineer-Pawn-Active.png", Texture.class);
+            giveTexture = ForbiddenIsland.assetManager.get("pawn/Engineer-Pawn-Give.png", Texture.class);
+            moveTexture = ForbiddenIsland.assetManager.get("pawn/Engineer-Pawn-Move.png", Texture.class);
+            focusedTexture = ForbiddenIsland.assetManager.get("pawn/Engineer-Pawn-Focused.png", Texture.class);
         } else if (ability == Player.MESSENGER) {
-            normalTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Messenger-Pawn.png"));
-            activeTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Messenger-Pawn-Active.png"));
-            giveTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Messenger-Pawn-Give.png"));
-            moveTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Messenger-Pawn-Move.png"));
-            focusedTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Messenger-Pawn-Focused.png"));
+            normalTexture = ForbiddenIsland.assetManager.get("pawn/Messenger-Pawn.png", Texture.class);
+            activeTexture = ForbiddenIsland.assetManager.get("pawn/Messenger-Pawn-Active.png", Texture.class);
+            giveTexture = ForbiddenIsland.assetManager.get("pawn/Messenger-Pawn-Give.png", Texture.class);
+            moveTexture = ForbiddenIsland.assetManager.get("pawn/Messenger-Pawn-Move.png", Texture.class);
+            focusedTexture = ForbiddenIsland.assetManager.get("pawn/Messenger-Pawn-Focused.png", Texture.class);
         } else if (ability == Player.EXPLORER) {
-            normalTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Explorer-Pawn.png"));
-            activeTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Explorer-Pawn-Active.png"));
-            giveTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Explorer-Pawn-Give.png"));
-            moveTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Explorer-Pawn-Move.png"));
-            focusedTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Explorer-Pawn-Focused.png"));
+            normalTexture = ForbiddenIsland.assetManager.get("pawn/Explorer-Pawn.png", Texture.class);
+            activeTexture = ForbiddenIsland.assetManager.get("pawn/Explorer-Pawn-Active.png", Texture.class);
+            giveTexture = ForbiddenIsland.assetManager.get("pawn/Explorer-Pawn-Give.png", Texture.class);
+            moveTexture = ForbiddenIsland.assetManager.get("pawn/Explorer-Pawn-Move.png", Texture.class);
+            focusedTexture = ForbiddenIsland.assetManager.get("pawn/Explorer-Pawn-Focused.png", Texture.class);
         } else if (ability == Player.DIVER) {
-            normalTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Diver-Pawn.png"));
-            activeTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Diver-Pawn-Active.png"));
-            giveTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Diver-Pawn-Give.png"));
-            moveTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Diver-Pawn-Move.png"));
-            focusedTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Diver-Pawn-Focused.png"));
+            normalTexture = ForbiddenIsland.assetManager.get("pawn/Diver-Pawn.png", Texture.class);
+            activeTexture = ForbiddenIsland.assetManager.get("pawn/Diver-Pawn-Active.png", Texture.class);
+            giveTexture = ForbiddenIsland.assetManager.get("pawn/Diver-Pawn-Give.png", Texture.class);
+            moveTexture = ForbiddenIsland.assetManager.get("pawn/Diver-Pawn-Move.png", Texture.class);
+            focusedTexture = ForbiddenIsland.assetManager.get("pawn/Diver-Pawn-Focused.png", Texture.class);
         } else if (ability == Player.NAVIGATOR) {
-            normalTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Navigator-Pawn.png"));
-            activeTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Navigator-Pawn-Active.png"));
-            giveTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Navigator-Pawn-Give.png"));
-            moveTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Navigator-Pawn-Move.png"));
-            focusedTexture = new Texture(Gdx.files.internal("./desktop/assets/custom-ui/pawn/Navigator-Pawn-Focused.png"));
+            normalTexture = ForbiddenIsland.assetManager.get("pawn/Navigator-Pawn.png", Texture.class);
+            activeTexture = ForbiddenIsland.assetManager.get("pawn/Navigator-Pawn-Active.png", Texture.class);
+            giveTexture = ForbiddenIsland.assetManager.get("pawn/Navigator-Pawn-Give.png", Texture.class);
+            moveTexture = ForbiddenIsland.assetManager.get("pawn/Navigator-Pawn-Move.png", Texture.class);
+            focusedTexture = ForbiddenIsland.assetManager.get("pawn/Navigator-Pawn-Focused.png", Texture.class);
         }
 
         super.setBounds(this.x, this.y, this.pawnWidth, this.pawnHeight);

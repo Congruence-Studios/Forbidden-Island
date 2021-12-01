@@ -15,7 +15,7 @@ public class Resources {
             "Pilot"
     };
 
-    public static final LinkedList<String> IslandTiles = new LinkedList<>(Arrays.asList(
+    public static final ArrayList<String> IslandTiles = new ArrayList<>(Arrays.asList(
             "Breakers Bridge",
             "Bronze Gate",
             "Cave of Embers",
