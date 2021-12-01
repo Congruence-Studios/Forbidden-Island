@@ -46,10 +46,10 @@ public class GameMenuShoreUpButton extends Actor {
         this.height = height;
         this.width = width;
 
-        outlinedButtonTexture = ForbiddenIsland.assetManager.get("./desktop/assets/custom-ui/shore-up/Shore-Up-Button.png", Texture.class);
-        hoverButtonTexture = ForbiddenIsland.assetManager.get("./desktop/assets/custom-ui/shore-up/Shore-Up-Button-Hovered.png", Texture.class);
-        focusedButtonTexture = ForbiddenIsland.assetManager.get("./desktop/assets/custom-ui/shore-up/Shore-Up-Button-Pressed.png", Texture.class);
-        disabledButtonTexture = ForbiddenIsland.assetManager.get("./desktop/assets/custom-ui/shore-up/Shore-Up-Button-Disabled.png", Texture.class);
+        outlinedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/shore-up/Shore-Up-Button.png", Texture.class);
+        hoverButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/shore-up/Shore-Up-Button-Hovered.png", Texture.class);
+        focusedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/shore-up/Shore-Up-Button-Pressed.png", Texture.class);
+        disabledButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/shore-up/Shore-Up-Button-Disabled.png", Texture.class);
         outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);

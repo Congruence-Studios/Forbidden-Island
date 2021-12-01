@@ -51,25 +51,25 @@ public class AbilityCard extends Actor {
         this.width = width;
         this.height = height;
         this.ability = ability;
-        outlinedButtonTexture = ForbiddenIsland.assetManager.get("./desktop/assets/custom-ui/ability-button/Ability-Button.png", Texture.class);
-        hoverButtonTexture = ForbiddenIsland.assetManager.get("./desktop/assets/custom-ui/ability-button/Ability-Button-Hovered.png", Texture.class);
-        focusedButtonTexture = ForbiddenIsland.assetManager.get("./desktop/assets/custom-ui/ability-button/Ability-Button-Focused.png", Texture.class);
+        outlinedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/ability-button/Ability-Button.png", Texture.class);
+        hoverButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/ability-button/Ability-Button-Hovered.png", Texture.class);
+        focusedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/ability-button/Ability-Button-Focused.png", Texture.class);
         outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         if (ability == Player.PILOT) {
-            abilityIcon = ForbiddenIsland.assetManager.get("./desktop/assets/ability-icon/RoleTable_Icon_Pilot@2x.png", Texture.class);
+            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Pilot@2x.png", Texture.class);
         } else if (ability == Player.ENGINEER) {
-            abilityIcon = ForbiddenIsland.assetManager.get("./desktop/assets/ability-icon/RoleTable_Icon_Engineer@2x.png", Texture.class);
+            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Engineer@2x.png", Texture.class);
         } else if (ability == Player.MESSENGER) {
-            abilityIcon = ForbiddenIsland.assetManager.get("./desktop/assets/ability-icon/RoleTable_Icon_Messenger@2x.png", Texture.class);
+            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Messenger@2x.png", Texture.class);
         } else if (ability == Player.EXPLORER) {
-            abilityIcon = ForbiddenIsland.assetManager.get("./desktop/assets/ability-icon/RoleTable_Icon_Explorer@2x.png", Texture.class);
+            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Explorer@2x.png", Texture.class);
         } else if (ability == Player.DIVER) {
-            abilityIcon = ForbiddenIsland.assetManager.get("./desktop/assets/ability-icon/RoleTable_Icon_Diver@2x.png", Texture.class);
+            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Diver@2x.png", Texture.class);
         } else if (ability == Player.NAVIGATOR) {
-            abilityIcon = ForbiddenIsland.assetManager.get("./desktop/assets/ability-icon/RoleTable_Icon_Navigator@2x.png", Texture.class);
+            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Navigator@2x.png", Texture.class);
         }
 
         super.setBounds(this.positionX, this.positionY, this.width, this.height);

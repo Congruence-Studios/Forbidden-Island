@@ -45,9 +45,9 @@ public class GameMenuSkipButton extends Actor {
         this.height = height;
         this.width = width;
 
-        outlinedButtonTexture = ForbiddenIsland.assetManager.get("./desktop/assets/custom-ui/skip-button/Skip-Button.png", Texture.class);
-        hoverButtonTexture = ForbiddenIsland.assetManager.get("./desktop/assets/custom-ui/skip-button/Skip-Button-Hovered.png", Texture.class);
-        focusedButtonTexture = ForbiddenIsland.assetManager.get("./desktop/assets/custom-ui/skip-button/Skip-Button-Pressed.png", Texture.class);
+        outlinedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/skip-button/Skip-Button.png", Texture.class);
+        hoverButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/skip-button/Skip-Button-Hovered.png", Texture.class);
+        focusedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/skip-button/Skip-Button-Pressed.png", Texture.class);
         outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);

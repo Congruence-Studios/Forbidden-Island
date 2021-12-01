@@ -73,17 +73,17 @@ public class WaterMeterScreen extends Actor {
         parameter.color = Color.BLACK;
         titleFont = generator.generateFont(parameter);
         generator.dispose();
-        background = ForbiddenIsland.assetManager.get("./desktop/assets/custom-ui/dialog-background/Dialog.png", Texture.class);
-        WaterMeterHeight1 = ForbiddenIsland.assetManager.get("./desktop/assets/water-meter/Water Meter-1.png", Texture.class);
-        WaterMeterHeight2 = ForbiddenIsland.assetManager.get("./desktop/assets/water-meter/Water Meter-2.png", Texture.class);
-        WaterMeterHeight3 = ForbiddenIsland.assetManager.get("./desktop/assets/water-meter/Water Meter-3.png", Texture.class);
-        WaterMeterHeight4 = ForbiddenIsland.assetManager.get("./desktop/assets/water-meter/Water Meter-4.png", Texture.class);
-        WaterMeterHeight5 = ForbiddenIsland.assetManager.get("./desktop/assets/water-meter/Water Meter-5.png", Texture.class);
-        WaterMeterHeight6 = ForbiddenIsland.assetManager.get("./desktop/assets/water-meter/Water Meter-6.png", Texture.class);
-        WaterMeterHeight7 = ForbiddenIsland.assetManager.get("./desktop/assets/water-meter/Water Meter-7.png", Texture.class);
-        WaterMeterHeight8 = ForbiddenIsland.assetManager.get("./desktop/assets/water-meter/Water Meter-8.png", Texture.class);
-        WaterMeterHeight9 = ForbiddenIsland.assetManager.get("./desktop/assets/water-meter/Water Meter-9.png", Texture.class);
-        WaterMeterHeight10 = ForbiddenIsland.assetManager.get("./desktop/assets/water-meter/Water Meter-10.png", Texture.class);
+        background = ForbiddenIsland.assetManager.get("custom-ui/dialog-background/Dialog.png", Texture.class);
+        WaterMeterHeight1 = ForbiddenIsland.assetManager.get("water-meter/Water Meter-1.png", Texture.class);
+        WaterMeterHeight2 = ForbiddenIsland.assetManager.get("water-meter/Water Meter-2.png", Texture.class);
+        WaterMeterHeight3 = ForbiddenIsland.assetManager.get("water-meter/Water Meter-3.png", Texture.class);
+        WaterMeterHeight4 = ForbiddenIsland.assetManager.get("water-meter/Water Meter-4.png", Texture.class);
+        WaterMeterHeight5 = ForbiddenIsland.assetManager.get("water-meter/Water Meter-5.png", Texture.class);
+        WaterMeterHeight6 = ForbiddenIsland.assetManager.get("water-meter/Water Meter-6.png", Texture.class);
+        WaterMeterHeight7 = ForbiddenIsland.assetManager.get("water-meter/Water Meter-7.png", Texture.class);
+        WaterMeterHeight8 = ForbiddenIsland.assetManager.get("water-meter/Water Meter-8.png", Texture.class);
+        WaterMeterHeight9 = ForbiddenIsland.assetManager.get("water-meter/Water Meter-9.png", Texture.class);
+        WaterMeterHeight10 = ForbiddenIsland.assetManager.get("water-meter/Water Meter-10.png", Texture.class);
 
         titleLayout = new GlyphLayout(titleFont, "");
     }

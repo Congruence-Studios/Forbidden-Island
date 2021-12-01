@@ -5,12 +5,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.congruence.ForbiddenIsland;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Artifact extends Actor {
-
-    private static final Logger logger = LoggerFactory.getLogger(Artifact.class);
 
     private float positionX;
 
@@ -38,7 +34,7 @@ public class Artifact extends Actor {
         this.artifactWidth = width;
         this.artifactHeight = height;
         this.artifactName = artifactName;
-        artifactTexture = ForbiddenIsland.assetManager.get("./desktop/assets/artifacts/" + artifactName + ".png", Texture.class);
+        artifactTexture = ForbiddenIsland.assetManager.get("artifacts/" + artifactName + ".png", Texture.class);
         artifactTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         super.setBounds(this.positionX, this.positionY, this.artifactWidth, this.artifactHeight);
     }
