@@ -154,21 +154,21 @@ public class ForbiddenIsland extends Game {
 			assetDirectories.add("pawn");
 			for (String folder : assetDirectories) {
 				FileHandle handle = resolver.resolve(folder);
-				logger.info("Path " + resolver.resolve(folder).path() + " List size " + handle.path());
+				//logger.info("Path " + resolver.resolve(folder).path() + " List size " + handle.path());
 				for (FileHandle asset : handle.list()) {
 					FileHandle folderSub = resolver.resolve(asset.path());
-					logger.info(asset.name());
+					//logger.info(asset.name());
 					if (folderSub.isDirectory()) {
 						for (FileHandle assetSub : folderSub.list()) {
-							logger.info(assetSub.path());
+							//logger.info(assetSub.path());
 							assetManager.load(assetSub.path(), Texture.class);
-							logger.info(assetManager.getProgress() + "");
+							//logger.info(assetManager.getProgress() + "");
 						}
 					}
 					else {
-						logger.info(asset.path());
+						//logger.info(asset.path());
 						assetManager.load(asset.path(), Texture.class);
-						logger.info(assetManager.getProgress() + "");
+						//logger.info(assetManager.getProgress() + "");
 					}
 				}
 			}

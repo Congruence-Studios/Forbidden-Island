@@ -39,6 +39,8 @@ public class GameUI implements Screen {
 
     private Pair currentFocusedTile = Pair.INVALID;
 
+    private IslandTile currentFocusedTileInstance = null;
+
     private int currentFocusedPawn = -1;
 
     private GameMenuSkipButton skipButton;
@@ -111,24 +113,44 @@ public class GameUI implements Screen {
                     islandTile.addListener(new ClickListener() {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
-                            if (GameUI.this.currentFocusedTile.equals(islandTile.getCoordinates())) {
-                                islandTile.setFocused(false);
-                                disableShoreUpButton();
-                                currentFocusedTile = Pair.INVALID;
-                            } else {
-                                islandTile.setFocused(true);
-                                if (!GameUI.this.currentFocusedTile.isInvalid()) {
-                                    GameUI.this.islandTiles.get(currentFocusedTile).setFocused(false);
+                            if (islandTile.isCanMove()) {
+                                Player tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber()));
+                                logger.info(islandTile.getCoordinates().toString());
+                                tempPlayer.setTileX(islandTile.getCoordinates().x);
+                                tempPlayer.setTileY(islandTile.getCoordinates().y);
+                                logger.info(currentFocusedPawn + "");
+                                pawns.get(currentFocusedPawn).setX(findPawnPositionX(currentFocusedPawn));
+                                pawns.get(currentFocusedPawn).setY(findPawnPositionY(currentFocusedPawn));
+                                eraseMovementTiles();
+                                setMovementTiles(currentFocusedPawn);
+                            }
+                            else {
+                                if (GameUI.this.currentFocusedTile.equals(islandTile.getCoordinates())) {
+                                    islandTile.setFocused(false);
+                                    disableShoreUpButton();
+                                    currentFocusedTile = Pair.INVALID;
+                                    currentFocusedTileInstance = null;
+                                } else {
+                                    islandTile.setFocused(true);
+                                    if (!GameUI.this.currentFocusedTile.isInvalid()) {
+                                        GameUI.this.islandTiles.get(currentFocusedTile).setFocused(false);
+                                    }
+                                    GameUI.this.currentFocusedTile = islandTile.getCoordinates();
+                                    currentFocusedTileInstance = islandTile;
+                                    enableShoreUpButton(islandTile);
                                 }
-                                GameUI.this.currentFocusedTile = islandTile.getCoordinates();
-                                enableShoreUpButton(islandTile);
+                                if (currentFocusedPawn != -1) {
+                                    pawns.get(currentFocusedPawn).setPawnState(Pawn.NORMAL);
+                                }
+                                currentFocusedPawn = -1;
+                                eraseMovementTiles();
                             }
                         }
 
                         @Override
                         public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                             islandTile.setHovered(true);
-                            logger.info("enter: " + islandTile.getCoordinates().x + " " + islandTile.getCoordinates().y + " x: " + x + " y: " + y);
+                            //logger.info("enter: " + islandTile.getCoordinates().x + " " + islandTile.getCoordinates().y + " x: " + x + " y: " + y);
                         }
 
                         @Override
@@ -346,6 +368,53 @@ public class GameUI implements Screen {
         }
         for (int i = 0; i < pawns.size(); i++) {
             Pawn p = pawns.get(i);
+            int finalI = i;
+            p.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if (finalI == gameState.getTurnNumber()) {
+                        if (currentFocusedPawn == finalI) {
+                            pawns.get(currentFocusedPawn).setPawnState(Pawn.NORMAL);
+                            currentFocusedPawn = -1;
+                            eraseMovementTiles();
+                        }
+                        else {
+                            currentFocusedTile = Pair.INVALID;
+                            if (currentFocusedTileInstance != null) {
+                                currentFocusedTileInstance.setFocused(false);
+                                currentFocusedTileInstance = null;
+                            }
+                            currentFocusedPawn = finalI;
+                            setMovementTiles(finalI);
+                        }
+                    }
+                    //Navigator is Able to Move Other People
+                    else if (gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber())).getAbility() == Player.NAVIGATOR) {
+                        if (currentFocusedPawn == finalI) {
+                            pawns.get(currentFocusedPawn).setPawnState(Pawn.NORMAL);
+                            currentFocusedPawn = -1;
+                            eraseMovementTiles();
+                        }
+                        else {
+                            currentFocusedTile = Pair.INVALID;
+                            if (currentFocusedTileInstance != null) {
+                                currentFocusedTileInstance.setFocused(false);
+                                currentFocusedTileInstance = null;
+                            }
+                            currentFocusedPawn = finalI;
+                            setMovementTiles(finalI);
+                        }
+                    }
+                }
+
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                }
+
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                }
+            });
             logger.info("Pawn " + i + ": " + p.toString());
             stage.addActor(p);
         }
@@ -383,7 +452,7 @@ public class GameUI implements Screen {
         ///////////////////////////////////////////
         ///////////////////////////////////////////
 
-        setMovementTiles(gameState.getTurnNumber());
+        //setMovementTiles();
 
         ///////////////////////////////////////////
         ///////////////////////////////////////////
@@ -663,7 +732,7 @@ public class GameUI implements Screen {
 
         float tileHeight = (GameConfiguration.height - 70f) / 6f;
         float tileWidth = (GameConfiguration.height - 70f) / 6f;
-        return islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionX() + (tileWidth / 4) - (tileWidth / 4) / 2;
+        return islandTiles.get(new Pair(tempPlayer.getTileX(), tempPlayer.getTileY())).getPositionX() + (tileWidth / 4) - (tileWidth / 4) / 2;
     }
 
     public float findPawnPositionY( int player ) {
@@ -672,13 +741,59 @@ public class GameUI implements Screen {
         float tileHeight = (GameConfiguration.height - 70f) / 6f - 15f;
         float tileWidth = (GameConfiguration.height - 70f) / 6f;
         logger.info( "PAWN_ISLAND_TILE:::POSITION_Y " + islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY() );
-        return islandTiles.get(new Pair(tempPlayer.getTileY(), tempPlayer.getTileX())).getPositionY() + 15f + (tileHeight / 4) - (tileHeight / 3) / 2;
+        return islandTiles.get(new Pair(tempPlayer.getTileX(), tempPlayer.getTileY())).getPositionY() + 15f + (tileHeight / 4) - (tileHeight / 3) / 2;
     }
 
     public void setMovementTiles(int player) {
+        eraseMovementTiles();
+
         Pawn current = pawns.get(player);
         Player tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(player));
+        ArrayList<Pair> movableTiles = new ArrayList<>();
+        movableTiles.add(new Pair(tempPlayer.getTileX()+1, tempPlayer.getTileY()));
+        movableTiles.add(new Pair(tempPlayer.getTileX()-1, tempPlayer.getTileY()));
+        movableTiles.add(new Pair(tempPlayer.getTileX(), tempPlayer.getTileY()+1));
+        movableTiles.add(new Pair(tempPlayer.getTileX(), tempPlayer.getTileY()-1));
 
+        if (tempPlayer.getAbility() == Player.PILOT) {
+            movableTiles.addAll(islandTiles.keySet());
+        }
+        else if (tempPlayer.getAbility() == Player.DIVER) {
+            //TODO ADD
+        }
+        else if (tempPlayer.getAbility() == Player.EXPLORER) {
+            movableTiles.add(new Pair(tempPlayer.getTileX()+1, tempPlayer.getTileY()+1));
+            movableTiles.add(new Pair(tempPlayer.getTileX()+1, tempPlayer.getTileY()-1));
+            movableTiles.add(new Pair(tempPlayer.getTileX()-1, tempPlayer.getTileY()+1));
+            movableTiles.add(new Pair(tempPlayer.getTileX()-1, tempPlayer.getTileY()-1));
+        }
+
+
+        current.setPawnState(Pawn.MOVE);
+
+        for (int i = 0; i < movableTiles.size(); i++) {
+            Pair e = movableTiles.get(i);
+            e.x = Math.max(e.x, 0);
+            e.x = Math.min(e.x, 5);
+            e.y = Math.max(e.y, 0);
+            e.y = Math.min(e.y, 5);
+            if (gameState.getIslandTileState()[e.x][e.y] == GameState.SUNKEN_ISLAND_TILE) {
+                movableTiles.remove(i);
+                i--;
+            }
+        }
+
+        for (Pair e : movableTiles) {
+            if (islandTiles.containsKey(e)) {
+                islandTiles.get(e).setCanMove(true);
+            }
+        }
+    }
+
+    public void eraseMovementTiles() {
+        for (IslandTile e : islandTiles.values()) {
+            e.setCanMove(false);
+        }
     }
 
 

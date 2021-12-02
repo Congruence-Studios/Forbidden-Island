@@ -101,22 +101,6 @@ public class Pawn extends Actor {
             }
 
             @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                logger.info("touchDown: X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
-                if (pawnState != FOCUSED) {
-                    pawnState = FOCUSED;
-                } else if (pawnState == FOCUSED) {
-                    pawnState = NORMAL;
-                }
-                return true;
-            }
-
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-
-            }
-
-            @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 logger.info("enter: X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
             }
@@ -181,6 +165,14 @@ public class Pawn extends Actor {
     public void setY(float positionY) {
         this.y = positionY;
         super.setBounds(this.x, this.y, this.pawnWidth, this.pawnHeight);
+    }
+
+    public int getPawnState() {
+        return pawnState;
+    }
+
+    public void setPawnState(int pawnState) {
+        this.pawnState = pawnState;
     }
 
     public String toString() {
