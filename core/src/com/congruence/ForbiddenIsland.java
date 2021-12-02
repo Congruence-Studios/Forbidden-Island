@@ -78,8 +78,8 @@ public class ForbiddenIsland extends Game {
 					TEMP_PLAYER_CARDS.pop(),
 					null,
 					null,
-					4,
-					1
+					1,
+					4
 			));
 			if (NumberOfPlayers > 2) {
 				playerOrder.put(2, TEMP_PLAYER_CARDS.peek());
@@ -97,8 +97,8 @@ public class ForbiddenIsland extends Game {
 						TEMP_PLAYER_CARDS.pop(),
 						null,
 						null,
-						1,
-						4
+						4,
+						1
 				));
 			}
 			logger.info(NumberOfPlayers + "");

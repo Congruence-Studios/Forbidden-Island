@@ -40,6 +40,8 @@ public class Player {
      */
     private int ability;
 
+    private int tilePosition;
+
     public Player(String playerName, String rName, ArrayList<TreasureCard> cardsAtHand,
                   int tileX, int tileY) {
         this.playerName = playerName;
@@ -47,6 +49,7 @@ public class Player {
         this.cardsAtHand = cardsAtHand;
         this.tileX = tileX;
         this.tileY = tileY;
+        this.tilePosition = 0;
 
         if (playerName.equals("Pilot")) {
             ability = Player.PILOT;
@@ -122,6 +125,14 @@ public class Player {
 
     public void setAbility(int ability) {
         this.ability = ability;
+    }
+
+    public int getTilePosition() {
+        return tilePosition;
+    }
+
+    public void setTilePosition(int tilePosition) {
+        this.tilePosition = tilePosition;
     }
 
     @Override

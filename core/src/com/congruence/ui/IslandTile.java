@@ -47,6 +47,8 @@ public class IslandTile extends Actor {
 
     private boolean canMoveSpecialAction;
 
+    private final boolean[] tilePositionOpen = new boolean[]{true, true, true, true};
+
     public IslandTile(
             float positionX,
             float positionY,
@@ -204,4 +206,7 @@ public class IslandTile extends Actor {
         this.coordinates = coordinates;
     }
 
+    public boolean[] getTilePositionOpen() {
+        return tilePositionOpen;
+    }
 }
