@@ -156,11 +156,12 @@ public class ForbiddenIsland extends Game {
 			assetDirectories.add("water-meter");
 			assetDirectories.add("pawn");
 			for (String folder : assetDirectories) {
-				FileHandle handle = resolver.resolve(folder);
-				//logger.info("Path " + resolver.resolve(folder).path() + " List size " + handle.path());
+				FileHandle handle = Gdx.files.internal(folder);
+				logger.info(handle.parent().path());
+				logger.info("Path " + resolver.resolve(folder).path() + " List size " + handle.list().length);
 				for (FileHandle asset : handle.list()) {
 					FileHandle folderSub = resolver.resolve(asset.path());
-					//logger.info(asset.name());
+					logger.info(asset.path());
 					if (folderSub.isDirectory()) {
 						for (FileHandle assetSub : folderSub.list()) {
 							//logger.info(assetSub.path());

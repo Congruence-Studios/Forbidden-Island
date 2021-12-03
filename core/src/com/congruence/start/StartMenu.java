@@ -146,7 +146,7 @@ public class StartMenu implements Screen {
         numberOfPlayerSelect.setX((GameConfiguration.width - numberOfPlayerSelect.getPrefWidth()) / 2f);
         numberOfPlayerSelect.setY(headingHeight - 50f - difficultlySelect.getPrefHeight() - 25f);
 
-        seedTextField = new TextField("Seed", neonUISkin);
+        seedTextField = new TextField("", neonUISkin);
         stage.addActor(seedTextField);
         seedTextField.setSize(seedTextField.getPrefWidth(), seedTextField.getPrefHeight());
         seedTextField.setX((GameConfiguration.width - seedTextField.getPrefWidth()) / 2f);
