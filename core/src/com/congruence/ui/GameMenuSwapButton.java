@@ -47,10 +47,10 @@ public class GameMenuSwapButton extends Actor {
         hoverButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/give-button/Give-Button-Hovered.png", Texture.class);
         focusedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/give-button/Give-Button-Pressed.png", Texture.class);
         disabledButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/give-button/Give-Button-Disabled.png", Texture.class);
-        outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        outlinedButtonTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        hoverButtonTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        focusedButtonTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        disabledButtonTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
 
         super.setBounds(positionX + 10f, positiveY + 10f, outlinedButtonTexture.getWidth(), hoverButtonTexture.getHeight());
         super.addListener(new ClickListener(){

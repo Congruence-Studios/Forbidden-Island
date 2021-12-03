@@ -48,7 +48,8 @@ public class StartScreen implements Screen {
 
         ScreenViewport viewport = new ScreenViewport(camera);
 
-        backgroundImage = new Texture("NewWorld_Island.jpg");
+        backgroundImage = new Texture(Gdx.files.internal("NewWorld_Island.jpg"), true);
+        backgroundImage.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
 
         stage = new Stage();
         stage.setViewport(viewport);

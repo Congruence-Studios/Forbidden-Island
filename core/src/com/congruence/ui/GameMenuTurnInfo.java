@@ -48,9 +48,9 @@ public class GameMenuTurnInfo extends Actor {
         outlinedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/info-button/Info-Button.png", Texture.class);
         hoverButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/info-button/Info-Button-Hovered.png", Texture.class);
         focusedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/info-button/Info-Button-Pressed.png", Texture.class);
-        outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        outlinedButtonTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        hoverButtonTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        focusedButtonTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
 
         super.addListener(new ClickListener(){
             @Override

@@ -46,10 +46,10 @@ public class TreasureDeckPile extends Actor {
         hoverButtonTexture = ForbiddenIsland.assetManager.get("treasure-deck/Treasure-Deck-Hovered.png", Texture.class);
         focusedButtonTexture = ForbiddenIsland.assetManager.get("treasure-deck/Treasure-Deck-Pressed.png", Texture.class);
         disabledButtonTexture = ForbiddenIsland.assetManager.get("treasure-deck/Treasure-Deck-Disabled.png", Texture.class);
-        outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        outlinedButtonTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        hoverButtonTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        focusedButtonTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        disabledButtonTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
         super.setBounds(this.positionX, this.positionY, this.treasureDeckWidth, this.treasureDeckHeight);
         super.addListener(new ClickListener(){
             @Override

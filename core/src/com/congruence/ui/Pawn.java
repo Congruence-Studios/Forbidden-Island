@@ -91,6 +91,11 @@ public class Pawn extends Actor {
             moveTexture = ForbiddenIsland.assetManager.get("pawn/Navigator-Pawn-Move.png", Texture.class);
             focusedTexture = ForbiddenIsland.assetManager.get("pawn/Navigator-Pawn-Focused.png", Texture.class);
         }
+        normalTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        activeTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        giveTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        moveTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        focusedTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
 
         super.setBounds(this.x, this.y, this.pawnWidth, this.pawnHeight);
         super.addListener(new ClickListener(){

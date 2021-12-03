@@ -46,11 +46,9 @@ public class FloodDeckPile extends Actor {
         hoverButtonTexture = ForbiddenIsland.assetManager.get("flood-deck/Flood-Deck-Hovered.png", Texture.class);
         focusedButtonTexture = ForbiddenIsland.assetManager.get("flood-deck/Flood-Deck-Pressed.png", Texture.class);
         disabledButtonTexture = ForbiddenIsland.assetManager.get("flood-deck/Flood-Deck-Disabled.png", Texture.class);
-        outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        outlinedButtonTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        hoverButtonTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        focusedButtonTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
         super.setBounds(this.positionX, this.positionY, this.floodDeckWidth, this.floodDeckHeight);
         super.addListener(new ClickListener(){
             @Override

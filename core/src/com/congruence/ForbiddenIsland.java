@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.AssetLoader;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.badlogic.gdx.assets.loaders.TextureLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -141,6 +142,8 @@ public class ForbiddenIsland extends Game {
 
 
 			assetManager = new AssetManager(new InternalFileHandleResolver());
+			TextureLoader.TextureParameter textureParameter = new TextureLoader.TextureParameter();
+			textureParameter.genMipMaps = true;
 			Array<String> assetDirectories = new Array<>();
 			FileHandleResolver resolver = new InternalFileHandleResolver();
 			assetDirectories.add("artifacts");
@@ -161,13 +164,13 @@ public class ForbiddenIsland extends Game {
 					if (folderSub.isDirectory()) {
 						for (FileHandle assetSub : folderSub.list()) {
 							//logger.info(assetSub.path());
-							assetManager.load(assetSub.path(), Texture.class);
+							assetManager.load(assetSub.path(), Texture.class, textureParameter);
 							//logger.info(assetManager.getProgress() + "");
 						}
 					}
 					else {
 						//logger.info(asset.path());
-						assetManager.load(asset.path(), Texture.class);
+						assetManager.load(asset.path(), Texture.class, textureParameter);
 						//logger.info(assetManager.getProgress() + "");
 					}
 				}

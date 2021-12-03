@@ -35,7 +35,7 @@ public class Artifact extends Actor {
         this.artifactHeight = height;
         this.artifactName = artifactName;
         artifactTexture = ForbiddenIsland.assetManager.get("artifacts/" + artifactName + ".png", Texture.class);
-        artifactTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        artifactTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
         super.setBounds(this.positionX, this.positionY, this.artifactWidth, this.artifactHeight);
     }
 
