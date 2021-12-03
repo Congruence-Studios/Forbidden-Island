@@ -488,7 +488,7 @@ public class GameUI implements Screen {
 
         for (int i = 0; i < pawns.size(); i++) {
             IslandTile a = islandTiles.get(new Pair(gameState.getPlayers().get(gameState.getPlayerOrder().get(i)).getTileX(), gameState.getPlayers().get(gameState.getPlayerOrder().get(i)).getTileY()));
-            a.getTilePositionOpen()[gameState.getPlayers().get(gameState.getPlayerOrder().get(i)).getTilePosition()] = true;
+            a.getTilePositionOpen()[gameState.getPlayers().get(gameState.getPlayerOrder().get(i)).getTilePosition()] = false;
         }
 
         ///////////////////////////////////////////

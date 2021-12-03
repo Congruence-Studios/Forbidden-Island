@@ -85,6 +85,18 @@ public class WaterMeterScreen extends Actor {
         WaterMeterHeight9 = ForbiddenIsland.assetManager.get("water-meter/Water Meter-9.png", Texture.class);
         WaterMeterHeight10 = ForbiddenIsland.assetManager.get("water-meter/Water Meter-10.png", Texture.class);
 
+        background.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        WaterMeterHeight1.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        WaterMeterHeight2.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        WaterMeterHeight3.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        WaterMeterHeight4.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        WaterMeterHeight5.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        WaterMeterHeight6.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        WaterMeterHeight7.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        WaterMeterHeight8.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        WaterMeterHeight9.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        WaterMeterHeight10.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+
         titleLayout = new GlyphLayout(titleFont, "");
     }
 
