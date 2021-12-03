@@ -603,12 +603,12 @@ public class GameUI implements Screen {
         turnInfo.setWidth(((GameConfiguration.width) - (GameConfiguration.height)) / 2f);
 
         treasureDeckPile.setPositionX(((GameConfiguration.width - 10f) + ((GameConfiguration.width - 10f) - ((GameConfiguration.width) - (GameConfiguration.height)) / 2f)) / 2f - tileHeight * 8f / 10f);
-        treasureDeckPile.setPositionY(2 * tileHeight + 30f);
+        treasureDeckPile.setPositionY(2 * tileHeight + 20f);
         treasureDeckPile.setTreasureDeckHeight(tileHeight);
         treasureDeckPile.setTreasureDeckWidth(tileHeight);
 
         floodDeckPile.setPositionX(((GameConfiguration.width - 10f) + ((GameConfiguration.width - 10f) - ((GameConfiguration.width) - (GameConfiguration.height)) / 2f)) / 2f - tileHeight * 8f / 10f);
-        floodDeckPile.setPositionY(3 * tileHeight + 40f);
+        floodDeckPile.setPositionY(3 * tileHeight + 30f);
         floodDeckPile.setFloodDeckHeight(tileHeight);
         floodDeckPile.setFloodDeckHeight(tileHeight);
 
@@ -651,31 +651,31 @@ public class GameUI implements Screen {
         infoScreen.setHeight(GameConfiguration.height * 15/16f);
         infoScreen.setWidth(GameConfiguration.height * 15/16f);
 
-        abilityCards.get(0).setPositionX(10f + ((tileHeight * 2 + 10f) / 2));
+        abilityCards.get(0).setPositionX(10f);
         abilityCards.get(0).setPositionY(GameConfiguration.height - (tileHeight * 2 + 10f) - 10f);
-        abilityCards.get(0).setHeight(tileHeight * 2 + 10f);
-        abilityCards.get(0).setWidth((tileHeight * 2 + 10f) / 2);
+        abilityCards.get(0).setHeight(tileHeight);
+        abilityCards.get(0).setWidth(tileWidth);
         logger.info(0 + " " + abilityCards.get(0).getPositionX() + " " + abilityCards.get(0).getPositionY());
 
-        abilityCards.get(1).setPositionX(GameConfiguration.width - ((tileHeight * 2 + 10f) / 2) - 10f - ((tileHeight * 2 + 10f) / 2));
+        abilityCards.get(1).setPositionX(GameConfiguration.width - (tileWidth * 2 + 10f) / 2 - 10f);
         abilityCards.get(1).setPositionY(GameConfiguration.height - (tileHeight * 2 + 10f) - 10f);
-        abilityCards.get(1).setHeight(tileHeight * 2 + 10f);
-        abilityCards.get(1).setWidth((tileHeight * 2 + 10f) / 2);
+        abilityCards.get(1).setHeight(tileHeight);
+        abilityCards.get(1).setWidth(tileWidth);
         logger.info(1 + " " + abilityCards.get(1).getPositionX() + " " + abilityCards.get(1).getPositionY());
 
         if (gameState.getMaxTurnLoops() >= 3) {
-            abilityCards.get(2).setPositionX(GameConfiguration.width - ((tileHeight * 2 + 10f) / 2) - 10f - ((tileHeight * 2 + 10f) / 2));
-            abilityCards.get(2).setPositionY(10f);
-            abilityCards.get(2).setHeight(tileHeight * 2 + 10f);
-            abilityCards.get(2).setWidth((tileHeight * 2 + 10f) / 2);
-            logger.info(2 + " " + abilityCards.get(2).getPositionX() + " " + abilityCards.get(2).getPositionY());
+            abilityCards.get(2).setPositionX(GameConfiguration.width - (tileWidth * 2 + 10f) / 2 - 10f);
+            abilityCards.get(2).setPositionY(10f + (tileHeight * 2 + 10f) / 2);
+            abilityCards.get(2).setHeight(tileHeight);
+            abilityCards.get(2).setWidth(tileWidth);
+            //logger.info(2 + " " + abilityCards.get(2).getPositionX() + " " + abilityCards.get(2).getPositionY());
         }
 
         if (gameState.getMaxTurnLoops() >= 4) {
-            abilityCards.get(3).setPositionX(10f + ((tileHeight * 2 + 10f) / 2));
-            abilityCards.get(3).setPositionY(10f);
-            abilityCards.get(3).setHeight(tileHeight * 2 + 10f);
-            abilityCards.get(3).setWidth((tileHeight * 2 + 10f) / 2);
+            abilityCards.get(3).setPositionX(10f);
+            abilityCards.get(3).setPositionY(10f + (tileHeight * 2 + 10f) / 2);
+            abilityCards.get(3).setHeight(tileHeight);
+            abilityCards.get(3).setWidth(tileWidth);
             logger.info(3 + " " + abilityCards.get(3).getPositionX() + " " + abilityCards.get(3).getPositionY());
         }
         Player tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(0));

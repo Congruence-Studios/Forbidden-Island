@@ -72,32 +72,21 @@ public class AbilityCard extends Actor {
             abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Navigator@2x.png", Texture.class);
         }
 
+        abilityIcon.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+
         super.setBounds(this.positionX, this.positionY, this.width, this.height);
         super.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                logger.info("X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
+                //logger.info("X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
                 //focused = !focused;
             }
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                logger.info("touchDown: X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
+                //logger.info("touchDown: X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
                 focused = true;
-                //pop up new window with more details
-                /*
-                Skin neonUISkin = new Skin(Gdx.files.internal("./ui/neon/neon-ui.json"));
-                Dialog dialog = new Dialog("Info", neonUISkin, "dialog") {
-                    public void result(Object obj) {
-                        System.out.println("result "+obj);
-                    }
-                };
-                dialog.text("Are you sure you want to yada yada?");
-                dialog.button("Yes", true); //sends "true" as the result
-                dialog.button("No", false); //sends "false" as the result
-                dialog.show(AbilityCard.super.getStage());
 
-                 */
                 return true;
             }
 
@@ -108,7 +97,7 @@ public class AbilityCard extends Actor {
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                logger.info("enter: X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
+                //logger.info("enter: X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
                 hovered = true;
             }
 
@@ -123,16 +112,7 @@ public class AbilityCard extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         batch.end();
         batch.begin();
-        if (focused) {
-            batch.draw(focusedButtonTexture, positionX, positionY, width, height);
-        }
-        else if (hovered) {
-            batch.draw(hoverButtonTexture, positionX, positionY, width, height);
-        }
-        else {
-            batch.draw(outlinedButtonTexture, positionX, positionY, width, height);
-        }
-        batch.draw(abilityIcon, positionX + (width - abilityIcon.getWidth()) / 2, positionY + (height - abilityIcon.getHeight()) / 2, abilityIcon.getWidth(), abilityIcon.getHeight());
+        batch.draw(abilityIcon, positionX, positionY, width, height);
     }
 
     @Override

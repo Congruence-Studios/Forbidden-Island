@@ -42,9 +42,9 @@ public class GameMenuHelpButton extends Actor {
         outlinedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/help-button/Help-Button.png", Texture.class);
         hoverButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/help-button/Help-Button-Hovered.png", Texture.class);
         focusedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/help-button/Help-Button-Pressed.png", Texture.class);
-        outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        outlinedButtonTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        hoverButtonTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        focusedButtonTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
 
         super.setBounds(positionX + 10f, positiveY + 10f, outlinedButtonTexture.getWidth(), hoverButtonTexture.getHeight());
         super.addListener(new ClickListener(){
