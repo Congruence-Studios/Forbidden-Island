@@ -66,6 +66,8 @@ public class GameUI implements Screen {
 
     private InfoScreen infoScreen;
 
+    private TurnChangeScreen turnChangeScreen;
+
     private ArrayList<Pawn> pawns = new ArrayList<>();
 
     public GameUI(GameState gameState) {
@@ -227,6 +229,7 @@ public class GameUI implements Screen {
                 currentNormalPawn = gameState.getTurnNumber();
                 gameState.setCurrentPlayerActionsLeft(3);
                 eraseMovementTiles();
+                registerTurnChange();
             }
         });
         shoreUpButton = new GameMenuShoreUpButton(
@@ -465,6 +468,21 @@ public class GameUI implements Screen {
         );
         stage.addActor(infoScreen);
 
+        turnChangeScreen = new TurnChangeScreen(
+                (GameConfiguration.width - (GameConfiguration.height * 15/16f))*0.5f,
+                (GameConfiguration.height - (GameConfiguration.height * 15/16f))*0.5f,
+                GameConfiguration.height * 15/16f * (750/1600f),
+                GameConfiguration.height * 15/16f,
+                gameState
+        );
+        stage.addActor(turnChangeScreen);
+        turnChangeScreen.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                turnChangeScreen.setOpen(false);
+            }
+        });
+
         floodDeckPile.setEnabled(true);
         treasureDeckPile.setEnabled(true);
 
@@ -612,30 +630,30 @@ public class GameUI implements Screen {
 
 
         playerHands.get(0).setPositionX(10f);
-        playerHands.get(0).setPositionY(GameConfiguration.height - (tileHeight * 2 + 10f) / 2 - 10f);
-        playerHands.get(0).setWidth(tileHeight * 2 + 10f);
-        playerHands.get(0).setHeight((tileHeight * 2 + 10f) / 2);
+        playerHands.get(0).setPositionY(GameConfiguration.height - tileHeight - 10f);
+        playerHands.get(0).setWidth(tileWidth * 2 + 10f);
+        playerHands.get(0).setHeight(tileHeight);
         logger.info(0 + " " + playerHands.get(0).getPositionX() + " " + playerHands.get(0).getPositionY());
 
-        playerHands.get(1).setPositionX(GameConfiguration.width - 10f - (tileHeight * 2 + 10f));
-        playerHands.get(1).setPositionY(GameConfiguration.height - (tileHeight * 2 + 10f) / 2 - 10f);
-        playerHands.get(1).setWidth(tileHeight * 2 + 10f);
-        playerHands.get(1).setHeight((tileHeight * 2 + 10f) / 2);
+        playerHands.get(1).setPositionX(GameConfiguration.width - 10f - (tileWidth * 2 + 10f));
+        playerHands.get(1).setPositionY(GameConfiguration.height - tileHeight - 10f);
+        playerHands.get(1).setWidth(tileWidth * 2 + 10f);
+        playerHands.get(1).setHeight(tileHeight);
         logger.info(1 + " " + playerHands.get(1).getPositionX() + " " + playerHands.get(1).getPositionY());
 
         if (gameState.getMaxTurnLoops() >= 3) {
-            playerHands.get(2).setPositionX(GameConfiguration.width - 10f - (tileHeight * 2 + 10f));
+            playerHands.get(2).setPositionX(GameConfiguration.width - 10f - (tileWidth * 2 + 10f));
             playerHands.get(2).setPositionY(10f);
-            playerHands.get(2).setWidth(tileHeight * 2 + 10f);
-            playerHands.get(2).setHeight((tileHeight * 2 + 10f) / 2);
+            playerHands.get(2).setWidth(tileWidth * 2 + 10f);
+            playerHands.get(2).setHeight(tileHeight);
             logger.info(2 + " " + playerHands.get(2).getPositionX() + " " + playerHands.get(2).getPositionY());
         }
 
         if (gameState.getMaxTurnLoops() >= 4) {
             playerHands.get(3).setPositionX(10f);
             playerHands.get(3).setPositionY(10f);
-            playerHands.get(3).setWidth(tileHeight * 2 + 10f);
-            playerHands.get(3).setHeight((tileHeight * 2 + 10f) / 2);
+            playerHands.get(3).setWidth(tileWidth * 2 + 10f);
+            playerHands.get(3).setHeight(tileHeight);
             logger.info(3 + " " + playerHands.get(3).getPositionX() + " " + playerHands.get(3).getPositionY());
         }
 
@@ -648,6 +666,11 @@ public class GameUI implements Screen {
         infoScreen.setPositiveY((GameConfiguration.height - (GameConfiguration.height * 15/16f))*0.5f);
         infoScreen.setHeight(GameConfiguration.height * 15/16f);
         infoScreen.setWidth(GameConfiguration.height * 15/16f);
+
+        turnChangeScreen.setPositionX((GameConfiguration.width - (GameConfiguration.height * 15/16f))*0.5f);
+        turnChangeScreen.setPositiveY((GameConfiguration.height - (GameConfiguration.height * 15/16f * 750f/1600f))*0.5f);
+        turnChangeScreen.setHeight(GameConfiguration.height * 15/16f * (750/1600f));
+        turnChangeScreen.setWidth(GameConfiguration.height * 15/16f);
 
         abilityCards.get(0).setPositionX(10f);
         abilityCards.get(0).setPositionY(GameConfiguration.height - (tileHeight * 2 + 10f) - 10f);
@@ -963,7 +986,12 @@ public class GameUI implements Screen {
             currentNormalPawn = gameState.getTurnNumber();
             gameState.setCurrentPlayerActionsLeft(3);
             eraseMovementTiles();
+            registerTurnChange();
         }
+    }
+
+    public void registerTurnChange() {
+        turnChangeScreen.setOpen(true);
     }
 
 }

@@ -59,17 +59,17 @@ public class AbilityCard extends Actor {
         focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         if (ability == Player.PILOT) {
-            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Pilot@2x.png", Texture.class);
+            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/Pilot Icon.png", Texture.class);
         } else if (ability == Player.ENGINEER) {
-            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Engineer@2x.png", Texture.class);
+            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/Engineer Icon.png", Texture.class);
         } else if (ability == Player.MESSENGER) {
-            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Messenger@2x.png", Texture.class);
+            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/Messenger Icon.png", Texture.class);
         } else if (ability == Player.EXPLORER) {
-            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Explorer@2x.png", Texture.class);
+            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/Explorer Icon.png", Texture.class);
         } else if (ability == Player.DIVER) {
-            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Diver@2x.png", Texture.class);
+            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/Diver Icon.png", Texture.class);
         } else if (ability == Player.NAVIGATOR) {
-            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Navigator@2x.png", Texture.class);
+            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/Navigator Icon.png", Texture.class);
         }
 
         abilityIcon.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);

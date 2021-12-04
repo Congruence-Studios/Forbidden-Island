@@ -53,12 +53,12 @@ public class TurnChangeScreen extends Actor {
 
         super.setBounds(0, 0, 0, 0);
 
-        EngineerTexture = ForbiddenIsland.assetManager.get("custom-ui/dialog-background/Dialog.png", Texture.class);
-        ExplorerTexture = ForbiddenIsland.assetManager.get("water-meter/Water Meter-1.png", Texture.class);
-        DiverTexture = ForbiddenIsland.assetManager.get("water-meter/Water Meter-2.png", Texture.class);
-        NavigatorTexture = ForbiddenIsland.assetManager.get("water-meter/Water Meter-3.png", Texture.class);
-        MessengerTexture = ForbiddenIsland.assetManager.get("water-meter/Water Meter-4.png", Texture.class);
-        PilotTexture = ForbiddenIsland.assetManager.get("water-meter/Water Meter-4.png", Texture.class);
+        EngineerTexture = ForbiddenIsland.assetManager.get("custom-ui/turn/Engineer Turn.png", Texture.class);
+        ExplorerTexture = ForbiddenIsland.assetManager.get("custom-ui/turn/Explorer Turn.png", Texture.class);
+        DiverTexture = ForbiddenIsland.assetManager.get("custom-ui/turn/Diver Turn.png", Texture.class);
+        NavigatorTexture = ForbiddenIsland.assetManager.get("custom-ui/turn/Navigator Turn.png", Texture.class);
+        MessengerTexture = ForbiddenIsland.assetManager.get("custom-ui/turn/Messenger Turn.png", Texture.class);
+        PilotTexture = ForbiddenIsland.assetManager.get("custom-ui/turn/Pilot Turn.png", Texture.class);
 
         EngineerTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
         ExplorerTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);

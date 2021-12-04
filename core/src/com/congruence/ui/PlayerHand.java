@@ -52,22 +52,22 @@ public class PlayerHand extends Actor {
         outlinedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/player-hand/Player Hand Button.png", Texture.class);
         hoverButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/player-hand/Player Hand Button Hovered.png", Texture.class);
         focusedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/player-hand/Player Hand Button Pressed.png", Texture.class);
-        outlinedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        hoverButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        outlinedButtonTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        hoverButtonTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        focusedButtonTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
 
         super.setBounds(this.positionX, this.positionY, this.width, this.height);
         super.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                logger.info("X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
+                //logger.info("X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
                 //focused = !focused;
             }
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                logger.info("touchDown: X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
-                focused = true;
+                //logger.info("touchDown: X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
+                //focused = true;
                 return true;
             }
 
@@ -78,8 +78,8 @@ public class PlayerHand extends Actor {
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                logger.info("enter: X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
-                hovered = true;
+                //logger.info("enter: X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
+                //hovered = true;
             }
 
             @Override
