@@ -33,4 +33,12 @@ public class Pair implements Comparable<Pair> {
         }
         else return -1;
     }
+
+    public boolean equals(Pair p) {
+        return this.x == p.x && this.y == p.y;
+    }
+
+    public String toString() {
+        return "x: " + x + " y: " + y;
+    }
 }
