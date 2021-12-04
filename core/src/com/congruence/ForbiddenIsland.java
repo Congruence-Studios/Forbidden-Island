@@ -56,8 +56,16 @@ public class ForbiddenIsland extends Game {
 			HashMap<Integer, String> playerOrder = new HashMap<>();
 			String[][] islandTiles = new String[6][6];
 			int[][] islandTileState = new int[6][6];
+
 			Stack<FloodCard> floodCardDeck = new Stack<>();
 			Stack<TreasureCard> treasureCardDeck = new Stack<>();
+
+			for (int i = 0; i < 5; i++) {
+				treasureCardDeck.add(new TreasureCard("Ocean's Chalice", TreasureCard.TREASURE_CARD));
+				treasureCardDeck.add(new TreasureCard("Crystal of Fire", TreasureCard.TREASURE_CARD));
+				treasureCardDeck.add(new TreasureCard("Statue of the Wind", TreasureCard.TREASURE_CARD));
+				treasureCardDeck.add(new TreasureCard("Earth Stone", TreasureCard.TREASURE_CARD));
+			}
 
 			Stack<String> TEMP_PLAYER_CARDS = new Stack<>();
 			List<String> TEMP_PLAYER_CARDS_LIST = Arrays.asList(Resources.PLAYER_NAMES);

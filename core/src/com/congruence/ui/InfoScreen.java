@@ -53,10 +53,14 @@ public class InfoScreen extends Actor {
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 50;
         parameter.color = Color.BLACK;
+        parameter.genMipMaps = true;
+        parameter.magFilter = Texture.TextureFilter.MipMapLinearLinear;
+        parameter.minFilter = Texture.TextureFilter.MipMapLinearLinear;
         titleFont = generator.generateFont(parameter);
         generator.dispose();
         background = ForbiddenIsland.assetManager.get("custom-ui/dialog-background/Dialog.png", Texture.class);
 
+        turnLayout = new GlyphLayout(titleFont, "Turn Info");
         turnLayout = new GlyphLayout(titleFont, "");
         actionCountLayout = new GlyphLayout(titleFont, "");
     }
@@ -69,7 +73,7 @@ public class InfoScreen extends Actor {
         if (isOpen) {
             batch.draw(background, positionX, positiveY, width, height);
 
-            turnLayout.setText(titleFont, "Player Turn: " + state.getPlayers().get(state.getPlayerOrder().get(state.getTurnNumber())).getPlayerName());
+            turnLayout.setText(titleFont, "Current Player Turn: " + state.getPlayers().get(state.getPlayerOrder().get(state.getTurnNumber())).getPlayerName());
             float turnFontX = 0 + (GameConfiguration.width - turnLayout.width) / 2;
             float turnFontY = positiveY + height - 25f;
 

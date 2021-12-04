@@ -14,6 +14,7 @@ import com.congruence.GameConfiguration;
 import com.congruence.state.GameState;
 import com.congruence.state.Player;
 import com.congruence.state.Resources;
+import com.congruence.state.TreasureCard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,6 +70,8 @@ public class GameUI implements Screen {
     private TurnChangeScreen turnChangeScreen;
 
     private ArrayList<Pawn> pawns = new ArrayList<>();
+
+    private DrawTreasureCard drawTreasureCard;
 
     public GameUI(GameState gameState) {
         this.gameState = gameState;
@@ -292,6 +295,12 @@ public class GameUI implements Screen {
                 tileHeight
         );
         stage.addActor(treasureDeckPile);
+        treasureDeckPile.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                drawTreasureCards();
+            }
+        });
         floodDeckPile = new FloodDeckPile(
                 ((GameConfiguration.width - 10f) + ((GameConfiguration.width - 10f) - ((GameConfiguration.width) - (GameConfiguration.height)) / 2f)) / 2f - tileHeight * 8f / 10f,
                 3 * tileHeight + 40f,
@@ -482,6 +491,14 @@ public class GameUI implements Screen {
                 turnChangeScreen.setOpen(false);
             }
         });
+        drawTreasureCard = new DrawTreasureCard(
+                (GameConfiguration.width - (GameConfiguration.height * 15/16f))*0.5f,
+                (GameConfiguration.height - (GameConfiguration.height * 15/16f))*0.5f,
+                GameConfiguration.height * 15/16f * (750/1600f),
+                GameConfiguration.height * 15/16f,
+                gameState
+        );
+        stage.addActor(drawTreasureCard);
 
         floodDeckPile.setEnabled(true);
         treasureDeckPile.setEnabled(true);
@@ -671,6 +688,11 @@ public class GameUI implements Screen {
         turnChangeScreen.setPositiveY((GameConfiguration.height - (GameConfiguration.height * 15/16f * 750f/1600f))*0.5f);
         turnChangeScreen.setHeight(GameConfiguration.height * 15/16f * (750/1600f));
         turnChangeScreen.setWidth(GameConfiguration.height * 15/16f);
+
+        drawTreasureCard.setPositionX((GameConfiguration.width - (GameConfiguration.height * 15/16f))*0.5f);
+        drawTreasureCard.setPositiveY((GameConfiguration.height - (GameConfiguration.height * 15/16f * 750f/1600f))*0.5f);
+        drawTreasureCard.setHeight(GameConfiguration.height * 15/16f * (750/1600f));
+        drawTreasureCard.setWidth(GameConfiguration.height * 15/16f);
 
         abilityCards.get(0).setPositionX(10f);
         abilityCards.get(0).setPositionY(GameConfiguration.height - (tileHeight * 2 + 10f) - 10f);
@@ -992,6 +1014,15 @@ public class GameUI implements Screen {
 
     public void registerTurnChange() {
         turnChangeScreen.setOpen(true);
+    }
+
+    public void drawTreasureCards() {
+        Stack<TreasureCard> treasureDeck = gameState.getTreasureCardDeck();
+        gameState.setCurrentDrawnTreasureCards(new ArrayList<>(3));
+        gameState.getCurrentDrawnTreasureCards().add(treasureDeck.pop());
+        gameState.getCurrentDrawnTreasureCards().add(treasureDeck.pop());
+        gameState.getCurrentDrawnTreasureCards().add(treasureDeck.pop());
+        drawTreasureCard.setOpen(true);
     }
 
 }
