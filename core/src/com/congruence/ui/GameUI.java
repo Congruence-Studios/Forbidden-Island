@@ -848,26 +848,13 @@ public class GameUI implements Screen {
     public void setMovementTiles(int player) {
         eraseMovementTiles();
 
-        for (int i = 0; i < gameState.getIslandTileState().length; i++) {
-            for (int j = 0; j < gameState.getIslandTileState().length; j++) {
-                logger.info("IslandTileState: x/i: " + i + " y/j: " + j + " value: " + gameState.getIslandTileState()[i][j]);
-            }
-        }
-        for (int i = 0; i < gameState.getIslandTiles().length; i++) {
-            for (int j = 0; j < gameState.getIslandTiles().length; j++) {
-                logger.info("IslandTile: x/i: " + i + " y/j: " + j + " value: " + gameState.getIslandTiles()[i][j]);
-            }
-        }
-
         Pawn current = pawns.get(player);
-        logger.info("current: x: " + current.getX() + " y: " + current.getY());
         Player tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(player));
         ArrayList<Pair> movableTiles = new ArrayList<>();
         movableTiles.add(new Pair(tempPlayer.getTileX()+1, tempPlayer.getTileY()));
         movableTiles.add(new Pair(tempPlayer.getTileX()-1, tempPlayer.getTileY()));
         movableTiles.add(new Pair(tempPlayer.getTileX(), tempPlayer.getTileY()+1));
         movableTiles.add(new Pair(tempPlayer.getTileX(), tempPlayer.getTileY()-1));
-        logger.info("tempPlayer: " + tempPlayer.getPlayerName() + " " + tempPlayer.getTileX() + " " + tempPlayer.getTileY());
         if (tempPlayer.getAbility() == Player.PILOT) {
             movableTiles.addAll(islandTiles.keySet());
         }
@@ -881,7 +868,6 @@ public class GameUI implements Screen {
             boolean changesMade = false;
             while (!currentTiles.isEmpty()) {
                 for (Pair i : currentTiles) {
-                    logger.info("current pair: " + i);
                     if (islandTiles.get(i) != null && islandTiles.get(i).getTileState() == GameState.NORMAL_ISLAND_TILE) {
                         nextTiles.add(i);
                     } else if (islandTiles.get(i) != null && (islandTiles.get(i).getTileState() == GameState.FLOODED_ISLAND_TILE ||
@@ -892,21 +878,18 @@ public class GameUI implements Screen {
                                 changesMade = true;
                             }
                         }
-                        logger.info(nextTiles.toString());
                         if (islandTiles.get(new Pair(i.x-1, i.y)) != null &&
                                 islandTiles.get(new Pair(i.x-1, i.y)).getTileState() != GameState.INVALID) {
                             if (nextTiles.add(new Pair(i.x-1, i.y))) {
                                 changesMade = true;
                             }
                         }
-                        logger.info(nextTiles.toString());
                         if (islandTiles.get(new Pair(i.x, i.y+1)) != null &&
                                 islandTiles.get(new Pair(i.x, i.y+1)).getTileState() != GameState.INVALID) {
                             if (nextTiles.add(new Pair(i.x, i.y+1))) {
                                 changesMade = true;
                             }
                         }
-                        logger.info(nextTiles.toString());
                         if (islandTiles.get(new Pair(i.x, i.y-1)) != null &&
                                 islandTiles.get(new Pair(i.x, i.y-1)).getTileState() != GameState.INVALID) {
                             if (nextTiles.add(new Pair(i.x, i.y-1))) {
@@ -914,15 +897,11 @@ public class GameUI implements Screen {
                             }
                         }
                         nextTiles.add(i);
-                        logger.info(nextTiles.toString());
                     }
-                    logger.info(nextTiles.toString());
                 }
-                logger.info(changesMade + " " + currentTiles + " " + nextTiles);
                 if (changesMade) {
                     currentTiles = new TreeSet<>(nextTiles);
                     changesMade = false;
-                    logger.info("changes made");
                 } else {
                     break;
                 }
