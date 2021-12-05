@@ -79,8 +79,8 @@ public class DrawTreasureCard extends Actor {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (state.isDrawingTreasureCards())  {
-                    state.setDrawingTreasureCards(false);
+                if (state.getGamePhase() == GameState.DRAWING_TREASURE_CARDS)  {
+                    state.setGamePhase(GameState.DRAWING_FLOOD_CARDS);
                     isOpen = false;
                 }
                 return true;

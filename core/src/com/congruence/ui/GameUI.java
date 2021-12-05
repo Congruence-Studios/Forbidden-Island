@@ -130,6 +130,11 @@ public class GameUI implements Screen {
                                 }
                                 tempPlayerData.setTileX(islandTile.getCoordinates().x);
                                 tempPlayerData.setTileY(islandTile.getCoordinates().y);
+                                if (tempPlayerData.getAbility() == Player.PILOT && !((Math.abs(islandTile.getCoordinates().x - tempPlayerData.getTileX()) <= 1) &&
+                                        islandTile.getCoordinates().y - y == 0 || (Math.abs(islandTile.getCoordinates().y - tempPlayerData.getTileY()) <= 1) &&
+                                        islandTile.getCoordinates().x - x == 0)) {
+                                    tempPlayerData.setCanUseSpecialAction(false);
+                                }
                                 logger.info(currentNormalPawn + "");
                                 pawns.get(currentNormalPawn).setX(findPawnPositionX(currentNormalPawn));
                                 pawns.get(currentNormalPawn).setY(findPawnPositionY(currentNormalPawn));
@@ -295,7 +300,7 @@ public class GameUI implements Screen {
         treasureDeckPile.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (!gameState.isDrawingIslandTileCards() && !gameState.isDrawingTreasureCards()) {
+                if (gameState.getGamePhase() == GameState.MOVING_PAWNS && gameState.getCurrentPlayerActionsLeft() == 0) {
                     drawTreasureCards();
                 }
             }
@@ -424,7 +429,7 @@ public class GameUI implements Screen {
             p.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if (finalI == gameState.getTurnNumber() && (!gameState.isDrawingTreasureCards() && !gameState.isDrawingIslandTileCards())) {
+                    if (finalI == gameState.getTurnNumber() && (gameState.getGamePhase() == GameState.MOVING_PAWNS)) {
                         if (currentPawnFocused) {
                             pawns.get(currentNormalPawn).setPawnState(Pawn.NORMAL);
                             currentPawnFocused = false;
@@ -916,7 +921,7 @@ public class GameUI implements Screen {
         movableTiles.add(new Pair(tempPlayer.getTileX()-1, tempPlayer.getTileY()));
         movableTiles.add(new Pair(tempPlayer.getTileX(), tempPlayer.getTileY()+1));
         movableTiles.add(new Pair(tempPlayer.getTileX(), tempPlayer.getTileY()-1));
-        if (tempPlayer.getAbility() == Player.PILOT) {
+        if (tempPlayer.getAbility() == Player.PILOT && tempPlayer.isCanUseSpecialAction()) {
             movableTiles.addAll(islandTiles.keySet());
         }
         else if (tempPlayer.getAbility() == Player.DIVER) {
@@ -1016,6 +1021,7 @@ public class GameUI implements Screen {
 
     public void checkTurn() {
         if (gameState.getCurrentPlayerActionsLeft() == 0) {
+            gameState.getPlayers().get(gameState.getCurrentPlayerTurn()).setCanUseSpecialAction(true);
             gameState.setTurnNumber( gameState.getTurnNumber() + 1 );
             if (gameState.getTurnNumber() >= gameState.getMaxTurnLoops()) {
                 gameState.setTurnNumber( 0 );
@@ -1047,6 +1053,6 @@ public class GameUI implements Screen {
             }
         }
         drawTreasureCard.setOpen(true);
-        gameState.setDrawingTreasureCards(true);
+        gameState.setGamePhase(GameState.DRAWING_TREASURE_CARDS);
     }
 }

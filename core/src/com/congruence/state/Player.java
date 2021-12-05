@@ -42,7 +42,7 @@ public class Player {
 
     private int tilePosition;
 
-    private boolean canUsePilotSpecial;
+    private boolean canUseSpecialAction;
 
     public Player(String playerName, String rName, ArrayList<TreasureCard> cardsAtHand,
                   int tileX, int tileY) {
@@ -52,7 +52,7 @@ public class Player {
         this.tileX = tileX;
         this.tileY = tileY;
         this.tilePosition = 0;
-        this.canUsePilotSpecial = true;
+        this.canUseSpecialAction = true;
 
         if (playerName.equals("Pilot")) {
             ability = Player.PILOT;
@@ -138,12 +138,12 @@ public class Player {
         this.tilePosition = tilePosition;
     }
 
-    public boolean isCanUsePilotSpecial() {
-        return canUsePilotSpecial;
+    public boolean isCanUseSpecialAction() {
+        return canUseSpecialAction;
     }
 
-    public void setCanUsePilotSpecial(boolean canUsePilotSpecial) {
-        this.canUsePilotSpecial = canUsePilotSpecial;
+    public void setCanUseSpecialAction(boolean canUseSpecialAction) {
+        this.canUseSpecialAction = canUseSpecialAction;
     }
 
     @Override

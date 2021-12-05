@@ -22,6 +22,9 @@ public class GameState {
     public static final int FOOLS_LANDING_SUNK = 2;
     public static final int BOTH_TREASURE_TILES_SUNK = 3;
     public static final int WATER_METER_FULL = 4;
+    public static final int MOVING_PAWNS = 0;
+    public static final int DRAWING_TREASURE_CARDS = 1;
+    public static final int DRAWING_FLOOD_CARDS = 2;
     /**
      * The Collected Artifacts of the Player
      */
@@ -127,18 +130,15 @@ public class GameState {
      * The Discard Pile for the Treasure Cards
      */
     private ArrayList<TreasureCard> treasureCardDiscardDeck;
-    /**
-     * Should the Game Show the UI for Drawing Treasure Cards
+    /*
+     * Indicates what phase of the game is currently in
+     * (moving pawns, drawing treasure cards, drawing island tile cards)
      */
-    private boolean drawingTreasureCards = false;
+    private int gamePhase = 0;
     /**
      * The Current Cards that Have Been Drawn from the TreasureDeck
      */
     private ArrayList<TreasureCard> currentDrawnTreasureCards = null;
-    /**
-     * Should the Game Show the UI for Drawing the IslandCards
-     */
-    private boolean drawingIslandTileCards = false;
     /**
      * The Current Cards that Have Been Drawn from the IslandTileDeck
      */
@@ -184,9 +184,7 @@ public class GameState {
         this.islandTileDiscardDeck = new ArrayList<>();
         this.treasureCardDeck = treasureCardDeck;
         this.treasureCardDiscardDeck = new ArrayList<>();
-        this.drawingTreasureCards = false;
         this.currentDrawnTreasureCards = currentDrawnTreasureCards;
-        this.drawingIslandTileCards = drawingIslandTileCards;
         this.currentDrawnIslandTileCards = currentDrawnIslandTileCards;
         this.amountOfCurrentDrawnIslandTileCards = amountOfCurrentDrawnIslandTileCards;
     }
@@ -327,28 +325,12 @@ public class GameState {
         this.treasureCardDiscardDeck = treasureCardDiscardDeck;
     }
 
-    public boolean isDrawingTreasureCards() {
-        return drawingTreasureCards;
-    }
-
-    public void setDrawingTreasureCards(boolean drawingTreasureCards) {
-        this.drawingTreasureCards = drawingTreasureCards;
-    }
-
     public ArrayList<TreasureCard> getCurrentDrawnTreasureCards() {
         return currentDrawnTreasureCards;
     }
 
     public void setCurrentDrawnTreasureCards(ArrayList<TreasureCard> currentDrawnTreasureCards) {
         this.currentDrawnTreasureCards = currentDrawnTreasureCards;
-    }
-
-    public boolean isDrawingIslandTileCards() {
-        return drawingIslandTileCards;
-    }
-
-    public void setDrawingIslandTileCards(boolean drawingIslandTileCards) {
-        this.drawingIslandTileCards = drawingIslandTileCards;
     }
 
     public ArrayList<FloodCard> getCurrentDrawnIslandTileCards() {
@@ -391,17 +373,25 @@ public class GameState {
         this.gameResult = gameResult;
     }
 
+    public int getGamePhase() {
+        return gamePhase;
+    }
+
+    public void setGamePhase(int gamePhase) {
+        this.gamePhase = gamePhase;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GameState gameState = (GameState) o;
-        return difficulty == gameState.difficulty && waterHeight == gameState.waterHeight && cardsToDraw == gameState.cardsToDraw && turnNumber == gameState.turnNumber && totalTurns == gameState.totalTurns && maxTurnLoops == gameState.maxTurnLoops && currentPlayerActionsLeft == gameState.currentPlayerActionsLeft && drawingTreasureCards == gameState.drawingTreasureCards && drawingIslandTileCards == gameState.drawingIslandTileCards && amountOfCurrentDrawnIslandTileCards == gameState.amountOfCurrentDrawnIslandTileCards && Arrays.equals(CollectedArtifacts, gameState.CollectedArtifacts) && Arrays.equals(ArtifactOwner, gameState.ArtifactOwner) && Objects.equals(players, gameState.players) && Objects.equals(playerOrder, gameState.playerOrder) && Arrays.deepEquals(islandTiles, gameState.islandTiles) && Arrays.deepEquals(islandTileState, gameState.islandTileState) && Objects.equals(stateListeners, gameState.stateListeners) && Objects.equals(currentPlayerTurn, gameState.currentPlayerTurn) && Objects.equals(islandTileDeck, gameState.islandTileDeck) && Objects.equals(islandTileDiscardDeck, gameState.islandTileDiscardDeck) && Objects.equals(treasureCardDeck, gameState.treasureCardDeck) && Objects.equals(treasureCardDiscardDeck, gameState.treasureCardDiscardDeck) && Objects.equals(currentDrawnTreasureCards, gameState.currentDrawnTreasureCards) && Objects.equals(currentDrawnIslandTileCards, gameState.currentDrawnIslandTileCards);
+        return difficulty == gameState.difficulty && waterHeight == gameState.waterHeight && cardsToDraw == gameState.cardsToDraw && turnNumber == gameState.turnNumber && totalTurns == gameState.totalTurns && maxTurnLoops == gameState.maxTurnLoops && currentPlayerActionsLeft == gameState.currentPlayerActionsLeft && amountOfCurrentDrawnIslandTileCards == gameState.amountOfCurrentDrawnIslandTileCards && Arrays.equals(CollectedArtifacts, gameState.CollectedArtifacts) && Arrays.equals(ArtifactOwner, gameState.ArtifactOwner) && Objects.equals(players, gameState.players) && Objects.equals(playerOrder, gameState.playerOrder) && Arrays.deepEquals(islandTiles, gameState.islandTiles) && Arrays.deepEquals(islandTileState, gameState.islandTileState) && Objects.equals(stateListeners, gameState.stateListeners) && Objects.equals(currentPlayerTurn, gameState.currentPlayerTurn) && Objects.equals(islandTileDeck, gameState.islandTileDeck) && Objects.equals(islandTileDiscardDeck, gameState.islandTileDiscardDeck) && Objects.equals(treasureCardDeck, gameState.treasureCardDeck) && Objects.equals(treasureCardDiscardDeck, gameState.treasureCardDiscardDeck) && Objects.equals(currentDrawnTreasureCards, gameState.currentDrawnTreasureCards) && Objects.equals(currentDrawnIslandTileCards, gameState.currentDrawnIslandTileCards);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(difficulty, waterHeight, cardsToDraw, players, playerOrder, stateListeners, turnNumber, totalTurns, maxTurnLoops, currentPlayerTurn, currentPlayerActionsLeft, islandTileDeck, islandTileDiscardDeck, treasureCardDeck, treasureCardDiscardDeck, drawingTreasureCards, currentDrawnTreasureCards, drawingIslandTileCards, currentDrawnIslandTileCards, amountOfCurrentDrawnIslandTileCards);
+        int result = Objects.hash(difficulty, waterHeight, cardsToDraw, players, playerOrder, stateListeners, turnNumber, totalTurns, maxTurnLoops, currentPlayerTurn, currentPlayerActionsLeft, islandTileDeck, islandTileDiscardDeck, treasureCardDeck, treasureCardDiscardDeck,  currentDrawnTreasureCards,  currentDrawnIslandTileCards, amountOfCurrentDrawnIslandTileCards);
         result = 31 * result + Arrays.hashCode(CollectedArtifacts);
         result = 31 * result + Arrays.hashCode(ArtifactOwner);
         result = 31 * result + Arrays.deepHashCode(islandTiles);
@@ -431,9 +421,7 @@ public class GameState {
                 ", islandTileDiscardDeck=" + islandTileDiscardDeck +
                 ", treasureCardDeck=" + treasureCardDeck +
                 ", treasureCardDiscardDeck=" + treasureCardDiscardDeck +
-                ", drawingTreasureCards=" + drawingTreasureCards +
                 ", currentDrawnTreasureCards=" + currentDrawnTreasureCards +
-                ", drawingIslandTileCards=" + drawingIslandTileCards +
                 ", currentDrawnIslandTileCards=" + currentDrawnIslandTileCards +
                 ", amountOfCurrentDrawnIslandTileCards=" + amountOfCurrentDrawnIslandTileCards +
                 '}';
