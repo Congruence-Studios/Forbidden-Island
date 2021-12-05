@@ -183,8 +183,8 @@ public class GameState {
         this.islandTileDeck = islandTileDeck;
         this.islandTileDiscardDeck = new ArrayList<>();
         this.treasureCardDeck = treasureCardDeck;
-        this.treasureCardDiscardDeck = treasureCardDiscardDeck;
-        this.drawingTreasureCards = drawingTreasureCards;
+        this.treasureCardDiscardDeck = new ArrayList<>();
+        this.drawingTreasureCards = false;
         this.currentDrawnTreasureCards = currentDrawnTreasureCards;
         this.drawingIslandTileCards = drawingIslandTileCards;
         this.currentDrawnIslandTileCards = currentDrawnIslandTileCards;

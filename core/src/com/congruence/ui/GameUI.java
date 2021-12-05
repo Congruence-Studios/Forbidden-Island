@@ -11,10 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.congruence.GameConfiguration;
-import com.congruence.state.GameState;
-import com.congruence.state.Player;
-import com.congruence.state.Resources;
-import com.congruence.state.TreasureCard;
+import com.congruence.state.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -298,7 +295,9 @@ public class GameUI implements Screen {
         treasureDeckPile.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                drawTreasureCards();
+                if (!gameState.isDrawingIslandTileCards() && !gameState.isDrawingTreasureCards()) {
+                    drawTreasureCards();
+                }
             }
         });
         floodDeckPile = new FloodDeckPile(
@@ -425,7 +424,7 @@ public class GameUI implements Screen {
             p.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if (finalI == gameState.getTurnNumber()) {
+                    if (finalI == gameState.getTurnNumber() && (!gameState.isDrawingTreasureCards() && !gameState.isDrawingIslandTileCards())) {
                         if (currentPawnFocused) {
                             pawns.get(currentNormalPawn).setPawnState(Pawn.NORMAL);
                             currentPawnFocused = false;
@@ -777,11 +776,27 @@ public class GameUI implements Screen {
     public void enableShoreUpButton(IslandTile e) {
         int x = e.getCoordinates().x;
         int y = e.getCoordinates().y;
-        if (gameState.getIslandTileState()[x][y] == GameState.FLOODED_ISLAND_TILE) {
+        logger.info("enableShoreUpButton: x: " + x + " y: " + y + "player x: " +
+                gameState.getPlayers().get(gameState.getCurrentPlayerTurn()).getTileX() + " y: " +
+                gameState.getPlayers().get(gameState.getCurrentPlayerTurn()).getTileY() + " " +
+                gameState.getIslandTileState()[x][y]);
+        if (gameState.getIslandTileState()[x][y] == GameState.FLOODED_ISLAND_TILE &&
+                gameState.getPlayers().get(gameState.getCurrentPlayerTurn()).getAbility() == Player.EXPLORER &&
+                Math.abs(gameState.getPlayers().get(gameState.getCurrentPlayerTurn()).getTileX() - x) <= 1 &&
+                Math.abs(gameState.getPlayers().get(gameState.getCurrentPlayerTurn()).getTileY() - y) <= 1) {
             shoreUpButton.setEnabled(true);
+            logger.info("1");
+        } else if (gameState.getIslandTileState()[x][y] == GameState.FLOODED_ISLAND_TILE &&
+                ((Math.abs(gameState.getPlayers().get(gameState.getCurrentPlayerTurn()).getTileX() - x) <= 1 &&
+                        gameState.getPlayers().get(gameState.getCurrentPlayerTurn()).getTileY() == y) ||
+                (Math.abs(gameState.getPlayers().get(gameState.getCurrentPlayerTurn()).getTileY() - y) <= 1 &&
+                        gameState.getPlayers().get(gameState.getCurrentPlayerTurn()).getTileX() == x))) {
+            shoreUpButton.setEnabled(true);
+            logger.info("2");
         }
         else {
             shoreUpButton.setEnabled(false);
+            logger.info("3");
         }
     }
 
@@ -795,6 +810,7 @@ public class GameUI implements Screen {
         if (x >= 0 && y >= 0 && shoreUpButton.isEnabled()) {
             gameState.getIslandTileState()[x][y] = GameState.NORMAL_ISLAND_TILE;
             islandTiles.get(currentFocusedTile).setTileState(GameState.NORMAL_ISLAND_TILE);
+            gameState.setCurrentPlayerActionsLeft(gameState.getCurrentPlayerActionsLeft()-1);
             shoreUpButton.setEnabled(false);
         }
     }
@@ -1021,7 +1037,8 @@ public class GameUI implements Screen {
         gameState.setCurrentDrawnTreasureCards(new ArrayList<>(2));
         for (int i = 0; i < 2; i++) {
             if (!treasureDeck.empty()) {
-                gameState.getCurrentDrawnTreasureCards().add(treasureDeck.pop());
+                gameState.getCurrentDrawnTreasureCards().add(treasureDeck.peek());
+                gameState.getTreasureCardDiscardDeck().add(treasureDeck.pop());
             } else {
                 Collections.shuffle(gameState.getTreasureCardDiscardDeck());
                 treasureDeck.addAll(gameState.getTreasureCardDiscardDeck());
@@ -1030,6 +1047,6 @@ public class GameUI implements Screen {
             }
         }
         drawTreasureCard.setOpen(true);
+        gameState.setDrawingTreasureCards(true);
     }
-
 }
