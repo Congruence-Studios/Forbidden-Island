@@ -13,9 +13,14 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.congruence.ForbiddenIsland;
 import com.congruence.GameConfiguration;
+import com.congruence.state.FloodCard;
 import com.congruence.state.GameState;
+import com.congruence.state.TreasureCard;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class InfoScreen extends Group {
+    private static final Logger logger = LoggerFactory.getLogger(InfoScreen.class);
 
     public boolean isOpen = false;
 
@@ -36,6 +41,10 @@ public class InfoScreen extends Group {
     private GlyphLayout turnLayout;
 
     private GlyphLayout actionCountLayout;
+
+    private GlyphLayout floodDeckLayout;
+
+    private GlyphLayout treasureDeckLayout;
 
     private CloseButton closeButton;
 
@@ -70,6 +79,8 @@ public class InfoScreen extends Group {
         turnLayout = new GlyphLayout(titleFont, "Turn Info");
         turnLayout = new GlyphLayout(titleFont, "");
         actionCountLayout = new GlyphLayout(titleFont, "");
+        treasureDeckLayout = new GlyphLayout();
+        floodDeckLayout = new GlyphLayout();
 
         closeButton = new CloseButton(
                 getWidth() - 50,
@@ -104,6 +115,28 @@ public class InfoScreen extends Group {
 
             titleFont.draw(batch, turnLayout, turnFontX, turnFontY);
             titleFont.draw(batch, actionCountLayout, actionCountFontX, actionCountFontY);
+
+            if (state.getIslandTileDiscardDeck().size() > 0) {
+                FloodCard temp = state.getIslandTileDiscardDeck().get(state.getIslandTileDiscardDeck().size()-1);
+                Texture tempTexture = ForbiddenIsland.assetManager.get("flood-deck/Flood_Card_" + temp.getName() + "@2x.png");
+                floodDeckLayout.setText(titleFont, "Size: " + state.getIslandTileDiscardDeck().size());
+                float floodDeckFontX = GameConfiguration.width/2f - 5 - tempTexture.getWidth()/2f - floodDeckLayout.width/2;
+                float floodDeckFontY = GameConfiguration.height/2f;
+                titleFont.draw(batch, floodDeckLayout, floodDeckFontX, floodDeckFontY);
+                logger.info(temp.getName());
+                batch.draw(tempTexture, GameConfiguration.width/2f - 5 - tempTexture.getWidth(), GameConfiguration.height/2f - tempTexture.getHeight(), tempTexture.getWidth(), tempTexture.getHeight());
+            }
+            if (state.getTreasureCardDiscardDeck().size() > 0) {
+                TreasureCard temp1 = state.getTreasureCardDiscardDeck().get(state.getTreasureCardDiscardDeck().size()-1);
+                Texture tempTexture = ForbiddenIsland.assetManager.get("treasure-deck/" + temp1.getName() + ".png");
+                treasureDeckLayout.setText(titleFont, "Size: " + state.getTreasureCardDiscardDeck().size());
+                float treasureFontX = GameConfiguration.width/2f + 5 + tempTexture.getWidth()/2f - treasureDeckLayout.width/2f;
+                float treasureFontY = GameConfiguration.height/2f;
+                titleFont.draw(batch, treasureDeckLayout, treasureFontX, treasureFontY);
+                logger.info(temp1.getName());
+                batch.draw(tempTexture, GameConfiguration.width/2f + 5, GameConfiguration.height/2f - tempTexture.getHeight(), tempTexture.getWidth(), tempTexture.getHeight());
+            }
+            //batch.draw(temp.);
 
             super.draw(batch, parentAlpha);
 

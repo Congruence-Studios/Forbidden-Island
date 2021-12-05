@@ -65,7 +65,7 @@ public class PlayerHand extends Group {
 
         COFTexture = ForbiddenIsland.assetManager.get("treasure-deck/Crystal of Fire.png", Texture.class);
         SOTWTexture = ForbiddenIsland.assetManager.get("treasure-deck/Statue of the Wind.png", Texture.class);
-        OCTexture = ForbiddenIsland.assetManager.get("treasure-deck/Oceans Chalice.png", Texture.class);
+        OCTexture = ForbiddenIsland.assetManager.get("treasure-deck/Ocean's Chalice.png", Texture.class);
         ESTexture = ForbiddenIsland.assetManager.get("treasure-deck/Earth Stone.png", Texture.class);
         SandbagCardTexture = ForbiddenIsland.assetManager.get("treasure-deck/Sandbag.png", Texture.class);
         HelicopterCardTexture = ForbiddenIsland.assetManager.get("treasure-deck/Helicopter.png", Texture.class);

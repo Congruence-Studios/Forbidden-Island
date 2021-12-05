@@ -827,8 +827,8 @@ public class GameUI implements Screen {
         if (x >= 0 && y >= 0 && shoreUpButton.isEnabled()) {
             gameState.getIslandTileState()[x][y] = GameState.NORMAL_ISLAND_TILE;
             islandTiles.get(currentFocusedTile).setTileState(GameState.NORMAL_ISLAND_TILE);
-            gameState.setCurrentPlayerActionsLeft(gameState.getCurrentPlayerActionsLeft()-1);
             shoreUpButton.setEnabled(false);
+            registerMove();
         }
     }
 
@@ -996,7 +996,7 @@ public class GameUI implements Screen {
             movableTiles.add(new Pair(tempPlayer.getTileX()-1, tempPlayer.getTileY()+1));
             movableTiles.add(new Pair(tempPlayer.getTileX()-1, tempPlayer.getTileY()-1));
         }
-
+        logger.info(movableTiles.toString());
 
         current.setPawnState(Pawn.MOVE);
 
@@ -1044,6 +1044,7 @@ public class GameUI implements Screen {
         if (gameState.getTurnNumber() >= gameState.getMaxTurnLoops()) {
             gameState.setTurnNumber( 0 );
         }
+        gameState.setCurrentPlayerTurn(gameState.getPlayerOrder().get(gameState.getTurnNumber()));
         pawns.get(currentNormalPawn).setPawnState(Pawn.NORMAL);
         currentNormalPawn = gameState.getTurnNumber();
         gameState.setCurrentPlayerActionsLeft(3);
@@ -1105,14 +1106,52 @@ public class GameUI implements Screen {
     }
 
     public boolean canShoreUp() {
-        return true;
+        Player p = gameState.getPlayers().get(gameState.getCurrentPlayerTurn());
+        logger.info(currentFocusedTile.toString());
+        if (islandTiles.get(currentFocusedTile) != null && p.getAbility() != Player.EXPLORER && gameState.getIslandTileState()[islandTiles.get(currentFocusedTile).getCoordinates().x][islandTiles.get(currentFocusedTile).getCoordinates().y] == GameState.FLOODED_ISLAND_TILE &&
+                ((p.getTileX() - islandTiles.get(currentFocusedTile).getCoordinates().x == 1 && p.getTileY() - islandTiles.get(currentFocusedTile).getCoordinates().y == 0) ||
+                (p.getTileX() - islandTiles.get(currentFocusedTile).getCoordinates().x == -1 && p.getTileY() - islandTiles.get(currentFocusedTile).getCoordinates().y == 0) ||
+                (p.getTileX() - islandTiles.get(currentFocusedTile).getCoordinates().x == 0 && p.getTileY() - islandTiles.get(currentFocusedTile).getCoordinates().y == 1) ||
+                (p.getTileX() - islandTiles.get(currentFocusedTile).getCoordinates().x == 0 && p.getTileY() - islandTiles.get(currentFocusedTile).getCoordinates().y == -1))) {
+            return true;
+        } else if (islandTiles.get(currentFocusedTile) != null && p.getAbility() == Player.EXPLORER && gameState.getIslandTileState()[islandTiles.get(currentFocusedTile).getCoordinates().x][islandTiles.get(currentFocusedTile).getCoordinates().y] == GameState.FLOODED_ISLAND_TILE &&
+                ((p.getTileX() - islandTiles.get(currentFocusedTile).getCoordinates().x == 1 && p.getTileY() - islandTiles.get(currentFocusedTile).getCoordinates().y == 0) ||
+                        (p.getTileX() - islandTiles.get(currentFocusedTile).getCoordinates().x == -1 && p.getTileY() - islandTiles.get(currentFocusedTile).getCoordinates().y == 0) ||
+                        (p.getTileX() - islandTiles.get(currentFocusedTile).getCoordinates().x == 0 && p.getTileY() - islandTiles.get(currentFocusedTile).getCoordinates().y == 1) ||
+                        (p.getTileX() - islandTiles.get(currentFocusedTile).getCoordinates().x == 0 && p.getTileY() - islandTiles.get(currentFocusedTile).getCoordinates().y == -1) ||
+                        (p.getTileX() - islandTiles.get(currentFocusedTile).getCoordinates().x == 1 && p.getTileY() - islandTiles.get(currentFocusedTile).getCoordinates().y == -1) ||
+                        (p.getTileX() - islandTiles.get(currentFocusedTile).getCoordinates().x == 1 && p.getTileY() - islandTiles.get(currentFocusedTile).getCoordinates().y == 1) ||
+                        (p.getTileX() - islandTiles.get(currentFocusedTile).getCoordinates().x == -1 && p.getTileY() - islandTiles.get(currentFocusedTile).getCoordinates().y == -1) ||
+                        (p.getTileX() - islandTiles.get(currentFocusedTile).getCoordinates().x == -1 && p.getTileY() - islandTiles.get(currentFocusedTile).getCoordinates().y == 1))) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void setShoreUpTiles() {
-
     }
 
     public boolean canShoreUpTile(IslandTile islandTile) {
-        return true;
+        Player p = gameState.getPlayers().get(gameState.getCurrentPlayerTurn());
+        if (p.getAbility() != Player.EXPLORER && gameState.getIslandTileState()[islandTile.getCoordinates().x][islandTile.getCoordinates().y] == GameState.FLOODED_ISLAND_TILE &&
+                ((p.getTileX() - islandTile.getCoordinates().x == 1 && p.getTileY() - islandTile.getCoordinates().x == 0) ||
+                (p.getTileX() - islandTile.getCoordinates().x == -1 && p.getTileY() - islandTile.getCoordinates().x == 0) ||
+                (p.getTileX() - islandTile.getCoordinates().x == 0 && p.getTileY() - islandTile.getCoordinates().x == 1) ||
+                (p.getTileX() - islandTile.getCoordinates().x == 0 && p.getTileY() - islandTile.getCoordinates().x == -1))) {
+            return true;
+        } else if (p.getAbility() == Player.EXPLORER && gameState.getIslandTileState()[islandTile.getCoordinates().x][islandTile.getCoordinates().y] == GameState.FLOODED_ISLAND_TILE &&
+            ((p.getTileX() - islandTile.getCoordinates().x == 1 && p.getTileY() - islandTile.getCoordinates().x == 0) ||
+                    (p.getTileX() - islandTile.getCoordinates().x == -1 && p.getTileY() - islandTile.getCoordinates().x == 0) ||
+                    (p.getTileX() - islandTile.getCoordinates().x == 0 && p.getTileY() - islandTile.getCoordinates().x == 1) ||
+                    (p.getTileX() - islandTile.getCoordinates().x == 0 && p.getTileY() - islandTile.getCoordinates().x == -1) ||
+                    (p.getTileX() - islandTile.getCoordinates().x == 1 && p.getTileY() - islandTile.getCoordinates().x == -1) ||
+                    (p.getTileX() - islandTile.getCoordinates().x == 1 && p.getTileY() - islandTile.getCoordinates().x == 1) ||
+                    (p.getTileX() - islandTile.getCoordinates().x == -1 && p.getTileY() - islandTile.getCoordinates().x == -1) ||
+                    (p.getTileX() - islandTile.getCoordinates().x == -1 && p.getTileY() - islandTile.getCoordinates().x == 1))) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
