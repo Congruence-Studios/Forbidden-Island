@@ -300,7 +300,7 @@ public class GameUI implements Screen {
         treasureDeckPile.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (gameState.getGamePhase() == GameState.MOVING_PAWNS && gameState.getCurrentPlayerActionsLeft() == 0) {
+                if (!gameState.isDrawingIslandTileCards() && !gameState.isDrawingTreasureCards() && gameState.getCurrentPlayerActionsLeft() == 0) {
                     drawTreasureCards();
                 }
             }
@@ -429,7 +429,7 @@ public class GameUI implements Screen {
             p.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if (finalI == gameState.getTurnNumber() && (gameState.getGamePhase() == GameState.MOVING_PAWNS)) {
+                    if (finalI == gameState.getTurnNumber() && (!gameState.isDrawingTreasureCards() && !gameState.isDrawingIslandTileCards())) {
                         if (currentPawnFocused) {
                             pawns.get(currentNormalPawn).setPawnState(Pawn.NORMAL);
                             currentPawnFocused = false;
@@ -1022,7 +1022,6 @@ public class GameUI implements Screen {
 
     public void checkTurn() {
         if (gameState.getCurrentPlayerActionsLeft() == 0) {
-            gameState.getPlayers().get(gameState.getCurrentPlayerTurn()).setCanUseSpecialAction(true);
             gameState.setTurnNumber( gameState.getTurnNumber() + 1 );
             if (gameState.getTurnNumber() >= gameState.getMaxTurnLoops()) {
                 gameState.setTurnNumber( 0 );
@@ -1054,6 +1053,6 @@ public class GameUI implements Screen {
             }
         }
         drawTreasureCard.setOpen(true);
-        gameState.setGamePhase(GameState.DRAWING_TREASURE_CARDS);
+        gameState.setDrawingTreasureCards(true);
     }
 }
