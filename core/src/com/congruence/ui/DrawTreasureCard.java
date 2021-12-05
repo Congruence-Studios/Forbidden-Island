@@ -78,29 +78,33 @@ public class DrawTreasureCard extends Actor {
         batch.begin();
 
         if (isOpen) {
+            batch.draw(Background, getPositionX(), getPositiveY(), getWidth(), getHeight());
+            float x = positionX+(getWidth()/2)-5-HelicopterCardTexture.getWidth();
+            float y = positiveY+(getHeight()/2)-HelicopterCardTexture.getHeight()/2f;
             if (state.getCurrentDrawnTreasureCards() != null) {
                 for (TreasureCard e : state.getCurrentDrawnTreasureCards()) {
                     if (e.getCardType() == TreasureCard.HELICOPTER_CARD) {
-                        batch.draw(HelicopterCardTexture, 0, 0);
+                        batch.draw(HelicopterCardTexture, x, y);
                     }
                     else if (e.getCardType() == TreasureCard.SANDBAG_CARD) {
-                        batch.draw(SandbagCardTexture, 0, 0);
+                        batch.draw(SandbagCardTexture, x, y);
                     }
                     else if (e.getCardType() == TreasureCard.WATERS_RISE_CARD) {
-                        batch.draw(SandbagCardTexture, 0, 0);
+                        batch.draw(WatersRiseTexture, x, y);
                     }
                     else if (e.getName().equals("Ocean's Chalice")) {
-                        batch.draw(SandbagCardTexture, 0, 0);
+                        batch.draw(OCTexture, x, y);
                     }
                     else if (e.getName().equals("Statue of the Wind")) {
-                        batch.draw(SandbagCardTexture, 0, 0);
+                        batch.draw(SOTWTexture, x, y);
                     }
                     else if (e.getName().equals("Earth Stone")) {
-                        batch.draw(SandbagCardTexture, 0, 0);
+                        batch.draw(ESTexture, x, y);
                     }
                     else if (e.getName().equals("Crystal of Fire")) {
-                        batch.draw(SandbagCardTexture, 0, 0);
+                        batch.draw(COFTexture, x, y);
                     }
+                    x += HelicopterCardTexture.getWidth()+10;
                 }
             }
         }
