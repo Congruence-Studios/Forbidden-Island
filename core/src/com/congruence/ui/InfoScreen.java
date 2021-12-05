@@ -81,7 +81,6 @@ public class InfoScreen extends Group {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 setOpen(false);
-                state.setDrawingTreasureCards(false);
             }
         });
         this.addActor(closeButton);
