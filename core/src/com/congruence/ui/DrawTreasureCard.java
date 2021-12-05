@@ -142,7 +142,6 @@ public class DrawTreasureCard extends Group {
             public void clicked(InputEvent event, float x, float y) {
                 setOpen(false, observable);
                 observable.onFinished();
-                observable = null;
                 state.setDrawingTreasureCards(false);
 
                 if (!claimButtons.get(0).isClaimed()) {
