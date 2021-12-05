@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.congruence.GameConfiguration;
 import com.congruence.state.*;
+import com.congruence.util.Observable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,7 +107,7 @@ public class GameUI implements Screen {
             for (int j = gameState.getIslandTiles()[i].length - 1; j >= 0; j--) {
                 positionX -= tileWidth;
                 if (gameState.getIslandTiles()[i][j] != null) {
-                    final IslandTile islandTile = new IslandTile(positionX, positionY, tileWidth, tileHeight, gameState.getIslandTiles()[i][j], new Pair(i, j), gameState.getIslandTileState()[i][j]);
+                    final IslandTile islandTile = new IslandTile(positionX, positionY, tileWidth, tileHeight, gameState.getIslandTiles()[i][j], new Pair(i, j), gameState);
                     logger.info("new islandTile: x: " + positionX + " y: " + positionY + " i: " + i + " j: " + j);
                     islandTiles.put(new Pair(i, j), islandTile);
 
@@ -228,15 +229,8 @@ public class GameUI implements Screen {
         skipButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                gameState.setTurnNumber( gameState.getTurnNumber() + 1 );
-                if (gameState.getTurnNumber() >= gameState.getMaxTurnLoops()) {
-                    gameState.setTurnNumber( 0 );
-                }
-                pawns.get(currentNormalPawn).setPawnState(Pawn.NORMAL);
-                currentNormalPawn = gameState.getTurnNumber();
-                gameState.setCurrentPlayerActionsLeft(3);
-                eraseMovementTiles();
-                registerTurnChange();
+                gameState.setCurrentPlayerActionsLeft(0);
+                checkTurn();
             }
         });
         shoreUpButton = new GameMenuShoreUpButton(
@@ -509,7 +503,9 @@ public class GameUI implements Screen {
         drawFloodCard.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                drawFloodCard.setOpen(false);
+                drawFloodCard.setOpen(false, drawFloodCard.getObservable());
+                drawFloodCard.getObservable().onFinished();
+                drawFloodCard.setObservable(null);
             }
         });
 
@@ -1035,26 +1031,24 @@ public class GameUI implements Screen {
 
     public void checkTurn() {
         if (gameState.getCurrentPlayerActionsLeft() == 0) {
-            gameState.getPlayers().get(gameState.getCurrentPlayerTurn()).setCanUseSpecialAction(true);
-            gameState.setTurnNumber( gameState.getTurnNumber() + 1 );
-            if (gameState.getTurnNumber() >= gameState.getMaxTurnLoops()) {
-                gameState.setTurnNumber( 0 );
-            }
-            pawns.get(currentNormalPawn).setPawnState(Pawn.NORMAL);
-            currentNormalPawn = gameState.getTurnNumber();
-            gameState.setCurrentPlayerActionsLeft(3);
             eraseMovementTiles();
-            drawFloodCards();
-            drawTreasureCards();
-            registerTurnChange();
+            drawTreasureCards(()->drawFloodCards(this::registerTurnChange));
         }
     }
 
     public void registerTurnChange() {
+        gameState.getPlayers().get(gameState.getCurrentPlayerTurn()).setCanUseSpecialAction(true);
+        gameState.setTurnNumber( gameState.getTurnNumber() + 1 );
+        if (gameState.getTurnNumber() >= gameState.getMaxTurnLoops()) {
+            gameState.setTurnNumber( 0 );
+        }
+        pawns.get(currentNormalPawn).setPawnState(Pawn.NORMAL);
+        currentNormalPawn = gameState.getTurnNumber();
+        gameState.setCurrentPlayerActionsLeft(3);
         turnChangeScreen.setOpen(true);
     }
 
-    public void drawTreasureCards() {
+    public void drawTreasureCards(Observable observable) {
         Stack<TreasureCard> treasureDeck = gameState.getTreasureCardDeck();
         gameState.setCurrentDrawnTreasureCards(new ArrayList<>(2));
         for (int i = 0; i < 2; i++) {
@@ -1068,11 +1062,11 @@ public class GameUI implements Screen {
                 gameState.getCurrentDrawnTreasureCards().add(treasureDeck.pop());
             }
         }
-        drawTreasureCard.setOpen(true);
+        drawTreasureCard.setOpen(true, observable);
         gameState.setDrawingTreasureCards(true);
     }
 
-    public void drawFloodCards() {
+    public void drawFloodCards(Observable observable) {
         Stack<FloodCard> floodDeck = gameState.getIslandTileDeck();
         gameState.setCurrentDrawnIslandTileCards(new ArrayList<>(5));
         for (int i = 0; i < gameState.getCardsToDraw(); i++) {
@@ -1088,7 +1082,7 @@ public class GameUI implements Screen {
                 gameState.getCurrentDrawnIslandTileCards().add(floodDeck.pop());
             }
         }
-        drawFloodCard.setOpen(true);
+        drawFloodCard.setOpen(true, observable);
     }
 
     public void lowerIslandTileState(String islandTileName) {

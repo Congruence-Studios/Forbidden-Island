@@ -23,7 +23,7 @@ public class IslandTile extends Actor {
 
     private Pair coordinates;
 
-    private int tileState;
+    private GameState state;
 
     private Texture islandTileNormalImage;
 
@@ -49,6 +49,8 @@ public class IslandTile extends Actor {
 
     private final boolean[] tilePositionOpen = new boolean[]{true, true, true, true};
 
+    private int tileState;
+
     public IslandTile(
             float positionX,
             float positionY,
@@ -56,7 +58,7 @@ public class IslandTile extends Actor {
             float height,
             String tileName,
             Pair coordinates,
-            int tileState
+            GameState state
     ) {
         this.positionX = positionX;
         this.positionY = positionY;
@@ -64,7 +66,7 @@ public class IslandTile extends Actor {
         this.islandHeight = height;
         this.tileName = tileName;
         this.coordinates = coordinates;
-        this.tileState = tileState;
+        this.state = state;
         islandTileNormalImage = ForbiddenIsland.assetManager.get("island-tiles/" + tileName + "@2x.png", Texture.class);
         islandTileFloodedImage = ForbiddenIsland.assetManager.get("island-tiles/" + tileName + "_flood@2x.png", Texture.class);
         islandTileSunkenImage = ForbiddenIsland.assetManager.get("island-tiles/Sunken-Tile.png", Texture.class);
@@ -83,16 +85,17 @@ public class IslandTile extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         batch.end();
         batch.begin();
-        if (tileState == GameState.NORMAL_ISLAND_TILE) {
+        if (state.getIslandTileState()[getCoordinates().x][getCoordinates().y] == GameState.NORMAL_ISLAND_TILE) {
             batch.draw(islandTileNormalImage, positionX, positionY, islandWidth, islandHeight);
         }
-        else if (tileState == GameState.FLOODED_ISLAND_TILE) {
+        else if (state.getIslandTileState()[getCoordinates().x][getCoordinates().y] == GameState.FLOODED_ISLAND_TILE) {
             batch.draw(islandTileFloodedImage, positionX, positionY, islandWidth, islandHeight);
         }
-        else if (tileState == GameState.SUNKEN_ISLAND_TILE) {
-            batch.draw(islandTileSunkenImage, positionX, positionY, islandWidth, islandHeight);
+        else if (state.getIslandTileState()[getCoordinates().x][getCoordinates().y] == GameState.SUNKEN_ISLAND_TILE) {
         }
-        if (hovered) {
+        if (state.getIslandTileState()[getCoordinates().x][getCoordinates().y] == GameState.SUNKEN_ISLAND_TILE) {
+        }
+        else if (hovered) {
             batch.draw(islandTileHoverImage, positionX-2, positionY+3, islandWidth, islandHeight);
         }
         else if (focused) {

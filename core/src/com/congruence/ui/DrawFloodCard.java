@@ -7,6 +7,7 @@ import com.congruence.ForbiddenIsland;
 import com.congruence.state.FloodCard;
 import com.congruence.state.GameState;
 import com.congruence.state.TreasureCard;
+import com.congruence.util.Observable;
 
 import java.util.HashMap;
 
@@ -27,6 +28,8 @@ public class DrawFloodCard extends Actor {
     private Texture Background;
 
     private HashMap<String, Texture> textures;
+
+    private Observable observable;
 
     public DrawFloodCard(
             float positionX,
@@ -114,13 +117,22 @@ public class DrawFloodCard extends Actor {
         return isOpen;
     }
 
-    public void setOpen(boolean open) {
+    public void setOpen(boolean open, Observable observable) {
         isOpen = open;
+        this.observable = observable;
         if (isOpen) {
             super.setBounds(positionX, positiveY, width, height);
         }
         else {
             super.setBounds(0, 0, 0, 0);
         }
+    }
+
+    public Observable getObservable() {
+        return observable;
+    }
+
+    public void setObservable(Observable observable) {
+        this.observable = observable;
     }
 }

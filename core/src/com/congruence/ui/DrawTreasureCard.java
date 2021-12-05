@@ -10,6 +10,7 @@ import com.congruence.ForbiddenIsland;
 import com.congruence.state.GameState;
 import com.congruence.state.Player;
 import com.congruence.state.TreasureCard;
+import com.congruence.util.Observable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,6 +59,8 @@ public class DrawTreasureCard extends Group {
     private int cardState1;
 
     private int cardState2;
+
+    private Observable observable;
 
     public DrawTreasureCard(
             float positionX,
@@ -137,7 +140,9 @@ public class DrawTreasureCard extends Group {
         closeButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                setOpen(false);
+                setOpen(false, observable);
+                observable.onFinished();
+                observable = null;
                 state.setDrawingTreasureCards(false);
 
                 if (!claimButtons.get(0).isClaimed()) {
@@ -146,9 +151,6 @@ public class DrawTreasureCard extends Group {
                 if (!claimButtons.get(1).isClaimed()) {
                     state.getTreasureCardDiscardDeck().add(state.getCurrentDrawnTreasureCards().get(1));
                 }
-
-                state.setCurrentPlayerActionsLeft(state.getCurrentPlayerActionsLeft()-1);
-                gameUI.checkTurn();
             }
         });
         this.addActor(closeButton);
@@ -288,8 +290,9 @@ public class DrawTreasureCard extends Group {
         return isOpen;
     }
 
-    public void setOpen(boolean open) {
+    public void setOpen(boolean open, Observable observable) {
         isOpen = open;
+        this.observable = observable;
         if (isOpen) {
             super.setBounds(positionX, positiveY, width, height);
 
