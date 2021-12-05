@@ -300,7 +300,7 @@ public class GameUI implements Screen {
         treasureDeckPile.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (gameState.getGamePhase() == GameState.MOVING_PAWNS) {
+                if (gameState.isDrawingTreasureCards()) {
                     drawTreasureCards();
                 }
             }
@@ -429,7 +429,7 @@ public class GameUI implements Screen {
             p.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if (finalI == gameState.getTurnNumber() && (gameState.getGamePhase() == GameState.MOVING_PAWNS)) {
+                    if (finalI == gameState.getTurnNumber()) {
                         if (currentPawnFocused) {
                             pawns.get(currentNormalPawn).setPawnState(Pawn.NORMAL);
                             currentPawnFocused = false;
@@ -1054,6 +1054,6 @@ public class GameUI implements Screen {
             }
         }
         drawTreasureCard.setOpen(true);
-        gameState.setGamePhase(GameState.DRAWING_TREASURE_CARDS);
+        gameState.setDrawingTreasureCards(true);
     }
 }

@@ -138,7 +138,7 @@ public class DrawTreasureCard extends Group {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 setOpen(false);
-                state.setGamePhase(GameState.MOVING_PAWNS);
+                state.setDrawingTreasureCards(false);
 
                 if (!claimButtons.get(0).isClaimed()) {
                     state.getTreasureCardDiscardDeck().add(state.getCurrentDrawnTreasureCards().get(0));
