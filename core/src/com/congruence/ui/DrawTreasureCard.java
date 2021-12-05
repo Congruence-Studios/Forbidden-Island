@@ -152,6 +152,8 @@ public class DrawTreasureCard extends Group {
             }
         });
         this.addActor(closeButton);
+
+        super.setBounds(0, 0, 0, 0);
     }
 
     @Override
@@ -203,7 +205,7 @@ public class DrawTreasureCard extends Group {
 
     public void setPositionX(float positionX) {
         this.positionX = positionX;
-        super.setBounds(positionX, positiveY, width, height);
+        super.setBounds(0, 0, 0, 0);
         float x = 0+(getWidth()/2)-5-HelicopterCardTexture.getWidth();
         float y = 0+(getHeight()*2/3)-HelicopterCardTexture.getHeight()/2f;
         claimButtons.get(0).setPositionX(x);
@@ -222,7 +224,7 @@ public class DrawTreasureCard extends Group {
 
     public void setPositiveY(float positiveY) {
         this.positiveY = positiveY;
-        super.setBounds(positionX, positiveY, width, height);
+        super.setBounds(0, 0, 0, 0);
         float x = 0+(getWidth()/2)-5-HelicopterCardTexture.getWidth();
         float y = 0+(getHeight()*2/3)-HelicopterCardTexture.getHeight()/2f;
         claimButtons.get(0).setPositionX(x);
@@ -243,7 +245,7 @@ public class DrawTreasureCard extends Group {
     @Override
     public void setHeight(float height) {
         this.height = height;
-        super.setBounds(positionX, positiveY, width, height);
+        super.setBounds(0, 0, 0, 0);
         float x = 0+(getWidth()/2)-5-HelicopterCardTexture.getWidth();
         float y = 0+(getHeight()*2/3)-HelicopterCardTexture.getHeight()/2f;
         claimButtons.get(0).setPositionX(x);
@@ -264,7 +266,7 @@ public class DrawTreasureCard extends Group {
     @Override
     public void setWidth(float width) {
         this.width = width;
-        super.setBounds(positionX, positiveY, width, height);
+        super.setBounds(0, 0, 0, 0);
         float x = 0+(getWidth()/2)-5-HelicopterCardTexture.getWidth();
         float y = 0+(getHeight()*2/3)-HelicopterCardTexture.getHeight()/2f;
         claimButtons.get(0).setPositionX(x);

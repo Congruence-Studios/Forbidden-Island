@@ -70,6 +70,8 @@ public class GameUI implements Screen {
 
     private DrawTreasureCard drawTreasureCard;
 
+    private DrawFloodCard drawFloodCard;
+
     public GameUI(GameState gameState) {
         this.gameState = gameState;
     }
@@ -297,14 +299,6 @@ public class GameUI implements Screen {
                 tileHeight
         );
         stage.addActor(treasureDeckPile);
-        treasureDeckPile.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (!gameState.isDrawingTreasureCards()) {
-                    drawTreasureCards();
-                }
-            }
-        });
         floodDeckPile = new FloodDeckPile(
                 ((GameConfiguration.width - 10f) + ((GameConfiguration.width - 10f) - ((GameConfiguration.width) - (GameConfiguration.height)) / 2f)) / 2f - tileHeight * 8f / 10f,
                 3 * tileHeight + 40f,
@@ -504,6 +498,20 @@ public class GameUI implements Screen {
                 this
         );
         stage.addActor(drawTreasureCard);
+        drawFloodCard = new DrawFloodCard(
+                (GameConfiguration.width - (GameConfiguration.height * 15/16f))*0.5f,
+                (GameConfiguration.height - (GameConfiguration.height * 15/16f))*0.5f,
+                GameConfiguration.height * 15/16f * (750/1600f),
+                GameConfiguration.height * 15/16f,
+                gameState
+        );
+        stage.addActor(drawFloodCard);
+        drawFloodCard.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                drawFloodCard.setOpen(false);
+            }
+        });
 
         floodDeckPile.setEnabled(true);
         treasureDeckPile.setEnabled(true);
@@ -698,6 +706,11 @@ public class GameUI implements Screen {
         drawTreasureCard.setPositiveY((GameConfiguration.height - (GameConfiguration.height * 15/16f * 750f/1600f))*0.5f);
         drawTreasureCard.setHeight(GameConfiguration.height * 15/16f * (750/1600f));
         drawTreasureCard.setWidth(GameConfiguration.height * 15/16f);
+
+        drawFloodCard.setPositionX((GameConfiguration.width - (GameConfiguration.height * 15/16f))*0.5f);
+        drawFloodCard.setPositiveY((GameConfiguration.height - (GameConfiguration.height * 15/16f * 750f/1600f))*0.5f);
+        drawFloodCard.setHeight(GameConfiguration.height * 15/16f * (750/1600f));
+        drawFloodCard.setWidth(GameConfiguration.height * 15/16f);
 
         abilityCards.get(0).setPositionX(10f);
         abilityCards.get(0).setPositionY(GameConfiguration.height - (tileHeight * 2 + 10f) - 10f);
@@ -1031,6 +1044,8 @@ public class GameUI implements Screen {
             currentNormalPawn = gameState.getTurnNumber();
             gameState.setCurrentPlayerActionsLeft(3);
             eraseMovementTiles();
+            drawFloodCards();
+            drawTreasureCards();
             registerTurnChange();
         }
     }
@@ -1055,5 +1070,41 @@ public class GameUI implements Screen {
         }
         drawTreasureCard.setOpen(true);
         gameState.setDrawingTreasureCards(true);
+    }
+
+    public void drawFloodCards() {
+        Stack<FloodCard> floodDeck = gameState.getIslandTileDeck();
+        gameState.setCurrentDrawnIslandTileCards(new ArrayList<>(5));
+        for (int i = 0; i < gameState.getCardsToDraw(); i++) {
+            if (!floodDeck.empty()) {
+                gameState.getCurrentDrawnIslandTileCards().add(floodDeck.peek());
+                lowerIslandTileState(floodDeck.peek().getName());
+                gameState.getIslandTileDiscardDeck().add(floodDeck.pop());
+            } else {
+                Collections.shuffle(gameState.getIslandTileDiscardDeck());
+                floodDeck.addAll(gameState.getIslandTileDiscardDeck());
+                gameState.getIslandTileDiscardDeck().clear();
+                lowerIslandTileState(floodDeck.peek().getName());
+                gameState.getCurrentDrawnIslandTileCards().add(floodDeck.pop());
+            }
+        }
+        drawFloodCard.setOpen(true);
+    }
+
+    public void lowerIslandTileState(String islandTileName) {
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 6; j++) {
+                if (gameState.getIslandTiles()[i][j] != null) {
+                    if (gameState.getIslandTiles()[i][j].equals(islandTileName)) {
+                        if (gameState.getIslandTileState()[i][j] == GameState.NORMAL_ISLAND_TILE) {
+                            gameState.getIslandTileState()[i][j] = GameState.FLOODED_ISLAND_TILE;
+                        }
+                        else if (gameState.getIslandTileState()[i][j] == GameState.FLOODED_ISLAND_TILE) {
+                            gameState.getIslandTileState()[i][j] = GameState.SUNKEN_ISLAND_TILE;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

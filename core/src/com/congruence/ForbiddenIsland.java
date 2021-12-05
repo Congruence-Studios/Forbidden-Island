@@ -48,6 +48,8 @@ public class ForbiddenIsland extends Game {
 
 	public static AssetManager assetManager;
 
+	public static LinkedList<String> islandTilesUsed;
+
 	private GameInitializeListener gameInitializeListener = new GameInitializeListener() {
 		@Override
 		public void onInitialize(int NumberOfPlayers, int Difficulty) {
@@ -143,6 +145,9 @@ public class ForbiddenIsland extends Game {
 				pickedIslandTiles.add(tempIslandTiles.remove(rand));
 				tilesLeft--;
 			}
+			ForbiddenIsland.islandTilesUsed = new LinkedList<>();
+			islandTilesUsed.addAll(pickedIslandTiles);
+
 			LinkedList<String> floodedTileCards = new LinkedList<>();
 			List<String> tileIslandCardTemp = new ArrayList<>(Resources.DefaultTileOrdering);
 			Iterator<String> setIterator = tileIslandCardTemp.iterator();
@@ -169,6 +174,12 @@ public class ForbiddenIsland extends Game {
 				}
 			}
 
+			for (String e : ForbiddenIsland.islandTilesUsed) {
+				floodCardDeck.add(new FloodCard(e, null, FloodCard.ISLAND_CARD));
+				floodCardDeck.add(new FloodCard(e, null, FloodCard.ISLAND_CARD));
+			}
+
+			Collections.shuffle(floodCardDeck);
 
 			assetManager = new AssetManager(new InternalFileHandleResolver());
 			TextureLoader.TextureParameter textureParameter = new TextureLoader.TextureParameter();

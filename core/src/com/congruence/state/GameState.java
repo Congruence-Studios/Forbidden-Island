@@ -169,7 +169,7 @@ public class GameState {
             ) {
         this.difficulty = difficulty;
         this.waterHeight = waterHeight;
-        this.cardsToDraw = cardsToDraw;
+        this.cardsToDraw = waterHeight / 2 +1;
         this.players = players;
         this.playerOrder = playerOrder;
         this.islandTiles = islandTiles;
@@ -205,6 +205,7 @@ public class GameState {
 
     public void setWaterHeight(int waterHeight) {
         this.waterHeight = waterHeight;
+        setCardsToDraw(waterHeight/2+1);
     }
 
     public int getCardsToDraw() {

@@ -8,6 +8,8 @@ import com.congruence.state.FloodCard;
 import com.congruence.state.GameState;
 import com.congruence.state.TreasureCard;
 
+import java.util.HashMap;
+
 public class DrawFloodCard extends Actor {
 
     private final GameState state;
@@ -24,7 +26,7 @@ public class DrawFloodCard extends Actor {
 
     private Texture Background;
 
-    private Texture BaseCard;
+    private HashMap<String, Texture> textures;
 
     public DrawFloodCard(
             float positionX,
@@ -41,11 +43,16 @@ public class DrawFloodCard extends Actor {
 
         super.setBounds(0, 0, 0, 0);
 
-        Background = ForbiddenIsland.assetManager.get("custom-ui/draw-screen/Draw Treasure Cards Background.png", Texture.class);
-        BaseCard = ForbiddenIsland.assetManager.get("treasure-deck/Crystal of Fire.png", Texture.class);
+        Background = ForbiddenIsland.assetManager.get("custom-ui/draw-screen/Draw Flood Cards Background.png", Texture.class);
 
         Background.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
-        BaseCard.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+
+        textures = new HashMap<>();
+        for (String e : ForbiddenIsland.islandTilesUsed) {
+            Texture t = ForbiddenIsland.assetManager.get("flood-deck/Flood_Card_" + e + "@2x.png");
+            t.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+            textures.put( e, t);
+        }
 
     }
 
@@ -56,13 +63,12 @@ public class DrawFloodCard extends Actor {
 
         if (isOpen) {
             batch.draw(Background, getPositionX(), getPositiveY(), getWidth(), getHeight());
-            float x = positionX+(getWidth()/2)-5-BaseCard.getWidth();
-            float y = positiveY+(getHeight()/2)-BaseCard.getHeight()/2f;
+            float x = positionX+(getWidth()/2)-(state.getCurrentDrawnIslandTileCards().size() > 1 ? 5 : 0)-(textures.get(ForbiddenIsland.islandTilesUsed.get(0)).getWidth() * state.getCurrentDrawnIslandTileCards().size() * 0.5f);
+            float y = positiveY+(getHeight()/2)-textures.get(ForbiddenIsland.islandTilesUsed.get(0)).getHeight()/2f;
             if (state.getCurrentDrawnIslandTileCards() != null) {
                 for (FloodCard e : state.getCurrentDrawnIslandTileCards()) {
-                    //Texture texture = ForbiddenIsland.assetManager.get(e.getName());
-                    batch.draw(BaseCard, x, y);
-                    x += BaseCard.getWidth()+10;
+                    batch.draw(textures.get(e.getName()), x, y);
+                    x += textures.get(ForbiddenIsland.islandTilesUsed.get(0)).getWidth()+10;
                 }
             }
         }
