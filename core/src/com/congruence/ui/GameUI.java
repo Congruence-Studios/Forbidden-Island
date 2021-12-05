@@ -161,6 +161,8 @@ public class GameUI implements Screen {
                                 eraseMovementTiles();
                                 setMovementTiles(currentNormalPawn);
                                 registerMove();
+                                shoreUpButton.setEnabled(canShoreUp());
+                                setShoreUpTiles();
                             }
                             else {
                                 if (GameUI.this.currentFocusedTile.equals(islandTile.getCoordinates())) {
@@ -1100,5 +1102,17 @@ public class GameUI implements Screen {
                 }
             }
         }
+    }
+
+    public boolean canShoreUp() {
+        return true;
+    }
+
+    public void setShoreUpTiles() {
+
+    }
+
+    public boolean canShoreUpTile(IslandTile islandTile) {
+        return true;
     }
 }
