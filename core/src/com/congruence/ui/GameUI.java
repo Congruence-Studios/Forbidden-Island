@@ -300,7 +300,7 @@ public class GameUI implements Screen {
         treasureDeckPile.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (gameState.isDrawingTreasureCards()) {
+                if (!gameState.isDrawingTreasureCards()) {
                     drawTreasureCards();
                 }
             }
