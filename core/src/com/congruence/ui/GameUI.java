@@ -944,10 +944,10 @@ public class GameUI implements Screen {
             boolean changesMade = false;
             while (!currentTiles.isEmpty()) {
                 for (Pair i : currentTiles) {
-                    if (islandTiles.get(i) != null && islandTiles.get(i).getTileState() == GameState.NORMAL_ISLAND_TILE) {
+                    if (islandTiles.get(i) != null && gameState.getIslandTileState()[i.x][i.y] == GameState.NORMAL_ISLAND_TILE) {
                         nextTiles.add(i);
-                    } else if (islandTiles.get(i) != null && (islandTiles.get(i).getTileState() == GameState.FLOODED_ISLAND_TILE ||
-                            islandTiles.get(i).getTileState() == GameState.SUNKEN_ISLAND_TILE)) {
+                    } else if (islandTiles.get(i) != null && (gameState.getIslandTileState()[i.x][i.y] == GameState.FLOODED_ISLAND_TILE ||
+                            gameState.getIslandTileState()[i.x][i.y] == GameState.SUNKEN_ISLAND_TILE)) {
                         if (islandTiles.get(new Pair(i.x+1, i.y)) != null &&
                                 islandTiles.get(new Pair(i.x+1, i.y)).getTileState() != GameState.INVALID) {
                             if (nextTiles.add(new Pair(i.x+1, i.y))) {
