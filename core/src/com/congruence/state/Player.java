@@ -44,6 +44,8 @@ public class Player {
 
     private boolean canUseSpecialAction;
 
+    private ArrayList<CardHandListener> cardHandListeners = new ArrayList<>();
+
     public Player(String playerName, String rName, ArrayList<TreasureCard> cardsAtHand,
                   int tileX, int tileY) {
         this.playerName = playerName;
@@ -98,6 +100,13 @@ public class Player {
         this.cardsAtHand = cardsAtHand;
     }
 
+    public void addTreasureToHand(TreasureCard treasureCard) {
+        cardsAtHand.add(treasureCard);
+        for (CardHandListener e : cardHandListeners) {
+            e.onAdd(treasureCard, cardsAtHand.size()-1);
+        }
+    }
+
     public ArrayList<String> getTreasuresAtHand() {
         return treasuresAtHand;
     }
@@ -146,6 +155,14 @@ public class Player {
         this.canUseSpecialAction = canUseSpecialAction;
     }
 
+    public ArrayList<CardHandListener> getCardHandListeners() {
+        return cardHandListeners;
+    }
+
+    public void setCardHandListeners(ArrayList<CardHandListener> cardHandListeners) {
+        this.cardHandListeners = cardHandListeners;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -169,5 +186,10 @@ public class Player {
                 ", tileY=" + tileY +
                 ", ability=" + ability +
                 '}';
+    }
+
+    public interface CardHandListener {
+        void onAdd(TreasureCard e, int index);
+        void onRemove(TreasureCard e, int index);
     }
 }

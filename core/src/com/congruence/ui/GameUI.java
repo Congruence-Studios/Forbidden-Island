@@ -500,7 +500,8 @@ public class GameUI implements Screen {
                 (GameConfiguration.height - (GameConfiguration.height * 15/16f))*0.5f,
                 GameConfiguration.height * 15/16f * (750/1600f),
                 GameConfiguration.height * 15/16f,
-                gameState
+                gameState,
+                this
         );
         stage.addActor(drawTreasureCard);
 

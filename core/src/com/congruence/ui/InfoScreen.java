@@ -8,11 +8,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.congruence.ForbiddenIsland;
 import com.congruence.GameConfiguration;
 import com.congruence.state.GameState;
 
-public class InfoScreen extends Actor {
+public class InfoScreen extends Group {
 
     public boolean isOpen = false;
 
@@ -33,6 +36,8 @@ public class InfoScreen extends Actor {
     private GlyphLayout turnLayout;
 
     private GlyphLayout actionCountLayout;
+
+    private CloseButton closeButton;
 
     public InfoScreen(
             float positionX,
@@ -58,11 +63,28 @@ public class InfoScreen extends Actor {
         parameter.minFilter = Texture.TextureFilter.MipMapLinearLinear;
         titleFont = generator.generateFont(parameter);
         generator.dispose();
+
         background = ForbiddenIsland.assetManager.get("custom-ui/dialog-background/Dialog.png", Texture.class);
+        background.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
 
         turnLayout = new GlyphLayout(titleFont, "Turn Info");
         turnLayout = new GlyphLayout(titleFont, "");
         actionCountLayout = new GlyphLayout(titleFont, "");
+
+        closeButton = new CloseButton(
+                getWidth() - 50,
+                getHeight() - 50,
+                40,
+                40
+        );
+        closeButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                setOpen(false);
+                state.setDrawingTreasureCards(false);
+            }
+        });
+        this.addActor(closeButton);
     }
 
     @Override
@@ -84,6 +106,8 @@ public class InfoScreen extends Actor {
             titleFont.draw(batch, turnLayout, turnFontX, turnFontY);
             titleFont.draw(batch, actionCountLayout, actionCountFontX, actionCountFontY);
 
+            super.draw(batch, parentAlpha);
+
         }
     }
 
@@ -93,6 +117,11 @@ public class InfoScreen extends Actor {
 
     public void setPositionX(float positionX) {
         this.positionX = positionX;
+
+        closeButton.setPositionX(getWidth()-50);
+        closeButton.setPositiveY(getHeight()-50);
+        closeButton.setWidth(40);
+        closeButton.setHeight(40);
     }
 
     public float getPositiveY() {
@@ -101,6 +130,11 @@ public class InfoScreen extends Actor {
 
     public void setPositiveY(float positiveY) {
         this.positiveY = positiveY;
+
+        closeButton.setPositionX(getWidth()-50);
+        closeButton.setPositiveY(getHeight()-50);
+        closeButton.setWidth(40);
+        closeButton.setHeight(40);
     }
 
     @Override
@@ -111,6 +145,11 @@ public class InfoScreen extends Actor {
     @Override
     public void setHeight(float height) {
         this.height = height;
+
+        closeButton.setPositionX(getWidth()-50);
+        closeButton.setPositiveY(getHeight()-50);
+        closeButton.setWidth(40);
+        closeButton.setHeight(40);
     }
 
     @Override
@@ -121,6 +160,11 @@ public class InfoScreen extends Actor {
     @Override
     public void setWidth(float width) {
         this.width = width;
+
+        closeButton.setPositionX(getWidth()-50);
+        closeButton.setPositiveY(getHeight()-50);
+        closeButton.setWidth(40);
+        closeButton.setHeight(40);
     }
 
     public boolean isOpen() {

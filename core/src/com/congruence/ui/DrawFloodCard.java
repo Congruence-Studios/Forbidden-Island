@@ -2,7 +2,6 @@ package com.congruence.ui;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -15,9 +14,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
-public class DrawTreasureCard extends Group {
+public class DrawFloodCard extends Group {
 
-    private static Logger logger = LoggerFactory.getLogger(DrawTreasureCard.class);
+    private static Logger logger = LoggerFactory.getLogger(DrawFloodCard.class);
 
     private final GameState state;
 
@@ -59,7 +58,7 @@ public class DrawTreasureCard extends Group {
 
     private int cardState2;
 
-    public DrawTreasureCard(
+    public DrawFloodCard(
             float positionX,
             float positionY,
             float height,
@@ -109,10 +108,10 @@ public class DrawTreasureCard extends Group {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Player e = state.getPlayers().get(state.getPlayerOrder().get(state.getTurnNumber()));
-                if (e.getCardsAtHand().size() < 5 && !claimButtons.get(0).isClaimed()) {
+                if (e.getCardsAtHand().size() < 5) {
                     claimButtons.get(0).setClaimed(true);
                     cardState1 = CLAIMED;
-                    e.addTreasureToHand(state.getCurrentDrawnTreasureCards().get(0));
+                    e.getCardsAtHand().add(state.getCurrentDrawnTreasureCards().get(0));
                 }
             }
         });
@@ -120,10 +119,10 @@ public class DrawTreasureCard extends Group {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Player e = state.getPlayers().get(state.getPlayerOrder().get(state.getTurnNumber()));
-                if (e.getCardsAtHand().size() < 5 && !claimButtons.get(1).isClaimed()) {
+                if (e.getCardsAtHand().size() < 5) {
                     claimButtons.get(1).setClaimed(true);
                     cardState2 = CLAIMED;
-                    e.addTreasureToHand(state.getCurrentDrawnTreasureCards().get(1));
+                    e.getCardsAtHand().add(state.getCurrentDrawnTreasureCards().get(1));
                 }
             }
         });
@@ -140,10 +139,10 @@ public class DrawTreasureCard extends Group {
                 setOpen(false);
                 state.setDrawingTreasureCards(false);
 
-                if (!claimButtons.get(0).isClaimed()) {
+                if (cardState1 == UNCLAIMED) {
                     state.getTreasureCardDiscardDeck().add(state.getCurrentDrawnTreasureCards().get(0));
                 }
-                if (!claimButtons.get(1).isClaimed()) {
+                if (cardState2 == UNCLAIMED) {
                     state.getTreasureCardDiscardDeck().add(state.getCurrentDrawnTreasureCards().get(1));
                 }
 

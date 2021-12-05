@@ -8,11 +8,18 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.congruence.ForbiddenIsland;
 import com.congruence.GameConfiguration;
 import com.congruence.state.GameState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class WaterMeterScreen extends Actor {
+public class WaterMeterScreen extends Group {
+
+    private Logger logger = LoggerFactory.getLogger(WaterMeterScreen.class);
 
     public boolean isOpen = false;
 
@@ -46,11 +53,9 @@ public class WaterMeterScreen extends Actor {
 
     private Texture WaterMeterHeight10;
 
-    private BitmapFont titleFont;
-
     private GameState state;
 
-    private GlyphLayout titleLayout;
+    private CloseButton closeButton;
 
     public WaterMeterScreen(
             float positionX,
@@ -67,12 +72,6 @@ public class WaterMeterScreen extends Actor {
 
         super.setBounds(0, 0, 0, 0);
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Abel-Regular.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 50;
-        parameter.color = Color.BLACK;
-        titleFont = generator.generateFont(parameter);
-        generator.dispose();
         background = ForbiddenIsland.assetManager.get("custom-ui/dialog-background/Dialog.png", Texture.class);
         WaterMeterHeight1 = ForbiddenIsland.assetManager.get("water-meter/Water Meter-1.png", Texture.class);
         WaterMeterHeight2 = ForbiddenIsland.assetManager.get("water-meter/Water Meter-2.png", Texture.class);
@@ -97,7 +96,20 @@ public class WaterMeterScreen extends Actor {
         WaterMeterHeight9.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
         WaterMeterHeight10.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
 
-        titleLayout = new GlyphLayout(titleFont, "");
+        closeButton = new CloseButton(
+                getWidth() - 50,
+                getHeight() - 50,
+                40,
+                40
+        );
+        closeButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                setOpen(false);
+                state.setDrawingTreasureCards(false);
+            }
+        });
+        this.addActor(closeButton);
     }
 
     @Override
@@ -108,42 +120,38 @@ public class WaterMeterScreen extends Actor {
         if (isOpen) {
             batch.draw(background, positionX, positiveY, width, height);
 
-            titleLayout.setText(titleFont, "Water Height: " + state.getWaterHeight());
-            float fontX = 0 + (GameConfiguration.width - titleLayout.width) / 2;
-            float fontY = positiveY + height - 25f;
-
-            titleFont.draw(batch, titleLayout, fontX, fontY);
-
             if (state.getWaterHeight() == 1) {
-                batch.draw(WaterMeterHeight1, (GameConfiguration.width / 2f) - (height * 7/8f * 5/8f * 0.5f), positiveY + 10f, height * 7/8f * 5/8f, height * 7/8f);
+                batch.draw(WaterMeterHeight1, (GameConfiguration.width / 2f) - (height * 7/8f * 5/8f * 0.5f), positiveY + getHeight()/2f - (height * 7/8f * 0.5f), height * 7/8f * 5/8f, height * 7/8f);
             }
             else if (state.getWaterHeight() == 2) {
-                batch.draw(WaterMeterHeight2, (GameConfiguration.width / 2f) - (height * 7/8f * 5/8f * 0.5f), positiveY + 10f, height * 7/8f * 5/8f, height * 7/8f);
+                batch.draw(WaterMeterHeight2, (GameConfiguration.width / 2f) - (height * 7/8f * 5/8f * 0.5f), positiveY + getHeight()/2f - (height * 7/8f * 0.5f), height * 7/8f * 5/8f, height * 7/8f);
             }
             else if (state.getWaterHeight() == 3) {
-                batch.draw(WaterMeterHeight3, (GameConfiguration.width / 2f) - (height * 7/8f * 5/8f * 0.5f), positiveY + 10f, height * 7/8f * 5/8f, height * 7/8f);
+                batch.draw(WaterMeterHeight3, (GameConfiguration.width / 2f) - (height * 7/8f * 5/8f * 0.5f), positiveY + getHeight()/2f - (height * 7/8f * 0.5f), height * 7/8f * 5/8f, height * 7/8f);
             }
             else if (state.getWaterHeight() == 4) {
-                batch.draw(WaterMeterHeight4, (GameConfiguration.width / 2f) - (height * 7/8f * 5/8f * 0.5f), positiveY + 10f, height * 7/8f * 5/8f, height * 7/8f);
+                batch.draw(WaterMeterHeight4, (GameConfiguration.width / 2f) - (height * 7/8f * 5/8f * 0.5f), positiveY + getHeight()/2f - (height * 7/8f * 0.5f), height * 7/8f * 5/8f, height * 7/8f);
             }
             else if (state.getWaterHeight() == 5) {
-                batch.draw(WaterMeterHeight5, (GameConfiguration.width / 2f) - (height * 7/8f * 5/8f * 0.5f), positiveY + 10f, height * 7/8f * 5/8f, height * 7/8f);
+                batch.draw(WaterMeterHeight5, (GameConfiguration.width / 2f) - (height * 7/8f * 5/8f * 0.5f), positiveY + getHeight()/2f - (height * 7/8f * 0.5f), height * 7/8f * 5/8f, height * 7/8f);
             }
             else if (state.getWaterHeight() == 6) {
-                batch.draw(WaterMeterHeight6, (GameConfiguration.width / 2f) - (height * 7/8f * 5/8f * 0.5f), positiveY + 10f, height * 7/8f * 5/8f, height * 7/8f);
+                batch.draw(WaterMeterHeight6, (GameConfiguration.width / 2f) - (height * 7/8f * 5/8f * 0.5f), positiveY + getHeight()/2f - (height * 7/8f * 0.5f), height * 7/8f * 5/8f, height * 7/8f);
             }
             else if (state.getWaterHeight() == 7) {
-                batch.draw(WaterMeterHeight7, (GameConfiguration.width / 2f) - (height * 7/8f * 5/8f * 0.5f), positiveY + 10f, height * 7/8f * 5/8f, height * 7/8f);
+                batch.draw(WaterMeterHeight7, (GameConfiguration.width / 2f) - (height * 7/8f * 5/8f * 0.5f), positiveY + getHeight()/2f - (height * 7/8f * 0.5f), height * 7/8f * 5/8f, height * 7/8f);
             }
             else if (state.getWaterHeight() == 8) {
-                batch.draw(WaterMeterHeight8, (GameConfiguration.width / 2f) - (height * 7/8f * 5/8f * 0.5f), positiveY + 10f, height * 7/8f * 5/8f, height * 7/8f);
+                batch.draw(WaterMeterHeight8, (GameConfiguration.width / 2f) - (height * 7/8f * 5/8f * 0.5f), positiveY + getHeight()/2f - (height * 7/8f * 0.5f), height * 7/8f * 5/8f, height * 7/8f);
             }
             else if (state.getWaterHeight() == 9) {
-                batch.draw(WaterMeterHeight9, (GameConfiguration.width / 2f) - (height * 7/8f * 5/8f * 0.5f), positiveY + 10f, height * 7/8f * 5/8f, height * 7/8f);
+                batch.draw(WaterMeterHeight9, (GameConfiguration.width / 2f) - (height * 7/8f * 5/8f * 0.5f), positiveY + getHeight()/2f - (height * 7/8f * 0.5f), height * 7/8f * 5/8f, height * 7/8f);
             }
             else if (state.getWaterHeight() == 10) {
-                batch.draw(WaterMeterHeight10, (GameConfiguration.width / 2f) - (height * 7/8f * 5/8f * 0.5f), positiveY + 10f, height * 7/8f * 5/8f, height * 7/8f);
+                batch.draw(WaterMeterHeight10, (GameConfiguration.width / 2f) - (height * 7/8f * 5/8f * 0.5f), positiveY + getHeight()/2f - (height * 7/8f * 0.5f), height * 7/8f * 5/8f, height * 7/8f);
             }
+
+            super.draw(batch, parentAlpha);
 
         }
     }
@@ -182,6 +190,14 @@ public class WaterMeterScreen extends Actor {
     @Override
     public void setWidth(float width) {
         this.width = width;
+
+        closeButton.setPositionX(width-50);
+        closeButton.setPositiveY(getHeight()-50);
+        closeButton.setWidth(40);
+        closeButton.setHeight(40);
+
+        logger.info(height + " " + closeButton.getPositiveY());
+        logger.info(width + " " + closeButton.getPositionX());
     }
 
     public boolean isOpen() {

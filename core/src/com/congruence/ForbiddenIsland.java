@@ -60,13 +60,6 @@ public class ForbiddenIsland extends Game {
 			Stack<FloodCard> floodCardDeck = new Stack<>();
 			Stack<TreasureCard> treasureCardDeck = new Stack<>();
 
-			for (int i = 0; i < 5; i++) {
-				treasureCardDeck.add(new TreasureCard("Ocean's Chalice", TreasureCard.TREASURE_CARD));
-				treasureCardDeck.add(new TreasureCard("Crystal of Fire", TreasureCard.TREASURE_CARD));
-				treasureCardDeck.add(new TreasureCard("Statue of the Wind", TreasureCard.TREASURE_CARD));
-				treasureCardDeck.add(new TreasureCard("Earth Stone", TreasureCard.TREASURE_CARD));
-			}
-
 			Stack<String> TEMP_PLAYER_CARDS = new Stack<>();
 			List<String> TEMP_PLAYER_CARDS_LIST = Arrays.asList(Resources.PLAYER_NAMES);
 			Collections.shuffle(TEMP_PLAYER_CARDS_LIST);
@@ -78,7 +71,7 @@ public class ForbiddenIsland extends Game {
 			players.put(TEMP_PLAYER_CARDS.peek(), new Player(
 					TEMP_PLAYER_CARDS.pop(),
 					null,
-					null,
+					new ArrayList<>(),
 					1,
 					1
 			));
@@ -86,7 +79,7 @@ public class ForbiddenIsland extends Game {
 			players.put(TEMP_PLAYER_CARDS.peek(), new Player(
 					TEMP_PLAYER_CARDS.pop(),
 					null,
-					null,
+					new ArrayList<>(),
 					1,
 					4
 			));
@@ -95,7 +88,7 @@ public class ForbiddenIsland extends Game {
 				players.put(TEMP_PLAYER_CARDS.peek(), new Player(
 						TEMP_PLAYER_CARDS.pop(),
 						null,
-						null,
+						new ArrayList<>(),
 						4,
 						4
 				));
@@ -105,12 +98,40 @@ public class ForbiddenIsland extends Game {
 				players.put(TEMP_PLAYER_CARDS.peek(), new Player(
 						TEMP_PLAYER_CARDS.pop(),
 						null,
-						null,
+						new ArrayList<>(),
 						4,
 						1
 				));
 			}
 			logger.info(NumberOfPlayers + "");
+
+			for (int i = 0; i < 5; i++) {
+				treasureCardDeck.add(new TreasureCard("Ocean's Chalice", TreasureCard.TREASURE_CARD));
+				treasureCardDeck.add(new TreasureCard("Crystal of Fire", TreasureCard.TREASURE_CARD));
+				treasureCardDeck.add(new TreasureCard("Statue of the Wind", TreasureCard.TREASURE_CARD));
+				treasureCardDeck.add(new TreasureCard("Earth Stone", TreasureCard.TREASURE_CARD));
+			}
+
+			treasureCardDeck.add(new TreasureCard("Helicopter", TreasureCard.HELICOPTER_CARD));
+			treasureCardDeck.add(new TreasureCard("Helicopter", TreasureCard.HELICOPTER_CARD));
+			treasureCardDeck.add(new TreasureCard("Helicopter", TreasureCard.HELICOPTER_CARD));
+
+			treasureCardDeck.add(new TreasureCard("Sandbag", TreasureCard.SANDBAG_CARD));
+			treasureCardDeck.add(new TreasureCard("Sandbag", TreasureCard.SANDBAG_CARD));
+
+			Collections.shuffle(treasureCardDeck);
+
+			for (Player e: players.values()) {
+				e.getCardsAtHand().add(treasureCardDeck.pop());
+				e.getCardsAtHand().add(treasureCardDeck.pop());
+			}
+
+			treasureCardDeck.add(new TreasureCard("Waters Rise", TreasureCard.WATERS_RISE_CARD));
+			treasureCardDeck.add(new TreasureCard("Waters Rise", TreasureCard.WATERS_RISE_CARD));
+			treasureCardDeck.add(new TreasureCard("Waters Rise", TreasureCard.WATERS_RISE_CARD));
+
+			Collections.shuffle(treasureCardDeck);
+
 
 			LinkedList<String> pickedIslandTiles = new LinkedList<>();
 			int tilesLeft = 24;
