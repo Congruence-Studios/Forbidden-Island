@@ -46,6 +46,8 @@ public class InfoScreen extends Group {
 
     private GlyphLayout treasureDeckLayout;
 
+    private GlyphLayout discardPilesLayout;
+
     private CloseButton closeButton;
 
     public InfoScreen(
@@ -81,6 +83,7 @@ public class InfoScreen extends Group {
         actionCountLayout = new GlyphLayout(titleFont, "");
         treasureDeckLayout = new GlyphLayout();
         floodDeckLayout = new GlyphLayout();
+        discardPilesLayout = new GlyphLayout();
 
         closeButton = new CloseButton(
                 getWidth() - 50,
@@ -121,7 +124,7 @@ public class InfoScreen extends Group {
                 Texture tempTexture = ForbiddenIsland.assetManager.get("flood-deck/Flood_Card_" + temp.getName() + "@2x.png");
                 floodDeckLayout.setText(titleFont, "Size: " + state.getIslandTileDiscardDeck().size());
                 float floodDeckFontX = GameConfiguration.width/2f - 5 - tempTexture.getWidth()/2f - floodDeckLayout.width/2;
-                float floodDeckFontY = GameConfiguration.height/2f;
+                float floodDeckFontY = GameConfiguration.height/2f + floodDeckLayout.height;
                 titleFont.draw(batch, floodDeckLayout, floodDeckFontX, floodDeckFontY);
                 logger.info(temp.getName());
                 batch.draw(tempTexture, GameConfiguration.width/2f - 5 - tempTexture.getWidth(), GameConfiguration.height/2f - tempTexture.getHeight(), tempTexture.getWidth(), tempTexture.getHeight());
@@ -131,11 +134,17 @@ public class InfoScreen extends Group {
                 Texture tempTexture = ForbiddenIsland.assetManager.get("treasure-deck/" + temp1.getName() + ".png");
                 treasureDeckLayout.setText(titleFont, "Size: " + state.getTreasureCardDiscardDeck().size());
                 float treasureFontX = GameConfiguration.width/2f + 5 + tempTexture.getWidth()/2f - treasureDeckLayout.width/2f;
-                float treasureFontY = GameConfiguration.height/2f;
+                float treasureFontY = GameConfiguration.height/2f + treasureDeckLayout.height;
                 titleFont.draw(batch, treasureDeckLayout, treasureFontX, treasureFontY);
                 logger.info(temp1.getName());
                 batch.draw(tempTexture, GameConfiguration.width/2f + 5, GameConfiguration.height/2f - tempTexture.getHeight(), tempTexture.getWidth(), tempTexture.getHeight());
             }
+
+            discardPilesLayout.setText(titleFont, "Discard Piles");
+            float discardPilesFontX = GameConfiguration.width/2f - discardPilesLayout.width / 2;
+            float discardPilesFontY = GameConfiguration.height/2f + discardPilesLayout.height * 2.5f;
+            titleFont.draw(batch, discardPilesLayout, discardPilesFontX, discardPilesFontY);
+
             //batch.draw(temp.);
 
             super.draw(batch, parentAlpha);
