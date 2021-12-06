@@ -155,13 +155,13 @@ public class GameUI implements Screen {
                                 else {
                                     a.getTilePositionOpen()[3] = true;
                                 }
-                                tempPlayerData.setTileX(islandTile.getCoordinates().x);
-                                tempPlayerData.setTileY(islandTile.getCoordinates().y);
                                 if (tempPlayerData.getAbility() == Player.PILOT && !((Math.abs(islandTile.getCoordinates().x - tempPlayerData.getTileX()) <= 1) &&
-                                        islandTile.getCoordinates().y - y == 0 || (Math.abs(islandTile.getCoordinates().y - tempPlayerData.getTileY()) <= 1) &&
-                                        islandTile.getCoordinates().x - x == 0)) {
+                                        islandTile.getCoordinates().y - tempPlayerData.getTileY() == 0 || (Math.abs(islandTile.getCoordinates().y - tempPlayerData.getTileY()) <= 1) &&
+                                        islandTile.getCoordinates().x - tempPlayerData.getTileX() == 0)) {
                                     tempPlayerData.setCanUseSpecialAction(false);
                                 }
+                                tempPlayerData.setTileX(islandTile.getCoordinates().x);
+                                tempPlayerData.setTileY(islandTile.getCoordinates().y);
                                 logger.info(currentNormalPawn + "");
                                 pawns.get(currentNormalPawn).setX(findPawnPositionX(currentNormalPawn));
                                 pawns.get(currentNormalPawn).setY(findPawnPositionY(currentNormalPawn));
