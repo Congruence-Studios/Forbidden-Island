@@ -1486,6 +1486,7 @@ public class GameUI implements Screen {
             setSuddenDeathTiles(suddenDeathPlayerQueue.peek());
             currentSuddenDeathPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(suddenDeathPlayerQueue.peek()));
             setSuddenDeathTiles(suddenDeathPlayerQueue.peek());
+            currentSuddenDeathPlayerPawn = suddenDeathPlayerQueue.peek();
             suddenDeathPlayerQueue.poll();
         }
         else {
