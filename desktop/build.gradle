@@ -1,6 +1,5 @@
 sourceCompatibility = 11
 sourceSets.main.java.srcDirs = [ "src/" ]
-sourceSets.main.resources.srcDirs = ["assets"]
 
 project.ext.mainClassName = "com.congruence.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("assets")
@@ -22,18 +21,16 @@ task debug(dependsOn: classes, type: JavaExec) {
     debug = true
 }
 
-task dist(type: Jar) {
-    manifest {
-        attributes 'Main-Class': project.mainClassName
+task distZip(type: Zip) {
+    into('assets') {
+        from 'assets'
     }
-    dependsOn configurations.runtimeClasspath
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    into('libs') {
+        from jar
+        from configurations.runtimeClasspath
     }
-    with jar
+
+    from('bin')
 }
-
-
-dist.dependsOn classes
 
 eclipse.project.name = appName + "-desktop"
