@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.congruence.ForbiddenIsland;
 import com.congruence.state.GameState;
@@ -35,6 +36,12 @@ public class TreasureCardUI extends Actor {
 
     private Texture HoverTexture;
 
+    private Texture DeleteModeTexture;
+
+    private boolean discardMode;
+
+    private int position;
+
     public TreasureCardUI(
             GameState state,
             float positionX,
@@ -43,6 +50,8 @@ public class TreasureCardUI extends Actor {
             float width,
             Texture CardTexture,
             String cardName
+            Texture CardTexture,
+            int position
     ) {
         this.state = state;
         this.positionX = positionX;
@@ -50,9 +59,12 @@ public class TreasureCardUI extends Actor {
         this.height = height;
         this.width = width;
         this.CardTexture = CardTexture;
+        this.position = position;
 
         HoverTexture = ForbiddenIsland.assetManager.get("treasure-deck/Treasure Card Hover.png", Texture.class);
+        DeleteModeTexture = ForbiddenIsland.assetManager.get("treasure-deck/Treasure Card Delete.png", Texture.class);
         HoverTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        DeleteModeTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
 
         super.setBounds(positionX, positiveY, width, height);
 
@@ -109,6 +121,14 @@ public class TreasureCardUI extends Actor {
             }
         });
 
+        super.addListener(new ActorGestureListener(){
+            @Override
+            public boolean longPress(Actor actor, float x, float y) {
+                discardMode = !discardMode;
+                return true;
+            }
+        });
+
     }
 
     @Override
@@ -121,6 +141,10 @@ public class TreasureCardUI extends Actor {
             batch.draw(HoverTexture, positionX, positiveY, width, height);
         } else if (hover) {
             batch.draw(HoverTexture, positionX, positiveY, width, height);
+        }
+
+        if (discardMode) {
+            batch.draw(DeleteModeTexture, positionX, positiveY, width, height);
         }
 
     }
@@ -168,6 +192,23 @@ public class TreasureCardUI extends Actor {
         this.width = width;
         super.setBounds(positionX, positiveY, width, height);
     }
+
+    public boolean isDiscardMode() {
+        return discardMode;
+    }
+
+    public void setDiscardMode(boolean discardMode) {
+        this.discardMode = discardMode;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
 
     public boolean isFocused() {
         return focused;

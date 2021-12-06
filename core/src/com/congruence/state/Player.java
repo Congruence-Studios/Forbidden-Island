@@ -1,5 +1,7 @@
 package com.congruence.state;
 
+import com.congruence.ui.TreasureCardUI;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -104,6 +106,13 @@ public class Player {
         cardsAtHand.add(treasureCard);
         for (CardHandListener e : cardHandListeners) {
             e.onAdd(treasureCard, cardsAtHand.size()-1);
+        }
+    }
+
+    public void removeTreasureFromHand(int index) {
+        TreasureCard removedCard = cardsAtHand.remove(index);
+        for (CardHandListener e : cardHandListeners) {
+            e.onRemove(removedCard, cardsAtHand.size()-1);
         }
     }
 

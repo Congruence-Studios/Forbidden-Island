@@ -160,8 +160,19 @@ public class PlayerHand extends Group {
             }
         }
 
-        for (TreasureCardUI e: treasureCardUIS) {
+        for (int i = 0; i < treasureCardUIS.size(); i++) {
+            TreasureCardUI e = treasureCardUIS.get(i);
             super.addActor(e);
+            e.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if (e.isDiscardMode()) {
+                        PlayerHand.super.removeActor(e);
+                        treasureCardUIS.remove(e.getPosition());
+                        player.removeTreasureFromHand(e.getPosition());
+                    }
+                }
+            });
         }
 
         super.setBounds(this.positionX, this.positionY, this.width, this.height);
@@ -175,8 +186,7 @@ public class PlayerHand extends Group {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 //logger.info("touchDown: X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
-                focused = true;
-                logger.info("touchDown: " + focused);
+                //focused = true;
                 return true;
             }
 
@@ -211,10 +221,11 @@ public class PlayerHand extends Group {
                         e.setPositionX(cardX);
                         e.setPositiveY(cardY);
                         cardX += cardWidth/2f;
+                        if (e.equals(selectedCard)) {
+                        }
                     }
                 }
                 TreasureCardUI treasureCardUI = new TreasureCardUI(
-                        state,
                         cardX,
                         cardY,
                         cardHeight,
@@ -222,13 +233,38 @@ public class PlayerHand extends Group {
                         getTexture(treasureCard),
                         treasureCard.getName()
                 );
+                PlayerHand.super.addActor(treasureCardUI);
                 treasureCardUIS.add(treasureCardUI);
-                addActor(treasureCardUI);
+                treasureCardUI.addListener(new ClickListener(){
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        if (treasureCardUI.isDiscardMode()) {
+                            PlayerHand.super.removeActor(treasureCardUI);
+                            player.getCardsAtHand().remove(treasureCardUI.getPosition());
+                        }
+                    }
+                });
             }
 
             @Override
-            public void onRemove(TreasureCard e, int index) {
-
+            public void onRemove(TreasureCard removedCard, int index) {
+                float cardX = 0;
+                float cardY = 0;
+                float cardHeight = PlayerHand.this.height;
+                float cardWidth = PlayerHand.this.height * 128/188f;
+                if (player.getCardsAtHand() != null) {
+                    for (int i = 0; i < treasureCardUIS.size(); i++) {
+                        TreasureCardUI e = treasureCardUIS.get(i);
+                        e.setWidth(cardWidth);
+                        e.setHeight(cardHeight);
+                        e.setPositionX(cardX);
+                        e.setPositiveY(cardY);
+                        cardX += cardWidth/2f;
+                        if (e.equals(selectedCard)) {
+                        }
+                        e.setPosition(i);
+                    }
+                }
             }
         });
     }
