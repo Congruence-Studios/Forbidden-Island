@@ -47,6 +47,8 @@ public class PlayerHand extends Group {
 
     private boolean[] collectedTreasures;
 
+    private static TreasureCardUI selectedCard = null;
+
     private ArrayList<TreasureCardUI> treasureCardUIS;
 
     public PlayerHand(
@@ -61,7 +63,6 @@ public class PlayerHand extends Group {
         this.player = player;
         this.width = width;
         this.height = height;
-
 
         COFTexture = ForbiddenIsland.assetManager.get("treasure-deck/Crystal of Fire.png", Texture.class);
         SOTWTexture = ForbiddenIsland.assetManager.get("treasure-deck/Statue of the Wind.png", Texture.class);
@@ -193,6 +194,8 @@ public class PlayerHand extends Group {
                         e.setPositionX(cardX);
                         e.setPositiveY(cardY);
                         cardX += cardWidth/2f;
+                        if (e.equals(selectedCard)) {
+                        }
                     }
                 }
                 TreasureCardUI treasureCardUI = new TreasureCardUI(
@@ -301,6 +304,14 @@ public class PlayerHand extends Group {
 
     public void setHovered(boolean hovered) {
         this.hovered = hovered;
+    }
+
+    public static TreasureCardUI getSelectedCard() {
+        return selectedCard;
+    }
+
+    public static void setSelectedCard(TreasureCardUI newCard) {
+        selectedCard = newCard;
     }
 
     public Texture getTexture(TreasureCard e) {

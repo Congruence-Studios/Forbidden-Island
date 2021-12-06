@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.congruence.ForbiddenIsland;
+import com.congruence.state.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,6 +57,7 @@ public class TreasureCardUI extends Actor {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 focused = true;
+                selectNewCard();
                 return true;
             }
 
@@ -83,10 +85,16 @@ public class TreasureCardUI extends Actor {
         batch.begin();
 
         batch.draw(CardTexture, positionX, positiveY, width, height);
-        if (hover) {
+        if (focused) {
+            batch.draw(HoverTexture, positionX, positiveY, width, height);
+        } else if (hover) {
             batch.draw(HoverTexture, positionX, positiveY, width, height);
         }
 
+    }
+
+    public void selectNewCard () {
+        PlayerHand.setSelectedCard(this);
     }
 
     public float getPositionX() {
