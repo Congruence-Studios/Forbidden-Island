@@ -49,8 +49,7 @@ public class TreasureCardUI extends Actor {
             float height,
             float width,
             Texture CardTexture,
-            String cardName
-            Texture CardTexture,
+            String cardName,
             int position
     ) {
         this.state = state;
@@ -72,10 +71,6 @@ public class TreasureCardUI extends Actor {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 //focused = !focused;
-            }
-
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 PlayerHand.setSelectedCard(TreasureCardUI.this);
                 if (cardName.equals("Helicopter")) {
                     boolean isWin = true;
@@ -102,6 +97,10 @@ public class TreasureCardUI extends Actor {
                         state.setGameResult(GameState.WIN);
                     }
                 }
+            }
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 return true;
             }
 

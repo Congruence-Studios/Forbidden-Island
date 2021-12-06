@@ -89,7 +89,8 @@ public class PlayerHand extends Group {
         float cardHeight = height;
         float cardWidth = height * 128/188f;
         if (player.getCardsAtHand() != null) {
-            for (TreasureCard e : player.getCardsAtHand()) {
+            for (int i = 0; i < player.getCardsAtHand().size(); i++) {
+                TreasureCard e = player.getCardsAtHand().get(i);
                 if (e.getCardType() == TreasureCard.HELICOPTER_CARD) {
                     treasureCardUIS.add(new TreasureCardUI(
                             state,
@@ -98,7 +99,8 @@ public class PlayerHand extends Group {
                             cardHeight,
                             cardWidth,
                             HelicopterCardTexture,
-                            "Helicopter"
+                            "Helicopter",
+                            i
                     ));
                 }
                 else if (e.getCardType() == TreasureCard.SANDBAG_CARD) {
@@ -109,7 +111,8 @@ public class PlayerHand extends Group {
                             cardHeight,
                             cardWidth,
                             SandbagCardTexture,
-                            "Sandbag"
+                            "Sandbag",
+                            i
                     ));
                 }
                 else if (e.getName().equals("Ocean's Chalice")) {
@@ -120,7 +123,8 @@ public class PlayerHand extends Group {
                             cardHeight,
                             cardWidth,
                             OCTexture,
-                            "Ocean's Chalice"
+                            "Ocean's Chalice",
+                            i
                     ));
                 }
                 else if (e.getName().equals("Statue of the Wind")) {
@@ -131,7 +135,8 @@ public class PlayerHand extends Group {
                             cardHeight,
                             cardWidth,
                             SOTWTexture,
-                            "Statue of the Wind"
+                            "Statue of the Wind",
+                            i
                     ));
                 }
                 else if (e.getName().equals("Earth Stone")) {
@@ -142,7 +147,8 @@ public class PlayerHand extends Group {
                             cardHeight,
                             cardWidth,
                             ESTexture,
-                            "Earth Stone"
+                            "Earth Stone",
+                            i
                     ));
                 }
                 else if (e.getName().equals("Crystal of Fire")) {
@@ -153,7 +159,8 @@ public class PlayerHand extends Group {
                             cardHeight,
                             cardWidth,
                             COFTexture,
-                            "Crystal of Fire"
+                            "Crystal of Fire",
+                            i
                     ));
                 }
                 cardX += cardWidth/2f;
@@ -226,12 +233,14 @@ public class PlayerHand extends Group {
                     }
                 }
                 TreasureCardUI treasureCardUI = new TreasureCardUI(
+                        state,
                         cardX,
                         cardY,
                         cardHeight,
                         cardWidth,
                         getTexture(treasureCard),
-                        treasureCard.getName()
+                        treasureCard.getName(),
+                        player.getCardsAtHand().size()-1
                 );
                 PlayerHand.super.addActor(treasureCardUI);
                 treasureCardUIS.add(treasureCardUI);
