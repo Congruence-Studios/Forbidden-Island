@@ -335,7 +335,12 @@ public class GameUI implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (swapButton.isEnabled()) {
-                    giveCardScreen.setOpen(true, ()->{});
+                    giveCardScreen.setOpen(true, ()->{
+                        gameState.setCurrentPlayerActionsLeft(gameState.getCurrentPlayerActionsLeft()-1);
+                        setCanGive();
+                        swapButton.setEnabled(gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber())).getCardsAtHand().size() > 0);
+                        checkTurn();
+                    });
                 }
             }
         });

@@ -174,9 +174,10 @@ public class PlayerHand extends Group {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     if (e.isDiscardMode()) {
-                        PlayerHand.super.removeActor(e);
-                        treasureCardUIS.remove(e.getPosition());
                         player.removeTreasureFromHand(e.getPosition());
+                    }
+                    else {
+                        state.setTreasureCardUI(e);
                     }
                 }
             });
@@ -257,6 +258,8 @@ public class PlayerHand extends Group {
 
             @Override
             public void onRemove(TreasureCard removedCard, int index) {
+                PlayerHand.super.removeActor(treasureCardUIS.get(index));
+                treasureCardUIS.remove(treasureCardUIS.get(index).getPosition());
                 state.getTreasureCardDiscardDeck().add(removedCard);
                 float cardX = 0;
                 float cardY = 0;

@@ -3,6 +3,7 @@ package com.congruence.state;
 import com.congruence.ui.Game;
 import com.congruence.ui.Pair;
 import com.congruence.ui.PlayerHand;
+import com.congruence.ui.TreasureCardUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -165,6 +166,8 @@ public class GameState {
     private int gameResult;
 
     private Pair foolsLandingCoordinates;
+
+    private TreasureCardUI treasureCardUI;
 
     public GameState(
             int difficulty,
@@ -417,6 +420,14 @@ public class GameState {
 
     public void setFoolsLandingCoordinates(Pair foolsLandingCoordinates) {
         this.foolsLandingCoordinates = foolsLandingCoordinates;
+    }
+
+    public TreasureCardUI getTreasureCardUI() {
+        return treasureCardUI;
+    }
+
+    public void setTreasureCardUI(TreasureCardUI treasureCardUI) {
+        this.treasureCardUI = treasureCardUI;
     }
 
     @Override

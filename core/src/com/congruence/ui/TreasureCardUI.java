@@ -74,7 +74,6 @@ public class TreasureCardUI extends Actor {
         super.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                PlayerHand.setSelectedCard(TreasureCardUI.this);
                 if (cardName.equals("Helicopter")) {
                     boolean isWin = true;
                     boolean[] totalTreasures = new boolean[4];
@@ -139,7 +138,7 @@ public class TreasureCardUI extends Actor {
         batch.begin();
 
         batch.draw(CardTexture, positionX, positiveY, width, height);
-        if (focused) {
+        if (state.getTreasureCardUI() == this) {
             batch.draw(PressedTexture, positionX, positiveY, width, height);
         } else if (hover) {
             batch.draw(HoverTexture, positionX, positiveY, width, height);

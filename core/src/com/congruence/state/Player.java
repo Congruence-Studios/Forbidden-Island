@@ -112,7 +112,7 @@ public class Player {
     public void removeTreasureFromHand(int index) {
         TreasureCard removedCard = cardsAtHand.remove(index);
         for (CardHandListener e : cardHandListeners) {
-            e.onRemove(removedCard, cardsAtHand.size()-1);
+            e.onRemove(removedCard, index);
         }
     }
 
