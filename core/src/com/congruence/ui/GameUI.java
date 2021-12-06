@@ -327,6 +327,14 @@ public class GameUI implements Screen {
                 ((GameConfiguration.width) - (GameConfiguration.height)) / 2f
         );
         stage.addActor(swapButton);
+        swapButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (swapButton.isEnabled()) {
+
+                }
+            }
+        });
         waterButton = new GameMenuWaterButton(
                 10f + (0.33f * (2 * tileHeight + 10f) - 5f) * 8f / 5f,
                 2 * tileHeight + 30f + 0.66f * (2 * tileHeight + 10f) - 10f,
@@ -1354,8 +1362,20 @@ public class GameUI implements Screen {
         for (PlayerHand p : playerHands) {
             logger.info("" + playerHands.get(gameState.getTurnNumber()).isFocused());
         }
+        Player currentPlayer = gameState.getPlayers().get(gameState.getCurrentPlayerTurn());
+        TreeSet<Player> players = (TreeSet<Player>) gameState.getPlayers().values();
+        ArrayList<Player> availablePlayers = new ArrayList<>();
         if (playerHands.get(gameState.getTurnNumber()).isFocused()) {
-            swapButton.setEnabled(true);
+            for (Player p : players) {
+                if (currentPlayer.getTileX() == p.getTileX() && currentPlayer.getTileY() == p.getTileY()) {
+                    availablePlayers.add(p);
+                }
+            }
+            if (!availablePlayers.isEmpty()) {
+                swapButton.setEnabled(true);
+            } else {
+                swapButton.setEnabled(false);
+            }
         } else {
             swapButton.setEnabled(false);
         }
