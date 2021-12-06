@@ -39,11 +39,15 @@ public class IslandTile extends Actor {
 
     private Texture islandTileSpecialMovementImage = ForbiddenIsland.assetManager.get("island-tiles/Tile_Special_Movement_Icon@2x.png", Texture.class);
 
+    private Texture islandTileShoreUpImage = ForbiddenIsland.assetManager.get("island-tiles/Tile_Special_Movement_Icon@2x.png", Texture.class);
+
     private boolean focused;
 
     private boolean hovered;
 
     private boolean canMove;
+
+    private boolean canShoreUp;
 
     private boolean canMoveSpecialAction;
 
@@ -77,6 +81,7 @@ public class IslandTile extends Actor {
         islandTileHoverImage.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
         islandTileFocusedImage.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
         islandTileSpecialMovementImage.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        islandTileShoreUpImage.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
 
         super.setBounds(this.positionX, this.positionY, this.islandWidth, this.islandHeight);
     }
@@ -100,6 +105,9 @@ public class IslandTile extends Actor {
         }
         else if (focused) {
             batch.draw(islandTileFocusedImage, positionX-2, positionY+3, islandWidth, islandHeight);
+        }
+        else if (canShoreUp) {
+            batch.draw(islandTileShoreUpImage, positionX-2, positionY+3, islandWidth, islandHeight);
         }
         else if (canMove) {
             batch.draw(islandTileMovementImage, positionX-2, positionY+3, islandWidth, islandHeight);
@@ -211,5 +219,13 @@ public class IslandTile extends Actor {
 
     public boolean[] getTilePositionOpen() {
         return tilePositionOpen;
+    }
+
+    public boolean isCanShoreUp() {
+        return canShoreUp;
+    }
+
+    public void setCanShoreUp(boolean canShoreUp) {
+        this.canShoreUp = canShoreUp;
     }
 }

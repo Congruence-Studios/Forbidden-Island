@@ -73,6 +73,18 @@ public class GameUI implements Screen {
 
     private DrawFloodCard drawFloodCard;
 
+    private ShoredUpDialog shoredUpDialog;
+
+    public static int MOVEMENT_MODE;
+
+    public static int SHORE_UP_MODE;
+
+    public static int ISLAND_SINK_MOVEMENT;
+
+    private int mode;
+
+    private Pair previousShoredUpTile;
+
     public GameUI(GameState gameState) {
         this.gameState = gameState;
     }
@@ -115,7 +127,7 @@ public class GameUI implements Screen {
                     islandTile.addListener(new ClickListener() {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
-                            if (islandTile.isCanMove()) {
+                            if (islandTile.isCanMove() && mode == MOVEMENT_MODE) {
                                 Player tempPlayerData = gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber()));
                                 logger.info(islandTile.getCoordinates().toString());
                                 IslandTile a = islandTiles.get(new Pair(tempPlayerData.getTileX(), tempPlayerData.getTileY()));
@@ -162,6 +174,40 @@ public class GameUI implements Screen {
                                 setMovementTiles(currentNormalPawn);
                                 registerMove();
                                 shoreUpButton.setEnabled(canShoreUp());
+                            }
+                            else if (islandTile.isCanShoreUp() && mode == SHORE_UP_MODE) {
+                                if (gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber())).getAbility() == Player.EXPLORER) {
+                                    if (previousShoredUpTile != null) {
+                                        gameState.getIslandTileState()
+                                                [islandTile.getCoordinates().x]
+                                                [islandTile.getCoordinates().y] = GameState.NORMAL_ISLAND_TILE;
+                                        gameState.getIslandTileState()
+                                                [previousShoredUpTile.x]
+                                                [previousShoredUpTile.y] = GameState.NORMAL_ISLAND_TILE;
+                                        ArrayList<String> shoredUpTiles = new ArrayList<>();
+                                        shoredUpTiles.add(islandTiles.get(previousShoredUpTile).getTileName());
+                                        shoredUpTiles.add(islandTile.getTileName());
+                                        shoredUpDialog.setOpen(true, shoredUpTiles);
+                                        shoreUpButton.setEnabled(canShoreUp());
+                                        gameState.setCurrentPlayerActionsLeft(gameState.getCurrentPlayerActionsLeft()-1);
+                                        checkTurn();
+                                    }
+                                    else {
+                                        previousShoredUpTile = new Pair(islandTile.getCoordinates().x, islandTile.getCoordinates().y);
+                                    }
+                                }
+                                else {
+                                    gameState.getIslandTileState()
+                                            [islandTile.getCoordinates().x]
+                                            [islandTile.getCoordinates().y] = GameState.NORMAL_ISLAND_TILE;
+                                    ArrayList<String> shoredUpTiles = new ArrayList<>();
+                                    shoredUpTiles.add(islandTile.getTileName());
+                                    shoredUpDialog.setOpen(true, shoredUpTiles);
+                                    shoreUpButton.setEnabled(canShoreUp());
+                                    gameState.setCurrentPlayerActionsLeft(gameState.getCurrentPlayerActionsLeft()-1);
+                                    checkTurn();
+                                }
+                                eraseShoreUpTiles();
                                 setShoreUpTiles();
                             }
                             else {
@@ -244,7 +290,24 @@ public class GameUI implements Screen {
         shoreUpButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                onShoreUpButtonClick();
+                if (shoreUpButton.isEnabled()) {
+                    if (gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber())).getAbility() == Player.EXPLORER && previousShoredUpTile != null) {
+                        gameState.getIslandTileState()
+                                [previousShoredUpTile.x]
+                                [previousShoredUpTile.y] = GameState.NORMAL_ISLAND_TILE;
+                        ArrayList<String> shoredUpTiles = new ArrayList<>();
+                        shoredUpTiles.add(islandTiles.get(previousShoredUpTile).getTileName());
+                        shoredUpDialog.setOpen(true, shoredUpTiles);
+                        shoreUpButton.setEnabled(canShoreUp());
+                        gameState.setCurrentPlayerActionsLeft(gameState.getCurrentPlayerActionsLeft()-1);
+                        checkTurn();
+                    }
+                    else {
+                        setShoreUpTiles();
+                        eraseMovementTiles();
+                        mode = SHORE_UP_MODE;
+                    }
+                }
             }
         });
         stage.addActor(shoreUpButton);
@@ -432,6 +495,7 @@ public class GameUI implements Screen {
                                 currentFocusedTileInstance = null;
                             }
                             currentPawnFocused = true;
+                            mode = MOVEMENT_MODE;
                             setMovementTiles(finalI);
                         }
                     }
@@ -510,6 +574,20 @@ public class GameUI implements Screen {
                 drawFloodCard.setObservable(null);
             }
         });
+        shoredUpDialog = new ShoredUpDialog(
+                (GameConfiguration.width - (GameConfiguration.height * 15/16f))*0.5f,
+                (GameConfiguration.height - (GameConfiguration.height * 15/16f))*0.5f,
+                GameConfiguration.height * 15/16f * (750/1600f),
+                GameConfiguration.height * 15/16f,
+                gameState
+        );
+        stage.addActor(shoredUpDialog);
+        shoredUpDialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                shoredUpDialog.setOpen(false, null);
+            }
+        });
 
         floodDeckPile.setEnabled(true);
         treasureDeckPile.setEnabled(true);
@@ -529,6 +607,7 @@ public class GameUI implements Screen {
         //setMovementTiles();
         //Set the First Pawn
         currentNormalPawn = 0;
+        shoreUpButton.setEnabled(canShoreUp());
 
         for (int i = 0; i < pawns.size(); i++) {
             IslandTile a = islandTiles.get(new Pair(gameState.getPlayers().get(gameState.getPlayerOrder().get(i)).getTileX(), gameState.getPlayers().get(gameState.getPlayerOrder().get(i)).getTileY()));
@@ -709,6 +788,11 @@ public class GameUI implements Screen {
         drawFloodCard.setPositiveY((GameConfiguration.height - (GameConfiguration.height * 15/16f * 750f/1600f))*0.5f);
         drawFloodCard.setHeight(GameConfiguration.height * 15/16f * (750/1600f));
         drawFloodCard.setWidth(GameConfiguration.height * 15/16f);
+
+        shoredUpDialog.setPositionX((GameConfiguration.width - (GameConfiguration.height * 15/16f))*0.5f);
+        shoredUpDialog.setPositiveY((GameConfiguration.height - (GameConfiguration.height * 15/16f * 750f/1600f))*0.5f);
+        shoredUpDialog.setHeight(GameConfiguration.height * 15/16f * (750/1600f));
+        shoredUpDialog.setWidth(GameConfiguration.height * 15/16f);
 
         abilityCards.get(0).setPositionX(10f);
         abilityCards.get(0).setPositionY(GameConfiguration.height - (tileHeight * 2 + 10f) - 10f);
@@ -925,6 +1009,7 @@ public class GameUI implements Screen {
 
     public void setMovementTiles(int player) {
         eraseMovementTiles();
+        eraseShoreUpTiles();
 
         Pawn current = pawns.get(player);
         Player tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(player));
@@ -1028,12 +1113,15 @@ public class GameUI implements Screen {
     public void registerMove() {
         Player e = gameState.getPlayers().get(gameState.getPlayerOrder().get(currentNormalPawn));
         gameState.setCurrentPlayerActionsLeft(gameState.getCurrentPlayerActionsLeft() - 1);
+        shoreUpButton.setEnabled(canShoreUp());
         checkTurn();
     }
 
     public void checkTurn() {
         if (gameState.getCurrentPlayerActionsLeft() == 0) {
+            disableShoreUpButton();
             eraseMovementTiles();
+            eraseShoreUpTiles();
             drawTreasureCards(()->drawFloodCards(this::registerTurnChange));
         }
     }
@@ -1048,6 +1136,7 @@ public class GameUI implements Screen {
         pawns.get(currentNormalPawn).setPawnState(Pawn.NORMAL);
         currentNormalPawn = gameState.getTurnNumber();
         gameState.setCurrentPlayerActionsLeft(3);
+        shoreUpButton.setEnabled(canShoreUp());
         turnChangeScreen.setOpen(true);
     }
 
@@ -1108,50 +1197,98 @@ public class GameUI implements Screen {
     public boolean canShoreUp() {
         Player p = gameState.getPlayers().get(gameState.getCurrentPlayerTurn());
         logger.info(currentFocusedTile.toString());
-        if (islandTiles.get(currentFocusedTile) != null && p.getAbility() != Player.EXPLORER && gameState.getIslandTileState()[islandTiles.get(currentFocusedTile).getCoordinates().x][islandTiles.get(currentFocusedTile).getCoordinates().y] == GameState.FLOODED_ISLAND_TILE &&
-                ((p.getTileX() - islandTiles.get(currentFocusedTile).getCoordinates().x == 1 && p.getTileY() - islandTiles.get(currentFocusedTile).getCoordinates().y == 0) ||
-                (p.getTileX() - islandTiles.get(currentFocusedTile).getCoordinates().x == -1 && p.getTileY() - islandTiles.get(currentFocusedTile).getCoordinates().y == 0) ||
-                (p.getTileX() - islandTiles.get(currentFocusedTile).getCoordinates().x == 0 && p.getTileY() - islandTiles.get(currentFocusedTile).getCoordinates().y == 1) ||
-                (p.getTileX() - islandTiles.get(currentFocusedTile).getCoordinates().x == 0 && p.getTileY() - islandTiles.get(currentFocusedTile).getCoordinates().y == -1))) {
+        if (gameState.getIslandTileState()
+                [Math.max(Math.min(p.getTileX(), 5), 0)]
+                [Math.max(Math.min(p.getTileY(), 5), 0)] == GameState.FLOODED_ISLAND_TILE)
             return true;
-        } else if (islandTiles.get(currentFocusedTile) != null && p.getAbility() == Player.EXPLORER && gameState.getIslandTileState()[islandTiles.get(currentFocusedTile).getCoordinates().x][islandTiles.get(currentFocusedTile).getCoordinates().y] == GameState.FLOODED_ISLAND_TILE &&
-                ((p.getTileX() - islandTiles.get(currentFocusedTile).getCoordinates().x == 1 && p.getTileY() - islandTiles.get(currentFocusedTile).getCoordinates().y == 0) ||
-                        (p.getTileX() - islandTiles.get(currentFocusedTile).getCoordinates().x == -1 && p.getTileY() - islandTiles.get(currentFocusedTile).getCoordinates().y == 0) ||
-                        (p.getTileX() - islandTiles.get(currentFocusedTile).getCoordinates().x == 0 && p.getTileY() - islandTiles.get(currentFocusedTile).getCoordinates().y == 1) ||
-                        (p.getTileX() - islandTiles.get(currentFocusedTile).getCoordinates().x == 0 && p.getTileY() - islandTiles.get(currentFocusedTile).getCoordinates().y == -1) ||
-                        (p.getTileX() - islandTiles.get(currentFocusedTile).getCoordinates().x == 1 && p.getTileY() - islandTiles.get(currentFocusedTile).getCoordinates().y == -1) ||
-                        (p.getTileX() - islandTiles.get(currentFocusedTile).getCoordinates().x == 1 && p.getTileY() - islandTiles.get(currentFocusedTile).getCoordinates().y == 1) ||
-                        (p.getTileX() - islandTiles.get(currentFocusedTile).getCoordinates().x == -1 && p.getTileY() - islandTiles.get(currentFocusedTile).getCoordinates().y == -1) ||
-                        (p.getTileX() - islandTiles.get(currentFocusedTile).getCoordinates().x == -1 && p.getTileY() - islandTiles.get(currentFocusedTile).getCoordinates().y == 1))) {
+        else if (gameState.getIslandTileState()
+                [Math.max(Math.min(p.getTileX()+1, 5), 0)]
+                [Math.max(Math.min(p.getTileY(), 5), 0)] == GameState.FLOODED_ISLAND_TILE)
             return true;
-        } else {
-            return false;
+        else if (gameState.getIslandTileState()
+                [Math.max(Math.min(p.getTileX(), 5), 0)]
+                [Math.max(Math.min(p.getTileY()+1, 5), 0)] == GameState.FLOODED_ISLAND_TILE)
+            return true;
+        else if (gameState.getIslandTileState()
+                [Math.max(Math.min(p.getTileX()-1, 5), 0)]
+                [Math.max(Math.min(p.getTileY(), 5), 0)] == GameState.FLOODED_ISLAND_TILE)
+            return true;
+        else if (gameState.getIslandTileState()
+                [Math.max(Math.min(p.getTileX(), 5), 0)]
+                [Math.max(Math.min(p.getTileY()-1, 5), 0)] == GameState.FLOODED_ISLAND_TILE)
+            return true;
+        else if (p.getAbility() == Player.EXPLORER){
+            if (gameState.getIslandTileState()
+                    [Math.max(Math.min(p.getTileX()+1, 5), 0)]
+                    [Math.max(Math.min(p.getTileY()+1, 5), 0)] == GameState.FLOODED_ISLAND_TILE)
+                return true;
+            else if (gameState.getIslandTileState()
+                    [Math.max(Math.min(p.getTileX()+1, 5), 0)]
+                    [Math.max(Math.min(p.getTileY()-1, 5), 0)] == GameState.FLOODED_ISLAND_TILE)
+                return true;
+            else if (gameState.getIslandTileState()
+                    [Math.max(Math.min(p.getTileX()-1, 5), 0)]
+                    [Math.max(Math.min(p.getTileY()+1, 5), 0)] == GameState.FLOODED_ISLAND_TILE)
+                return true;
+            else if (gameState.getIslandTileState()
+                    [Math.max(Math.min(p.getTileX()+1, 5), 0)]
+                    [Math.max(Math.min(p.getTileY()-1, 5), 0)] == GameState.FLOODED_ISLAND_TILE)
+                return true;
         }
+        return false;
     }
 
     public void setShoreUpTiles() {
-    }
-
-    public boolean canShoreUpTile(IslandTile islandTile) {
         Player p = gameState.getPlayers().get(gameState.getCurrentPlayerTurn());
-        if (p.getAbility() != Player.EXPLORER && gameState.getIslandTileState()[islandTile.getCoordinates().x][islandTile.getCoordinates().y] == GameState.FLOODED_ISLAND_TILE &&
-                ((p.getTileX() - islandTile.getCoordinates().x == 1 && p.getTileY() - islandTile.getCoordinates().x == 0) ||
-                (p.getTileX() - islandTile.getCoordinates().x == -1 && p.getTileY() - islandTile.getCoordinates().x == 0) ||
-                (p.getTileX() - islandTile.getCoordinates().x == 0 && p.getTileY() - islandTile.getCoordinates().x == 1) ||
-                (p.getTileX() - islandTile.getCoordinates().x == 0 && p.getTileY() - islandTile.getCoordinates().x == -1))) {
-            return true;
-        } else if (p.getAbility() == Player.EXPLORER && gameState.getIslandTileState()[islandTile.getCoordinates().x][islandTile.getCoordinates().y] == GameState.FLOODED_ISLAND_TILE &&
-            ((p.getTileX() - islandTile.getCoordinates().x == 1 && p.getTileY() - islandTile.getCoordinates().x == 0) ||
-                    (p.getTileX() - islandTile.getCoordinates().x == -1 && p.getTileY() - islandTile.getCoordinates().x == 0) ||
-                    (p.getTileX() - islandTile.getCoordinates().x == 0 && p.getTileY() - islandTile.getCoordinates().x == 1) ||
-                    (p.getTileX() - islandTile.getCoordinates().x == 0 && p.getTileY() - islandTile.getCoordinates().x == -1) ||
-                    (p.getTileX() - islandTile.getCoordinates().x == 1 && p.getTileY() - islandTile.getCoordinates().x == -1) ||
-                    (p.getTileX() - islandTile.getCoordinates().x == 1 && p.getTileY() - islandTile.getCoordinates().x == 1) ||
-                    (p.getTileX() - islandTile.getCoordinates().x == -1 && p.getTileY() - islandTile.getCoordinates().x == -1) ||
-                    (p.getTileX() - islandTile.getCoordinates().x == -1 && p.getTileY() - islandTile.getCoordinates().x == 1))) {
-            return true;
-        } else {
-            return false;
+        logger.info(currentFocusedTile.toString());
+        LinkedList<IslandTile> shoreUpTiles = new LinkedList<>();
+        if (gameState.getIslandTileState()
+                [Math.max(Math.min(p.getTileX(), 5), 0)]
+                [Math.max(Math.min(p.getTileY(), 5), 0)] == GameState.FLOODED_ISLAND_TILE)
+            shoreUpTiles.add(islandTiles.get(new Pair(Math.max(Math.min(p.getTileX(), 5), 0),Math.max(Math.min(p.getTileY(), 5), 0))));
+        if (gameState.getIslandTileState()
+                [Math.max(Math.min(p.getTileX()+1, 5), 0)]
+                [Math.max(Math.min(p.getTileY(), 5), 0)] == GameState.FLOODED_ISLAND_TILE)
+            shoreUpTiles.add(islandTiles.get(new Pair(Math.max(Math.min(p.getTileX()+1, 5), 0),Math.max(Math.min(p.getTileY(), 5), 0))));
+        if (gameState.getIslandTileState()
+                [Math.max(Math.min(p.getTileX(), 5), 0)]
+                [Math.max(Math.min(p.getTileY()+1, 5), 0)] == GameState.FLOODED_ISLAND_TILE)
+            shoreUpTiles.add(islandTiles.get(new Pair(Math.max(Math.min(p.getTileX(), 5), 0),Math.max(Math.min(p.getTileY()+1, 5), 0))));
+        if (gameState.getIslandTileState()
+                [Math.max(Math.min(p.getTileX()-1, 5), 0)]
+                [Math.max(Math.min(p.getTileY(), 5), 0)] == GameState.FLOODED_ISLAND_TILE)
+            shoreUpTiles.add(islandTiles.get(new Pair(Math.max(Math.min(p.getTileX()-1, 5), 0),Math.max(Math.min(p.getTileY(), 5), 0))));
+        if (gameState.getIslandTileState()
+                [Math.max(Math.min(p.getTileX(), 5), 0)]
+                [Math.max(Math.min(p.getTileY()-1, 5), 0)] == GameState.FLOODED_ISLAND_TILE)
+            shoreUpTiles.add(islandTiles.get(new Pair(Math.max(Math.min(p.getTileX(), 5), 0),Math.max(Math.min(p.getTileY()-1, 5), 0))));
+        if (p.getAbility() == Player.EXPLORER) {
+            if (gameState.getIslandTileState()
+                    [Math.max(Math.min(p.getTileX() + 1, 5), 0)]
+                    [Math.max(Math.min(p.getTileY() + 1, 5), 0)] == GameState.FLOODED_ISLAND_TILE)
+                shoreUpTiles.add(islandTiles.get(new Pair(Math.max(Math.min(p.getTileX()+1, 5), 0), Math.max(Math.min(p.getTileY()+1, 5), 0))));
+            if (gameState.getIslandTileState()
+                    [Math.max(Math.min(p.getTileX() + 1, 5), 0)]
+                    [Math.max(Math.min(p.getTileY() - 1, 5), 0)] == GameState.FLOODED_ISLAND_TILE)
+                shoreUpTiles.add(islandTiles.get(new Pair(Math.max(Math.min(p.getTileX()+1, 5), 0), Math.max(Math.min(p.getTileY()-1, 5), 0))));
+            if (gameState.getIslandTileState()
+                    [Math.max(Math.min(p.getTileX() - 1, 5), 0)]
+                    [Math.max(Math.min(p.getTileY() + 1, 5), 0)] == GameState.FLOODED_ISLAND_TILE)
+                shoreUpTiles.add(islandTiles.get(new Pair(Math.max(Math.min(p.getTileX()-1, 5), 0), Math.max(Math.min(p.getTileY()+1, 5), 0))));
+            if (gameState.getIslandTileState()
+                    [Math.max(Math.min(p.getTileX() + 1, 5), 0)]
+                    [Math.max(Math.min(p.getTileY() - 1, 5), 0)] == GameState.FLOODED_ISLAND_TILE)
+                shoreUpTiles.add(islandTiles.get(new Pair(Math.max(Math.min(p.getTileX()-1, 5), 0), Math.max(Math.min(p.getTileY()-1, 5), 0))));
+        }
+        for (IslandTile e: shoreUpTiles) {
+            e.setCanShoreUp(true);
         }
     }
+
+    public void eraseShoreUpTiles() {
+        for (IslandTile e : islandTiles.values()) {
+            e.setCanShoreUp(false);
+        }
+    }
+
 }
