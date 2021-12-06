@@ -166,13 +166,25 @@ public class GameState {
 
     private Pair foolsLandingCoordinates;
 
-    private ArrayList<Pair> fireSpacesLeft;
+    private ArrayList<Pair> fireSpacesLeft = new ArrayList<>();
 
-    private ArrayList<Pair> earthSpacesLeft;
+    private ArrayList<Pair> earthSpacesLeft = new ArrayList<>();
 
-    private ArrayList<Pair> oceanSpacesLeft;
+    private ArrayList<Pair> oceanSpacesLeft = new ArrayList<>();
 
-    private ArrayList<Pair> windSpacesLeft;
+    private ArrayList<Pair> windSpacesLeft = new ArrayList<>();
+
+    private Pair diverStart;
+
+    private Pair engineerStart;
+
+    private Pair explorerStart;
+
+    private Pair messengerStart;
+
+    private Pair navigatorStart;
+
+    private Pair pilotStart;
 
     private TreasureCardUI treasureCardUI;
 
@@ -230,6 +242,7 @@ public class GameState {
                         islandTiles[x][y].equals("Whispering Garden"))) {
                     windSpacesLeft.add(new Pair(x, y));
                     logger.info("wind: x: " + x + " y: " + y);
+                } else if (islandTiles[x][y] != null && islandTiles[x][y].equals("")) {
                 }
             }
         }
