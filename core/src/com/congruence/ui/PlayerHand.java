@@ -19,6 +19,8 @@ import java.util.ArrayList;
 public class PlayerHand extends Group {
     private static final Logger logger = LoggerFactory.getLogger(PlayerHand.class);
 
+    private GameState state;
+
     private float positionX;
 
     private float positionY;
@@ -52,12 +54,14 @@ public class PlayerHand extends Group {
     private ArrayList<TreasureCardUI> treasureCardUIS;
 
     public PlayerHand(
+            GameState state,
             float positionX,
             float positionY,
             float width,
             float height,
             Player player
     ) {
+        this.state = state;
         this.positionX = positionX;
         this.positionY = positionY;
         this.player = player;
@@ -88,56 +92,68 @@ public class PlayerHand extends Group {
             for (TreasureCard e : player.getCardsAtHand()) {
                 if (e.getCardType() == TreasureCard.HELICOPTER_CARD) {
                     treasureCardUIS.add(new TreasureCardUI(
+                            state,
                             cardX,
                             cardY,
                             cardHeight,
                             cardWidth,
-                            HelicopterCardTexture
+                            HelicopterCardTexture,
+                            "Helicopter"
                     ));
                 }
                 else if (e.getCardType() == TreasureCard.SANDBAG_CARD) {
                     treasureCardUIS.add(new TreasureCardUI(
+                            state,
                             cardX,
                             cardY,
                             cardHeight,
                             cardWidth,
-                            SandbagCardTexture
+                            SandbagCardTexture,
+                            "Sandbag"
                     ));
                 }
                 else if (e.getName().equals("Ocean's Chalice")) {
                     treasureCardUIS.add(new TreasureCardUI(
+                            state,
                             cardX,
                             cardY,
                             cardHeight,
                             cardWidth,
-                            OCTexture
+                            OCTexture,
+                            "Ocean's Chalice"
                     ));
                 }
                 else if (e.getName().equals("Statue of the Wind")) {
                     treasureCardUIS.add(new TreasureCardUI(
+                            state,
                             cardX,
                             cardY,
                             cardHeight,
                             cardWidth,
-                            SOTWTexture
+                            SOTWTexture,
+                            "Statue of the Wind"
                     ));
                 }
                 else if (e.getName().equals("Earth Stone")) {
                     treasureCardUIS.add(new TreasureCardUI(
+                            state,
                             cardX,
                             cardY,
                             cardHeight,
                             cardWidth,
-                            ESTexture
+                            ESTexture,
+                            "Earth Stone"
                     ));
                 }
                 else if (e.getName().equals("Crystal of Fire")) {
                     treasureCardUIS.add(new TreasureCardUI(
+                            state,
                             cardX,
                             cardY,
                             cardHeight,
                             cardWidth,
-                            COFTexture
+                            COFTexture,
+                            "Crystal of Fire"
                     ));
                 }
                 cardX += cardWidth/2f;
@@ -159,7 +175,8 @@ public class PlayerHand extends Group {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 //logger.info("touchDown: X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
-                //focused = true;
+                focused = true;
+                logger.info("touchDown: " + focused);
                 return true;
             }
 
@@ -194,16 +211,16 @@ public class PlayerHand extends Group {
                         e.setPositionX(cardX);
                         e.setPositiveY(cardY);
                         cardX += cardWidth/2f;
-                        if (e.equals(selectedCard)) {
-                        }
                     }
                 }
                 TreasureCardUI treasureCardUI = new TreasureCardUI(
+                        state,
                         cardX,
                         cardY,
                         cardHeight,
                         cardWidth,
-                        getTexture(treasureCard)
+                        getTexture(treasureCard),
+                        treasureCard.getName()
                 );
                 treasureCardUIS.add(treasureCardUI);
                 addActor(treasureCardUI);

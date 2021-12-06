@@ -85,6 +85,8 @@ public class GameUI implements Screen {
 
     private Pair previousShoredUpTile;
 
+    private ResultScreen resultScreen;
+
     public GameUI(GameState gameState) {
         this.gameState = gameState;
     }
@@ -366,40 +368,85 @@ public class GameUI implements Screen {
         );
         stage.addActor(floodDeckPile);
         playerHands.add(new PlayerHand(
+                gameState,
                 10f,
                 10f,
                 (tileHeight * 2 + 10f) / 2,
                 tileHeight * 2 + 10f,
                 gameState.getPlayers().get(gameState.getPlayerOrder().get(0))
         ));
+        playerHands.get(0).addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                for (PlayerHand p : playerHands) {
+                    p.setFocused(false);
+                }
+                playerHands.get(0).setFocused(true);
+                setCanGive();
+            }
+        });
         playerHands.add(new PlayerHand(
+                gameState,
                 10f,
                 GameConfiguration.height - (tileHeight * 2 + 10f) - 10f,
                 (tileHeight * 2 + 10f) / 2,
                 tileHeight * 2 + 10f,
                 gameState.getPlayers().get(gameState.getPlayerOrder().get(1))
         ));
+        playerHands.get(1).addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                for (PlayerHand p : playerHands) {
+                    p.setFocused(false);
+                }
+                playerHands.get(1).setFocused(true);
+                setCanGive();
+            }
+        });
         if (gameState.getMaxTurnLoops() >= 3) {
             playerHands.add(new PlayerHand(
+                    gameState,
                     GameConfiguration.width - ((tileHeight * 2 + 10f) / 2) - 10f,
                     GameConfiguration.height - (tileHeight * 2 + 10f) - 10f,
                     (tileHeight * 2 + 10f) / 2,
                     tileHeight * 2 + 10f,
                     gameState.getPlayers().get(gameState.getPlayerOrder().get(2))
             ));
+            playerHands.get(2).addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    for (PlayerHand p : playerHands) {
+                        p.setFocused(false);
+                    }
+                    playerHands.get(2).setFocused(true);
+                    setCanGive();
+                }
+            });
         }
         if (gameState.getMaxTurnLoops() >= 4) {
             playerHands.add(new PlayerHand(
+                    gameState,
                     GameConfiguration.width - ((tileHeight * 2 + 10f) / 2) - 10f,
                     10f,
                     (tileHeight * 2 + 10f) / 2,
                     tileHeight * 2 + 10f,
                     gameState.getPlayers().get(gameState.getPlayerOrder().get(3))
             ));
+            playerHands.get(3).addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    for (PlayerHand p : playerHands) {
+                        p.setFocused(false);
+                    }
+                    playerHands.get(3).setFocused(true);
+                    setCanGive();
+                }
+            });
         }
         for (PlayerHand ph : playerHands) {
             stage.addActor(ph);
         }
+        setCanGive();
         abilityCards.add(new AbilityCard(
                 10f + ((tileHeight * 2 + 10f) / 2),
                 10f,
@@ -588,6 +635,14 @@ public class GameUI implements Screen {
                 shoredUpDialog.setOpen(false, null);
             }
         });
+        resultScreen = new ResultScreen(
+                (GameConfiguration.width - (GameConfiguration.height * 15/16f))*0.5f,
+                (GameConfiguration.height - (GameConfiguration.height * 15/16f))*0.5f,
+                GameConfiguration.height * 15/16f,
+                GameConfiguration.height * 15/16f,
+                gameState
+        );
+        stage.addActor(resultScreen);
 
         floodDeckPile.setEnabled(true);
         treasureDeckPile.setEnabled(true);
@@ -660,6 +715,10 @@ public class GameUI implements Screen {
             GameConfiguration.height = (int)(GameConfiguration.width * 9.0 / 16.0);
         } else {
             GameConfiguration.width = (int)(GameConfiguration.height * 16.0 / 9.0);
+        }
+
+        if (gameState.isGameEnd()) {
+            resultScreen.setOpen(true);
         }
 
         float tileHeight = (GameConfiguration.height - 70f) / 6f;
@@ -1291,4 +1350,14 @@ public class GameUI implements Screen {
         }
     }
 
+    public void setCanGive() {
+        for (PlayerHand p : playerHands) {
+            logger.info("" + playerHands.get(gameState.getTurnNumber()).isFocused());
+        }
+        if (playerHands.get(gameState.getTurnNumber()).isFocused()) {
+            swapButton.setEnabled(true);
+        } else {
+            swapButton.setEnabled(false);
+        }
+    }
 }

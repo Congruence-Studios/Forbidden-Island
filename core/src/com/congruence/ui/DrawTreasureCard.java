@@ -301,6 +301,10 @@ public class DrawTreasureCard extends Group {
             else {
                 super.removeActor(claimButtons.get(0));
                 state.setWaterHeight(state.getWaterHeight()+1);
+                if (state.getWaterHeight() == 10) {
+                    state.setGameEnd(true);
+                    state.setGameResult(GameState.WATER_METER_FULL);
+                }
             }
             if (state.getCurrentDrawnTreasureCards().get(1).getCardType() != TreasureCard.WATERS_RISE_CARD) {
                 super.addActor(claimButtons.get(1));
@@ -308,6 +312,10 @@ public class DrawTreasureCard extends Group {
             else {
                 super.removeActor(claimButtons.get(1));
                 state.setWaterHeight(state.getWaterHeight()+1);
+                if (state.getWaterHeight() == 10) {
+                    state.setGameEnd(true);
+                    state.setGameResult(GameState.WATER_METER_FULL);
+                }
             }
 
             claimButtons.get(0).setClaimed(false);

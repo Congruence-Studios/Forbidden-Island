@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.congruence.ForbiddenIsland;
+import com.congruence.state.GameState;
 import com.congruence.state.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,8 @@ import org.slf4j.LoggerFactory;
 public class TreasureCardUI extends Actor {
 
     private Logger logger = LoggerFactory.getLogger(TreasureCardUI.class);
+
+    private GameState state;
 
     private boolean hover;
 
@@ -26,17 +29,22 @@ public class TreasureCardUI extends Actor {
 
     private float width;
 
+    private String cardName;
+
     private Texture CardTexture;
 
     private Texture HoverTexture;
 
     public TreasureCardUI(
+            GameState state,
             float positionX,
             float positionY,
             float height,
             float width,
-            Texture CardTexture
+            Texture CardTexture,
+            String cardName
     ) {
+        this.state = state;
         this.positionX = positionX;
         this.positiveY = positionY;
         this.height = height;
@@ -56,14 +64,38 @@ public class TreasureCardUI extends Actor {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                focused = true;
-                selectNewCard();
+                PlayerHand.setSelectedCard(TreasureCardUI.this);
+                if (cardName.equals("Helicopter")) {
+                    boolean isWin = true;
+                    boolean[] totalTreasures = new boolean[4];
+                    for (Player p : state.getPlayers().values()) {
+                        if (p.getTileX() != state.getFoolsLandingCoordinates().x || p.getTileY() != state.getFoolsLandingCoordinates().y) {
+                            isWin = false;
+                            break;
+                        }
+                        for (String treasure : p.getTreasuresAtHand()) {
+                            if (treasure.equals("The Crystal of Fire")) {
+                                totalTreasures[GameState.CRYSTAL_OF_FIRE] = true;
+                            } else if (treasure.equals("The Earth Stone")) {
+                                totalTreasures[GameState.EARTH_STONE] = true;
+                            } else if (treasure.equals("The Ocean's Chalice")) {
+                                totalTreasures[GameState.OCEANS_CHALICE] = true;
+                            } else if (treasure.equals("The Statue of the Wind")) {
+                                totalTreasures[GameState.STATUE_OF_THE_WIND] = true;
+                            }
+                        }
+                    }
+                    if (isWin && totalTreasures[0] && totalTreasures[1] && totalTreasures[2] && totalTreasures[3]) {
+                        state.setGameEnd(true);
+                        state.setGameResult(GameState.WIN);
+                    }
+                }
                 return true;
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                focused = false;
+
             }
 
             @Override
@@ -85,7 +117,7 @@ public class TreasureCardUI extends Actor {
         batch.begin();
 
         batch.draw(CardTexture, positionX, positiveY, width, height);
-        if (focused) {
+        if (focused || PlayerHand.getSelectedCard() == this) {
             batch.draw(HoverTexture, positionX, positiveY, width, height);
         } else if (hover) {
             batch.draw(HoverTexture, positionX, positiveY, width, height);
@@ -135,5 +167,13 @@ public class TreasureCardUI extends Actor {
     public void setWidth(float width) {
         this.width = width;
         super.setBounds(positionX, positiveY, width, height);
+    }
+
+    public boolean isFocused() {
+        return focused;
+    }
+
+    public void setFocused(boolean focused) {
+        this.focused = focused;
     }
 }

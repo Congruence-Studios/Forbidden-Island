@@ -1,8 +1,15 @@
 package com.congruence.state;
 
+import com.congruence.ui.Game;
+import com.congruence.ui.Pair;
+import com.congruence.ui.PlayerHand;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.*;
 
 public class GameState {
+    private static final Logger logger = LoggerFactory.getLogger(GameState.class);
 
     public static final int NOVICE = 0;
     public static final int NORMAL = 1;
@@ -157,6 +164,8 @@ public class GameState {
      */
     private int gameResult;
 
+    private Pair foolsLandingCoordinates;
+
     public GameState(
             int difficulty,
             Map<String, Player> players,
@@ -189,6 +198,16 @@ public class GameState {
         this.drawingIslandTileCards = drawingIslandTileCards;
         this.currentDrawnIslandTileCards = currentDrawnIslandTileCards;
         this.amountOfCurrentDrawnIslandTileCards = amountOfCurrentDrawnIslandTileCards;
+        for (int x = 0; x < islandTiles.length; x++) {
+            for (int y = 0; y < islandTiles[x].length; y++) {
+                logger.info("x: " + x + " y: " + y);
+                if (islandTiles[x][y] != null && islandTiles[x][y].equals("Fools Landing")) {
+                    foolsLandingCoordinates = new Pair(x, y);
+                    logger.info("found: x: " + x + " y: " + y);
+                    break;
+                }
+            }
+        }
     }
 
     public int getDifficulty() {
@@ -390,6 +409,14 @@ public class GameState {
 
     public void setGameResult(int gameResult) {
         this.gameResult = gameResult;
+    }
+
+    public Pair getFoolsLandingCoordinates() {
+        return foolsLandingCoordinates;
+    }
+
+    public void setFoolsLandingCoordinates(Pair foolsLandingCoordinates) {
+        this.foolsLandingCoordinates = foolsLandingCoordinates;
     }
 
     @Override
