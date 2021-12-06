@@ -226,6 +226,12 @@ public class GameState {
                 if (islandTiles[x][y] != null && islandTiles[x][y].equals("Fools Landing")) {
                     foolsLandingCoordinates = new Pair(x, y);
                     logger.info("found: x: " + x + " y: " + y);
+                    for (Player p : players.values()) {
+                        if (p.getAbility() == Player.PILOT) {
+                            p.setTileX(x);
+                            p.setTileY(y);
+                        }
+                    }
                 } else if (islandTiles[x][y] != null && (islandTiles[x][y].equals("Cave of Embers") ||
                     islandTiles[x][y].equals("Cave of Shadows"))) {
                     fireSpacesLeft.add(new Pair(x, y));
@@ -242,7 +248,46 @@ public class GameState {
                         islandTiles[x][y].equals("Whispering Garden"))) {
                     windSpacesLeft.add(new Pair(x, y));
                     logger.info("wind: x: " + x + " y: " + y);
-                } else if (islandTiles[x][y] != null && islandTiles[x][y].equals("")) {
+                } else if (islandTiles[x][y] != null && islandTiles[x][y].equals("Iron Gate")) {
+                    diverStart = new Pair(x, y);
+                    for (Player p : players.values()) {
+                        if (p.getAbility() == Player.DIVER) {
+                            p.setTileX(x);
+                            p.setTileY(y);
+                        }
+                    }
+                } else if (islandTiles[x][y] != null && islandTiles[x][y].equals("Bronze Gate")) {
+                    engineerStart = new Pair(x, y);
+                    for (Player p : players.values()) {
+                        if (p.getAbility() == Player.ENGINEER) {
+                            p.setTileX(x);
+                            p.setTileY(y);
+                        }
+                    }
+                } else if (islandTiles[x][y] != null && islandTiles[x][y].equals("Copper Gate")) {
+                    explorerStart = new Pair(x, y);
+                    for (Player p : players.values()) {
+                        if (p.getAbility() == Player.EXPLORER) {
+                            p.setTileX(x);
+                            p.setTileY(y);
+                        }
+                    }
+                } else if (islandTiles[x][y] != null && islandTiles[x][y].equals("Silver Gate")) {
+                    messengerStart = new Pair(x, y);
+                    for (Player p : players.values()) {
+                        if (p.getAbility() == Player.MESSENGER) {
+                            p.setTileX(x);
+                            p.setTileY(y);
+                        }
+                    }
+                } else if (islandTiles[x][y] != null && islandTiles[x][y].equals("Gold Gate")) {
+                    navigatorStart = new Pair(x, y);
+                    for (Player p : players.values()) {
+                        if (p.getAbility() == Player.NAVIGATOR) {
+                            p.setTileX(x);
+                            p.setTileY(y);
+                        }
+                    }
                 }
             }
         }
