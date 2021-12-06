@@ -1363,10 +1363,9 @@ public class GameUI implements Screen {
             logger.info("" + playerHands.get(gameState.getTurnNumber()).isFocused());
         }
         Player currentPlayer = gameState.getPlayers().get(gameState.getCurrentPlayerTurn());
-        TreeSet<Player> players = (TreeSet<Player>) gameState.getPlayers().values();
         ArrayList<Player> availablePlayers = new ArrayList<>();
         if (playerHands.get(gameState.getTurnNumber()).isFocused()) {
-            for (Player p : players) {
+            for (Player p : gameState.getPlayers().values()) {
                 if (currentPlayer.getTileX() == p.getTileX() && currentPlayer.getTileY() == p.getTileY()) {
                     availablePlayers.add(p);
                 }
