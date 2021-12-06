@@ -172,6 +172,7 @@ public class GiveCardScreen extends Group {
                         TreasureCard treasureCard = currentPlayer.getCardsAtHand().get(state.getTreasureCardUI().getPosition());
                         currentPlayer.removeTreasureFromHand(state.getTreasureCardUI().getPosition());
                         e.addTreasureToHand(treasureCard);
+                        state.setTreasureCardUI(null);
                         observable.onFinished();
                     }
                 });
