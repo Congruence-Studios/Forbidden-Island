@@ -75,11 +75,11 @@ public class GameUI implements Screen {
 
     private ShoredUpDialog shoredUpDialog;
 
-    public static int MOVEMENT_MODE;
+    public static int MOVEMENT_MODE = 1;
 
-    public static int SHORE_UP_MODE;
+    public static int SHORE_UP_MODE = 2;
 
-    public static int ISLAND_SINK_MOVEMENT;
+    public static int ISLAND_SINK_MOVEMENT_MODE = 3;
 
     private int mode;
 
@@ -88,6 +88,14 @@ public class GameUI implements Screen {
     private ResultScreen resultScreen;
 
     private GiveCardScreen giveCardScreen;
+
+    private Player currentSuddenDeathPlayer;
+
+    private int currentSuddenDeathPlayerPawn;
+
+    private Queue<Integer> suddenDeathPlayerQueue;
+
+    private Observable suddenDeathObservable;
 
     public GameUI(GameState gameState) {
         this.gameState = gameState;
@@ -178,6 +186,60 @@ public class GameUI implements Screen {
                                 setMovementTiles(currentNormalPawn);
                                 registerMove();
                                 shoreUpButton.setEnabled(canShoreUp());
+                            }
+                            else if (islandTile.isCanSuddenDeathMove() && mode == ISLAND_SINK_MOVEMENT_MODE) {
+
+                                IslandTile a = islandTiles.get(new Pair(currentSuddenDeathPlayer.getTileX(), currentSuddenDeathPlayer.getTileY()));
+                                if (currentSuddenDeathPlayer.getTilePosition() == 0) {
+                                    a.getTilePositionOpen()[0] = true;
+                                }
+                                else if (currentSuddenDeathPlayer.getTilePosition() == 1) {
+                                    a.getTilePositionOpen()[1] = true;
+                                }
+                                else if (currentSuddenDeathPlayer.getTilePosition() == 2) {
+                                    a.getTilePositionOpen()[2] = true;
+                                }
+                                else {
+                                    a.getTilePositionOpen()[3] = true;
+                                }
+                                currentSuddenDeathPlayer.setTileX(islandTile.getCoordinates().x);
+                                currentSuddenDeathPlayer.setTileY(islandTile.getCoordinates().y);
+                                if (currentSuddenDeathPlayer.getAbility() == Player.PILOT && !((Math.abs(islandTile.getCoordinates().x - currentSuddenDeathPlayer.getTileX()) <= 1) &&
+                                        islandTile.getCoordinates().y - y == 0 || (Math.abs(islandTile.getCoordinates().y - currentSuddenDeathPlayer.getTileY()) <= 1) &&
+                                        islandTile.getCoordinates().x - x == 0)) {
+                                    currentSuddenDeathPlayer.setCanUseSpecialAction(false);
+                                }
+                                logger.info(currentNormalPawn + "");
+                                pawns.get(currentSuddenDeathPlayerPawn).setX(findPawnPositionX(currentSuddenDeathPlayerPawn));
+                                pawns.get(currentSuddenDeathPlayerPawn).setY(findPawnPositionY(currentSuddenDeathPlayerPawn));
+                                IslandTile e = islandTiles.get(new Pair(currentSuddenDeathPlayer.getTileX(), currentSuddenDeathPlayer.getTileY()));
+                                if (e.getTilePositionOpen()[0]) {
+                                    e.getTilePositionOpen()[0] = false;
+                                    currentSuddenDeathPlayer.setTilePosition(0);
+                                }
+                                else if (e.getTilePositionOpen()[1]) {
+                                    e.getTilePositionOpen()[1] = false;
+                                    currentSuddenDeathPlayer.setTilePosition(1);
+                                }
+                                else if (e.getTilePositionOpen()[2]) {
+                                    e.getTilePositionOpen()[2] = false;
+                                    currentSuddenDeathPlayer.setTilePosition(2);
+                                }
+                                else {
+                                    e.getTilePositionOpen()[3] = false;
+                                    currentSuddenDeathPlayer.setTilePosition(3);
+                                }
+                                if (!suddenDeathPlayerQueue.isEmpty()) {
+                                    setSuddenDeathTiles(suddenDeathPlayerQueue.peek());
+                                    currentSuddenDeathPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(suddenDeathPlayerQueue.peek()));
+                                    setSuddenDeathTiles(suddenDeathPlayerQueue.peek());
+                                    suddenDeathPlayerQueue.poll();
+                                }
+                                else {
+                                    eraseSuddenDeathTiles();
+                                    suddenDeathObservable.onFinished();
+                                }
+
                             }
                             else if (islandTile.isCanShoreUp() && mode == SHORE_UP_MODE) {
                                 if (gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber())).getAbility() == Player.EXPLORER) {
@@ -748,10 +810,6 @@ public class GameUI implements Screen {
             GameConfiguration.width = (int)(GameConfiguration.height * 16.0 / 9.0);
         }
 
-        if (gameState.isGameEnd()) {
-            resultScreen.setOpen(true);
-        }
-
         float tileHeight = (GameConfiguration.height - 70f) / 6f;
         float tileWidth = (GameConfiguration.height - 70f) / 6f;
         float positionX = (GameConfiguration.width - 10f) - ((GameConfiguration.width) - (GameConfiguration.height)) / 2f;
@@ -1213,11 +1271,14 @@ public class GameUI implements Screen {
     }
 
     public void checkTurn() {
+        if (gameState.isGameEnd()) {
+            resultScreen.setOpen(true);
+        }
         if (gameState.getCurrentPlayerActionsLeft() == 0) {
             disableShoreUpButton();
             eraseMovementTiles();
             eraseShoreUpTiles();
-            drawTreasureCards(()->drawFloodCards(this::registerTurnChange));
+            drawTreasureCards(()->drawFloodCards(()->setSuddenDeathMode(this::registerTurnChange)));
         }
     }
 
@@ -1233,6 +1294,7 @@ public class GameUI implements Screen {
         gameState.setCurrentPlayerActionsLeft(3);
         shoreUpButton.setEnabled(canShoreUp());
         turnChangeScreen.setOpen(true);
+        mode = MOVEMENT_MODE;
     }
 
     public void drawTreasureCards(Observable observable) {
@@ -1398,6 +1460,7 @@ public class GameUI implements Screen {
                     availablePlayers.add(p);
                 }
             }
+            availablePlayers.remove(currentPlayer);
             if (!availablePlayers.isEmpty()) {
                 swapButton.setEnabled(true);
             } else {
@@ -1405,6 +1468,132 @@ public class GameUI implements Screen {
             }
         } else {
             swapButton.setEnabled(false);
+        }
+    }
+
+    public void setSuddenDeathMode(Observable observable) {
+        mode = ISLAND_SINK_MOVEMENT_MODE;
+        suddenDeathObservable = observable;
+        suddenDeathPlayerQueue = new LinkedList<>();
+        pawns.get(currentNormalPawn).setPawnState(Pawn.NORMAL);
+        for (int i = 0; i < gameState.getPlayers().size(); i++) {
+            Player e = gameState.getPlayers().get(gameState.getPlayerOrder().get(i));
+            if (gameState.getIslandTileState()[e.getTileX()][e.getTileY()] == GameState.SUNKEN_ISLAND_TILE) {
+                suddenDeathPlayerQueue.add(i);
+            }
+        }
+        if (!suddenDeathPlayerQueue.isEmpty()) {
+            setSuddenDeathTiles(suddenDeathPlayerQueue.peek());
+            currentSuddenDeathPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(suddenDeathPlayerQueue.peek()));
+            setSuddenDeathTiles(suddenDeathPlayerQueue.peek());
+            suddenDeathPlayerQueue.poll();
+        }
+        else {
+            eraseSuddenDeathTiles();
+            observable.onFinished();
+        }
+    }
+
+    public void setSuddenDeathTiles(int player) {
+        eraseMovementTiles();
+        eraseShoreUpTiles();
+
+        Pawn current = pawns.get(player);
+        Player tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(player));
+        ArrayList<Pair> movableTiles = new ArrayList<>();
+        movableTiles.add(new Pair(tempPlayer.getTileX()+1, tempPlayer.getTileY()));
+        movableTiles.add(new Pair(tempPlayer.getTileX()-1, tempPlayer.getTileY()));
+        movableTiles.add(new Pair(tempPlayer.getTileX(), tempPlayer.getTileY()+1));
+        movableTiles.add(new Pair(tempPlayer.getTileX(), tempPlayer.getTileY()-1));
+        if (tempPlayer.getAbility() == Player.PILOT && tempPlayer.isCanUseSpecialAction()) {
+            movableTiles.addAll(islandTiles.keySet());
+        }
+        else if (tempPlayer.getAbility() == Player.DIVER) {
+            TreeSet<Pair> currentTiles = new TreeSet<>();
+            TreeSet<Pair> nextTiles = new TreeSet<>();
+            currentTiles.add(new Pair(tempPlayer.getTileX()+1, tempPlayer.getTileY()));
+            currentTiles.add(new Pair(tempPlayer.getTileX()-1, tempPlayer.getTileY()));
+            currentTiles.add(new Pair(tempPlayer.getTileX(), tempPlayer.getTileY()+1));
+            currentTiles.add(new Pair(tempPlayer.getTileX(), tempPlayer.getTileY()-1));
+            boolean changesMade = false;
+            while (!currentTiles.isEmpty()) {
+                for (Pair i : currentTiles) {
+                    if (islandTiles.get(i) != null && gameState.getIslandTileState()[i.x][i.y] == GameState.NORMAL_ISLAND_TILE) {
+                        nextTiles.add(i);
+                    } else if (islandTiles.get(i) != null && (gameState.getIslandTileState()[i.x][i.y] == GameState.FLOODED_ISLAND_TILE ||
+                            gameState.getIslandTileState()[i.x][i.y] == GameState.SUNKEN_ISLAND_TILE)) {
+                        if (islandTiles.get(new Pair(i.x+1, i.y)) != null &&
+                                islandTiles.get(new Pair(i.x+1, i.y)).getTileState() != GameState.INVALID) {
+                            if (nextTiles.add(new Pair(i.x+1, i.y))) {
+                                changesMade = true;
+                            }
+                        }
+                        if (islandTiles.get(new Pair(i.x-1, i.y)) != null &&
+                                islandTiles.get(new Pair(i.x-1, i.y)).getTileState() != GameState.INVALID) {
+                            if (nextTiles.add(new Pair(i.x-1, i.y))) {
+                                changesMade = true;
+                            }
+                        }
+                        if (islandTiles.get(new Pair(i.x, i.y+1)) != null &&
+                                islandTiles.get(new Pair(i.x, i.y+1)).getTileState() != GameState.INVALID) {
+                            if (nextTiles.add(new Pair(i.x, i.y+1))) {
+                                changesMade = true;
+                            }
+                        }
+                        if (islandTiles.get(new Pair(i.x, i.y-1)) != null &&
+                                islandTiles.get(new Pair(i.x, i.y-1)).getTileState() != GameState.INVALID) {
+                            if (nextTiles.add(new Pair(i.x, i.y-1))) {
+                                changesMade = true;
+                            }
+                        }
+                        nextTiles.add(i);
+                    }
+                }
+                if (changesMade) {
+                    currentTiles = new TreeSet<>(nextTiles);
+                    changesMade = false;
+                } else {
+                    break;
+                }
+            }
+            nextTiles.remove(new Pair(tempPlayer.getTileX(), tempPlayer.getTileY()));
+            TreeSet<Pair> temp = new TreeSet<>();
+            temp.addAll(nextTiles);
+            temp.addAll(movableTiles);
+            movableTiles = new ArrayList<>(temp);
+        }
+        else if (tempPlayer.getAbility() == Player.EXPLORER) {
+            movableTiles.add(new Pair(tempPlayer.getTileX()+1, tempPlayer.getTileY()+1));
+            movableTiles.add(new Pair(tempPlayer.getTileX()+1, tempPlayer.getTileY()-1));
+            movableTiles.add(new Pair(tempPlayer.getTileX()-1, tempPlayer.getTileY()+1));
+            movableTiles.add(new Pair(tempPlayer.getTileX()-1, tempPlayer.getTileY()-1));
+        }
+        logger.info(movableTiles.toString());
+
+        current.setPawnState(Pawn.MOVE);
+
+        for (int i = 0; i < movableTiles.size(); i++) {
+            Pair e = movableTiles.get(i);
+            e.x = Math.max(e.x, 0);
+            e.x = Math.min(e.x, 5);
+            e.y = Math.max(e.y, 0);
+            e.y = Math.min(e.y, 5);
+            if (gameState.getIslandTileState()[e.x][e.y] == GameState.SUNKEN_ISLAND_TILE) {
+                movableTiles.remove(i);
+                i--;
+            }
+        }
+
+        for (Pair e : movableTiles) {
+            if (islandTiles.containsKey(e)) {
+                islandTiles.get(e).setCanSuddenDeathMove(true);
+            }
+        }
+    }
+
+    public void eraseSuddenDeathTiles() {
+        for (IslandTile e: islandTiles.values()) {
+            e.setCanSuddenDeathMove(false);
         }
     }
 }
