@@ -30,7 +30,7 @@ task distZip(type: Zip) {
         from configurations.runtimeClasspath
     }
 
-    from('bin')
+    from('scripts')
 }
 
 eclipse.project.name = appName + "-desktop"
