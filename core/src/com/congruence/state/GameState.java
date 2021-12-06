@@ -1,6 +1,5 @@
 package com.congruence.state;
 
-import com.congruence.ui.Game;
 import com.congruence.ui.Pair;
 import com.congruence.ui.PlayerHand;
 import com.congruence.ui.TreasureCardUI;
@@ -167,6 +166,14 @@ public class GameState {
 
     private Pair foolsLandingCoordinates;
 
+    private ArrayList<Pair> fireSpacesLeft;
+
+    private ArrayList<Pair> earthSpacesLeft;
+
+    private ArrayList<Pair> oceanSpacesLeft;
+
+    private ArrayList<Pair> windSpacesLeft;
+
     private TreasureCardUI treasureCardUI;
 
     public GameState(
@@ -207,7 +214,22 @@ public class GameState {
                 if (islandTiles[x][y] != null && islandTiles[x][y].equals("Fools Landing")) {
                     foolsLandingCoordinates = new Pair(x, y);
                     logger.info("found: x: " + x + " y: " + y);
-                    break;
+                } else if (islandTiles[x][y] != null && (islandTiles[x][y].equals("Cave of Embers") ||
+                    islandTiles[x][y].equals("Cave of Shadows"))) {
+                    fireSpacesLeft.add(new Pair(x, y));
+                    logger.info("fire: x: " + x + " y: " + y);
+                } else if (islandTiles[x][y] != null && (islandTiles[x][y].equals("Temple of the Moon") ||
+                        islandTiles[x][y].equals("Temple of the Sun"))) {
+                    earthSpacesLeft.add(new Pair(x, y));
+                    logger.info("earth: x: " + x + " y: " + y);
+                } else if (islandTiles[x][y] != null && (islandTiles[x][y].equals("Coral Palace") ||
+                        islandTiles[x][y].equals("Tidal Palace"))) {
+                    oceanSpacesLeft.add(new Pair(x, y));
+                    logger.info("ocean: x: " + x + " y: " + y);
+                } else if (islandTiles[x][y] != null && (islandTiles[x][y].equals("Howling Garden") ||
+                        islandTiles[x][y].equals("Whispering Garden"))) {
+                    windSpacesLeft.add(new Pair(x, y));
+                    logger.info("wind: x: " + x + " y: " + y);
                 }
             }
         }
