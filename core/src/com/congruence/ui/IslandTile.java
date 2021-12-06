@@ -41,6 +41,8 @@ public class IslandTile extends Actor {
 
     private Texture islandTileShoreUpImage = ForbiddenIsland.assetManager.get("island-tiles/Tile_Special_Movement_Icon@2x.png", Texture.class);
 
+    private Texture islandTileDeathImage = ForbiddenIsland.assetManager.get("island-tiles/Tile_Death_Icon@2x.png", Texture.class);
+
     private boolean focused;
 
     private boolean hovered;
@@ -50,6 +52,8 @@ public class IslandTile extends Actor {
     private boolean canShoreUp;
 
     private boolean canMoveSpecialAction;
+
+    private boolean canSuddenDeathMove;
 
     private final boolean[] tilePositionOpen = new boolean[]{true, true, true, true};
 
@@ -82,6 +86,7 @@ public class IslandTile extends Actor {
         islandTileFocusedImage.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
         islandTileSpecialMovementImage.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
         islandTileShoreUpImage.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        islandTileDeathImage.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
 
         super.setBounds(this.positionX, this.positionY, this.islandWidth, this.islandHeight);
     }
@@ -105,6 +110,9 @@ public class IslandTile extends Actor {
         }
         else if (focused) {
             batch.draw(islandTileFocusedImage, positionX-2, positionY+3, islandWidth, islandHeight);
+        }
+        else if (canSuddenDeathMove) {
+            batch.draw(islandTileDeathImage, positionX-2, positionY+3, islandWidth, islandHeight);
         }
         else if (canShoreUp) {
             batch.draw(islandTileShoreUpImage, positionX-2, positionY+3, islandWidth, islandHeight);
@@ -227,5 +235,13 @@ public class IslandTile extends Actor {
 
     public void setCanShoreUp(boolean canShoreUp) {
         this.canShoreUp = canShoreUp;
+    }
+
+    public boolean isCanSuddenDeathMove() {
+        return canSuddenDeathMove;
+    }
+
+    public void setCanSuddenDeathMove(boolean canSuddenDeathMove) {
+        this.canSuddenDeathMove = canSuddenDeathMove;
     }
 }
