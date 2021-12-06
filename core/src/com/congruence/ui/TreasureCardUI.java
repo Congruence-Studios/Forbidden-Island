@@ -36,6 +36,8 @@ public class TreasureCardUI extends Actor {
 
     private Texture HoverTexture;
 
+    private Texture PressedTexture;
+
     private Texture DeleteModeTexture;
 
     private boolean discardMode;
@@ -62,15 +64,16 @@ public class TreasureCardUI extends Actor {
 
         HoverTexture = ForbiddenIsland.assetManager.get("treasure-deck/Treasure Card Hover.png", Texture.class);
         DeleteModeTexture = ForbiddenIsland.assetManager.get("treasure-deck/Treasure Card Delete.png", Texture.class);
+        PressedTexture = ForbiddenIsland.assetManager.get("treasure-deck/Treasure Card Pressed.png", Texture.class);
         HoverTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
         DeleteModeTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        PressedTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
 
         super.setBounds(positionX, positiveY, width, height);
 
         super.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //focused = !focused;
                 PlayerHand.setSelectedCard(TreasureCardUI.this);
                 if (cardName.equals("Helicopter")) {
                     boolean isWin = true;
@@ -106,7 +109,7 @@ public class TreasureCardUI extends Actor {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-
+                focused = !focused;
             }
 
             @Override
@@ -136,8 +139,8 @@ public class TreasureCardUI extends Actor {
         batch.begin();
 
         batch.draw(CardTexture, positionX, positiveY, width, height);
-        if (focused || PlayerHand.getSelectedCard() == this) {
-            batch.draw(HoverTexture, positionX, positiveY, width, height);
+        if (focused) {
+            batch.draw(PressedTexture, positionX, positiveY, width, height);
         } else if (hover) {
             batch.draw(HoverTexture, positionX, positiveY, width, height);
         }

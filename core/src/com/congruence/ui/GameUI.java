@@ -87,6 +87,8 @@ public class GameUI implements Screen {
 
     private ResultScreen resultScreen;
 
+    private GiveCardScreen giveCardScreen;
+
     public GameUI(GameState gameState) {
         this.gameState = gameState;
     }
@@ -193,6 +195,7 @@ public class GameUI implements Screen {
                                         shoreUpButton.setEnabled(canShoreUp());
                                         gameState.setCurrentPlayerActionsLeft(gameState.getCurrentPlayerActionsLeft()-1);
                                         checkTurn();
+                                        previousShoredUpTile = null;
                                     }
                                     else {
                                         previousShoredUpTile = new Pair(islandTile.getCoordinates().x, islandTile.getCoordinates().y);
@@ -303,6 +306,7 @@ public class GameUI implements Screen {
                         shoreUpButton.setEnabled(canShoreUp());
                         gameState.setCurrentPlayerActionsLeft(gameState.getCurrentPlayerActionsLeft()-1);
                         checkTurn();
+                        previousShoredUpTile = null;
                     }
                     else {
                         setShoreUpTiles();
@@ -331,7 +335,7 @@ public class GameUI implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (swapButton.isEnabled()) {
-
+                    giveCardScreen.setOpen(true, ()->{});
                 }
             }
         });
@@ -643,6 +647,20 @@ public class GameUI implements Screen {
                 shoredUpDialog.setOpen(false, null);
             }
         });
+        giveCardScreen = new GiveCardScreen(
+                (GameConfiguration.width - (GameConfiguration.height * 15/16f))*0.5f,
+                (GameConfiguration.height - (GameConfiguration.height * 15/16f))*0.5f,
+                GameConfiguration.height * 15/16f * (750/1600f),
+                GameConfiguration.height * 15/16f,
+                gameState
+        );
+        stage.addActor(giveCardScreen);
+        giveCardScreen.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                giveCardScreen.setOpen(false, null);
+            }
+        });
         resultScreen = new ResultScreen(
                 (GameConfiguration.width - (GameConfiguration.height * 15/16f))*0.5f,
                 (GameConfiguration.height - (GameConfiguration.height * 15/16f))*0.5f,
@@ -860,6 +878,11 @@ public class GameUI implements Screen {
         shoredUpDialog.setPositiveY((GameConfiguration.height - (GameConfiguration.height * 15/16f * 750f/1600f))*0.5f);
         shoredUpDialog.setHeight(GameConfiguration.height * 15/16f * (750/1600f));
         shoredUpDialog.setWidth(GameConfiguration.height * 15/16f);
+
+        giveCardScreen.setPositionX((GameConfiguration.width - (GameConfiguration.height * 15/16f))*0.5f);
+        giveCardScreen.setPositiveY((GameConfiguration.height - (GameConfiguration.height * 15/16f * 750f/1600f))*0.5f);
+        giveCardScreen.setHeight(GameConfiguration.height * 15/16f * (750/1600f));
+        giveCardScreen.setWidth(GameConfiguration.height * 15/16f);
 
         abilityCards.get(0).setPositionX(10f);
         abilityCards.get(0).setPositionY(GameConfiguration.height - (tileHeight * 2 + 10f) - 10f);

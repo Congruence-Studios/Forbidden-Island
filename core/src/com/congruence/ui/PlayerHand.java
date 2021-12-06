@@ -257,6 +257,7 @@ public class PlayerHand extends Group {
 
             @Override
             public void onRemove(TreasureCard removedCard, int index) {
+                state.getTreasureCardDiscardDeck().add(removedCard);
                 float cardX = 0;
                 float cardY = 0;
                 float cardHeight = PlayerHand.this.height;
