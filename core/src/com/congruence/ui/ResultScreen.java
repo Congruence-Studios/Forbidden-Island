@@ -73,8 +73,9 @@ public class ResultScreen extends Group {
         batch.end();
         batch.begin();
 
-        if (isOpen) {
+        if (state.isGameEnd()) {
             batch.draw(background, positionX, positiveY, width, height);
+            resultLayout = new GlyphLayout(titleFont, "");
             if (state.getGameResult() == GameState.WIN) {
                 resultLayout.setText(titleFont, "YOU WIN");
                 float resultFontX = 0 + (GameConfiguration.width - resultLayout.width) / 2;

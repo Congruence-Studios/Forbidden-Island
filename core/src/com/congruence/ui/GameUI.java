@@ -202,14 +202,10 @@ public class GameUI implements Screen {
                                 else {
                                     a.getTilePositionOpen()[3] = true;
                                 }
+                                logger.info(currentSuddenDeathPlayerPawn + "");
                                 currentSuddenDeathPlayer.setTileX(islandTile.getCoordinates().x);
                                 currentSuddenDeathPlayer.setTileY(islandTile.getCoordinates().y);
-                                if (currentSuddenDeathPlayer.getAbility() == Player.PILOT && !((Math.abs(islandTile.getCoordinates().x - currentSuddenDeathPlayer.getTileX()) <= 1) &&
-                                        islandTile.getCoordinates().y - y == 0 || (Math.abs(islandTile.getCoordinates().y - currentSuddenDeathPlayer.getTileY()) <= 1) &&
-                                        islandTile.getCoordinates().x - x == 0)) {
-                                    currentSuddenDeathPlayer.setCanUseSpecialAction(false);
-                                }
-                                logger.info(currentNormalPawn + "");
+                                logger.info(currentSuddenDeathPlayerPawn + "");
                                 pawns.get(currentSuddenDeathPlayerPawn).setX(findPawnPositionX(currentSuddenDeathPlayerPawn));
                                 pawns.get(currentSuddenDeathPlayerPawn).setY(findPawnPositionY(currentSuddenDeathPlayerPawn));
                                 IslandTile e = islandTiles.get(new Pair(currentSuddenDeathPlayer.getTileX(), currentSuddenDeathPlayer.getTileY()));
@@ -1568,7 +1564,7 @@ public class GameUI implements Screen {
             movableTiles.add(new Pair(tempPlayer.getTileX()-1, tempPlayer.getTileY()+1));
             movableTiles.add(new Pair(tempPlayer.getTileX()-1, tempPlayer.getTileY()-1));
         }
-        logger.info(movableTiles.toString());
+        logger.info("sudden death: " + movableTiles.toString());
 
         current.setPawnState(Pawn.MOVE);
 
@@ -1583,10 +1579,17 @@ public class GameUI implements Screen {
                 i--;
             }
         }
+        logger.info("sudden death: " + tempPlayer.getPlayerName() + " " + movableTiles.toString());
 
-        for (Pair e : movableTiles) {
-            if (islandTiles.containsKey(e)) {
-                islandTiles.get(e).setCanSuddenDeathMove(true);
+        if (movableTiles.isEmpty()) {
+            gameState.setGameEnd(true);
+            gameState.setGameResult(GameState.PLAYER_DROWNED);
+            logger.info("GAME END: DROWNED");
+        } else {
+            for (Pair e : movableTiles) {
+                if (islandTiles.containsKey(e)) {
+                    islandTiles.get(e).setCanSuddenDeathMove(true);
+                }
             }
         }
     }

@@ -97,6 +97,7 @@ public class TreasureCardUI extends Actor {
                     if (isWin && totalTreasures[0] && totalTreasures[1] && totalTreasures[2] && totalTreasures[3]) {
                         state.setGameEnd(true);
                         state.setGameResult(GameState.WIN);
+                        logger.info("GAME END: WIN");
                     }
                 }
             }
