@@ -237,7 +237,7 @@ public class GameUI implements Screen {
 
                             }
                             else if (islandTile.isCanShoreUp() && mode == SHORE_UP_MODE) {
-                                if (gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber())).getAbility() == Player.EXPLORER) {
+                                if (gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber())).getAbility() == Player.ENGINEER) {
                                     if (previousShoredUpTile != null) {
                                         gameState.getIslandTileState()
                                                 [islandTile.getCoordinates().x]
@@ -353,7 +353,7 @@ public class GameUI implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (shoreUpButton.isEnabled()) {
-                    if (gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber())).getAbility() == Player.EXPLORER && previousShoredUpTile != null) {
+                    if (gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber())).getAbility() == Player.ENGINEER && previousShoredUpTile != null) {
                         gameState.getIslandTileState()
                                 [previousShoredUpTile.x]
                                 [previousShoredUpTile.y] = GameState.NORMAL_ISLAND_TILE;
@@ -1422,7 +1422,7 @@ public class GameUI implements Screen {
                 [Math.max(Math.min(p.getTileX(), 5), 0)]
                 [Math.max(Math.min(p.getTileY()-1, 5), 0)] == GameState.FLOODED_ISLAND_TILE)
             shoreUpTiles.add(islandTiles.get(new Pair(Math.max(Math.min(p.getTileX(), 5), 0),Math.max(Math.min(p.getTileY()-1, 5), 0))));
-        if (p.getAbility() == Player.ENGINEER) {
+        if (p.getAbility() == Player.EXPLORER) {
             if (gameState.getIslandTileState()
                     [Math.max(Math.min(p.getTileX() + 1, 5), 0)]
                     [Math.max(Math.min(p.getTileY() + 1, 5), 0)] == GameState.FLOODED_ISLAND_TILE)
