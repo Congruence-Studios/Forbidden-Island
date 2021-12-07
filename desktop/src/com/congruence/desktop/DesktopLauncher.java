@@ -1,19 +1,18 @@
 package com.congruence.desktop;
 
-import com.badlogic.gdx.Files;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.congruence.ForbiddenIsland;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.title = "Forbidden Island";
-		config.width = 1280;
-		config.height = 720;
-		config.resizable = false;
+		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+		config.setTitle("Forbidden Island");
+		config.setWindowedMode(1280, 720);
+		config.setResizable(false);
 
-		config.addIcon("Icon-Windows.png", Files.FileType.Internal);
-		new LwjglApplication(new ForbiddenIsland(), config);
+		config.setWindowIcon("Icon-Windows.png");
+		new Lwjgl3Application(new ForbiddenIsland(), config);
 	}
 }
