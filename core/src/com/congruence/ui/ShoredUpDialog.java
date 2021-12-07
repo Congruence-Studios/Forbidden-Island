@@ -117,7 +117,7 @@ public class ShoredUpDialog extends Actor {
             super.setBounds(positionX, positiveY, width, height);
             textures = new ArrayList<>();
             for (String e : shoredUpTiles) {
-                Texture t = ForbiddenIsland.assetManager.get("island-tiles/" + e + "@2x.png");
+                Texture t = ForbiddenIsland.assetManager.get("island-tiles/" + e + ".png");
                 t.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
                 textures.add(t);
             }
