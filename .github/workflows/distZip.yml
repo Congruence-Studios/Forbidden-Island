@@ -22,3 +22,15 @@ jobs:
       uses: gradle/gradle-build-action@4137be6a8bf7d7133955359dbd952c0ca73b1021
       with:
         arguments: distZip
+    - name: Get Time
+      id: getTime
+      uses: nanzm/get-time-action@v1.1
+      with:
+        timeZone: -6
+        format: 'YYYYMMDDHHmmss'
+    - name: 'Upload Artifact'
+      uses: actions/upload-artifact@v2
+      with:
+        name: "Forbidden-Island-desktop-${{ steps.getTime.outputs.time }}"
+        path: ./desktop/build/distributions/Forbidden-Island-desktop-1.0.zip
+        retention-days: 1
