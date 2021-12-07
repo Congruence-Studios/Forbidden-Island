@@ -22,6 +22,7 @@ task debug(dependsOn: classes, type: JavaExec) {
 }
 
 task distZip(type: Zip) {
+    archiveBaseName = appName + "-desktop"
     into('assets') {
         from 'assets'
     }
