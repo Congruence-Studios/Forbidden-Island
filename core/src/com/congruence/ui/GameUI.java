@@ -1302,8 +1302,7 @@ public class GameUI implements Screen {
         gameState.setCurrentDrawnTreasureCards(new ArrayList<>(2));
         for (int i = 0; i < 2; i++) {
             if (!treasureDeck.empty()) {
-                gameState.getCurrentDrawnTreasureCards().add(treasureDeck.peek());
-                gameState.getTreasureCardDiscardDeck().add(treasureDeck.pop());
+                gameState.getCurrentDrawnTreasureCards().add(treasureDeck.pop());
             } else {
                 Collections.shuffle(gameState.getTreasureCardDiscardDeck());
                 treasureDeck.addAll(gameState.getTreasureCardDiscardDeck());

@@ -196,7 +196,8 @@ public class GameState {
             int[][] islandTileState,
             Stack<FloodCard> islandTileDeck,
             Stack<TreasureCard> treasureCardDeck,
-            int waterHeight
+            int waterHeight,
+            ArrayList<FloodCard> islandTileDiscardDeck
             ) {
         this.difficulty = difficulty;
         this.waterHeight = waterHeight;
@@ -212,7 +213,7 @@ public class GameState {
         this.currentPlayerTurn = playerOrder.get(0);
         this.currentPlayerActionsLeft = 3;
         this.islandTileDeck = islandTileDeck;
-        this.islandTileDiscardDeck = new ArrayList<>();
+        this.islandTileDiscardDeck = islandTileDiscardDeck;
         this.treasureCardDeck = treasureCardDeck;
         this.treasureCardDiscardDeck = new ArrayList<>();
         this.drawingTreasureCards = false;

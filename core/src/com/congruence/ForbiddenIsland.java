@@ -135,6 +135,7 @@ public class ForbiddenIsland extends Game {
 			islandTilesUsed.addAll(pickedIslandTiles);
 
 			LinkedList<String> floodedTileCards = new LinkedList<>();
+			ArrayList<FloodCard> floodCards = new ArrayList<>();
 			List<String> tileIslandCardTemp = new ArrayList<>(Resources.DefaultTileOrdering);
 			Iterator<String> setIterator = tileIslandCardTemp.iterator();
 			Collections.shuffle(tileIslandCardTemp);
@@ -148,10 +149,13 @@ public class ForbiddenIsland extends Game {
 			for (int i = 0; i < 6; i++) {
 				for (int j = 0; j < 6; j++) {
 					if (Resources.DefaultTileOrdering.contains(i + "" + j)) {
-						islandTiles[i][j] = pickedIslandTiles.pop();
+						islandTiles[i][j] = pickedIslandTiles.peek();
 						if (floodedTileCards.contains(i + "" + j)) {
 							islandTileState[i][j] = GameState.FLOODED_ISLAND_TILE;
+							floodCards.add(new FloodCard(pickedIslandTiles.peek(),null, FloodCard.ISLAND_CARD));
+							logger.info(pickedIslandTiles.peek());
 						}
+						pickedIslandTiles.pop();
 					}
 					else {
 						islandTiles[i][j] = null;
@@ -230,7 +234,8 @@ public class ForbiddenIsland extends Game {
 					islandTileState,
 					floodCardDeck,
 					treasureCardDeck,
-					WaterHeight
+					WaterHeight,
+					floodCards
 			));
 			setScreen(gameUI);
 		}
