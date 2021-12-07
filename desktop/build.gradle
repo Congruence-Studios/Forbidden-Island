@@ -22,12 +22,17 @@ task debug(dependsOn: classes, type: JavaExec) {
 }
 
 task distZip(type: Zip) {
+    archiveBaseName = appName + "-desktop"
     into('assets') {
         from 'assets'
     }
     into('libs') {
         from jar
         from configurations.runtimeClasspath
+    }
+
+    into('conf') {
+        from 'conf'
     }
 
     from('scripts')
