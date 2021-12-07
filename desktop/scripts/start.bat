@@ -1,2 +1,2 @@
 cd assets
-java -cp ..\libs\* com.congruence.desktop.DesktopLauncher
+java -cp ..\conf;..\libs\* com.congruence.desktop.DesktopLauncher

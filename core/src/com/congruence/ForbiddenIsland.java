@@ -1,40 +1,26 @@
 package com.congruence;
 
-import com.badlogic.gdx.*;
-import com.badlogic.gdx.assets.AssetDescriptor;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.AssetLoader;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.TextureLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.congruence.start.StartMenu;
 import com.congruence.start.StartScreen;
 import com.congruence.state.*;
 import com.congruence.ui.GameUI;
-import com.congruence.ui.IslandTile;
-import com.congruence.ui.PlayerHand;
 import com.congruence.util.GameInitializeListener;
 import com.congruence.util.GameStartListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ForbiddenIsland extends Game {
 
@@ -181,41 +167,6 @@ public class ForbiddenIsland extends Game {
 
 			Collections.shuffle(floodCardDeck);
 
-			assetManager = new AssetManager(new InternalFileHandleResolver());
-			TextureLoader.TextureParameter textureParameter = new TextureLoader.TextureParameter();
-			textureParameter.genMipMaps = true;
-			Array<String> assetDirectories = new Array<>();
-			FileHandleResolver resolver = new InternalFileHandleResolver();
-			assetDirectories.add("artifacts");
-			assetDirectories.add("ability-icon");
-			assetDirectories.add("artifacts");
-			assetDirectories.add("custom-ui");
-			assetDirectories.add("flood-deck");
-			assetDirectories.add("treasure-deck");
-			assetDirectories.add("island-tiles");
-			assetDirectories.add("water-meter");
-			assetDirectories.add("pawn");
-			for (String folder : assetDirectories) {
-				FileHandle handle = Gdx.files.internal(folder);
-				logger.info(handle.parent().path());
-				logger.info("Path " + resolver.resolve(folder).path() + " List size " + handle.list().length);
-				for (FileHandle asset : handle.list()) {
-					FileHandle folderSub = resolver.resolve(asset.path());
-					logger.info(asset.path());
-					if (folderSub.isDirectory()) {
-						for (FileHandle assetSub : folderSub.list()) {
-							//logger.info(assetSub.path());
-							assetManager.load(assetSub.path(), Texture.class, textureParameter);
-							//logger.info(assetManager.getProgress() + "");
-						}
-					}
-					else {
-						//logger.info(asset.path());
-						assetManager.load(asset.path(), Texture.class, textureParameter);
-						//logger.info(assetManager.getProgress() + "");
-					}
-				}
-			}
 
 			Screen LoadingScreen = new Screen() {
 				@Override
@@ -304,6 +255,7 @@ public class ForbiddenIsland extends Game {
 	@Override
 	public void create() {
 		setScreen(startScreen);
+		loadAsserts();
 	}
 
 	@Override
@@ -311,4 +263,40 @@ public class ForbiddenIsland extends Game {
 		assetManager.dispose();
 	}
 
+	private void loadAsserts() {
+		assetManager = new AssetManager(new InternalFileHandleResolver());
+		TextureLoader.TextureParameter textureParameter = new TextureLoader.TextureParameter();
+		textureParameter.genMipMaps = true;
+		Array<String> assetDirectories = new Array<>();
+		FileHandleResolver resolver = new InternalFileHandleResolver();
+		assetDirectories.add("artifacts");
+		assetDirectories.add("ability-icon");
+		assetDirectories.add("artifacts");
+		assetDirectories.add("custom-ui");
+		assetDirectories.add("flood-deck");
+		assetDirectories.add("treasure-deck");
+		assetDirectories.add("island-tiles");
+		assetDirectories.add("water-meter");
+		assetDirectories.add("pawn");
+		for (String folder : assetDirectories) {
+			FileHandle handle = Gdx.files.internal(folder);
+			//logger.info("Path " + resolver.resolve(folder).path() + " List size " + handle.list().length);
+			for (FileHandle asset : handle.list()) {
+				FileHandle folderSub = resolver.resolve(asset.path());
+				if (folderSub.isDirectory()) {
+					for (FileHandle assetSub : folderSub.list()) {
+						//logger.info(assetSub.path());
+						assetManager.load(assetSub.path(), Texture.class, textureParameter);
+						//logger.info(assetManager.getProgress() + "");
+					}
+				}
+				else {
+					//logger.info(asset.path());
+					logger.info("Loading asset: " + asset.path());
+					assetManager.load(asset.path(), Texture.class, textureParameter);
+					//logger.info(assetManager.getProgress() + "");
+				}
+			}
+		}
+	}
 }

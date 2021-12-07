@@ -30,6 +30,10 @@ task distZip(type: Zip) {
         from configurations.runtimeClasspath
     }
 
+    into('conf') {
+        from 'conf'
+    }
+
     from('scripts')
 }
 
