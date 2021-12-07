@@ -123,7 +123,7 @@ public class ForbiddenIsland extends Game {
 
 			LinkedList<String> pickedIslandTiles = new LinkedList<>();
 			int tilesLeft = 24;
-			ArrayList<String> tempIslandTiles = (ArrayList<String>) Resources.IslandTiles.clone();
+			ArrayList<String> tempIslandTiles = new ArrayList<>(Resources.IslandTiles);
 			while (tilesLeft > 0) {
 				logger.info("tempIslandTiles.size(): " + tempIslandTiles.size() + " tilesLeft: " + tilesLeft);
 				int rand = random.nextInt(tempIslandTiles.size());
