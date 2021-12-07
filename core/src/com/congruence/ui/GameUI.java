@@ -1564,7 +1564,7 @@ public class GameUI implements Screen {
             movableTiles.add(new Pair(tempPlayer.getTileX()-1, tempPlayer.getTileY()+1));
             movableTiles.add(new Pair(tempPlayer.getTileX()-1, tempPlayer.getTileY()-1));
         }
-        logger.info("sudden death: " + movableTiles.toString());
+        logger.info(movableTiles.toString());
 
         current.setPawnState(Pawn.MOVE);
 
@@ -1579,17 +1579,10 @@ public class GameUI implements Screen {
                 i--;
             }
         }
-        logger.info("sudden death: " + tempPlayer.getPlayerName() + " " + movableTiles.toString());
 
-        if (movableTiles.isEmpty()) {
-            gameState.setGameEnd(true);
-            gameState.setGameResult(GameState.PLAYER_DROWNED);
-            logger.info("GAME END: DROWNED");
-        } else {
-            for (Pair e : movableTiles) {
-                if (islandTiles.containsKey(e)) {
-                    islandTiles.get(e).setCanSuddenDeathMove(true);
-                }
+        for (Pair e : movableTiles) {
+            if (islandTiles.containsKey(e)) {
+                islandTiles.get(e).setCanSuddenDeathMove(true);
             }
         }
     }
