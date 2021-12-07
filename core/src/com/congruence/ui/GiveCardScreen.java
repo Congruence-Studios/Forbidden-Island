@@ -154,28 +154,39 @@ public class GiveCardScreen extends Group {
             players.addAll(state.getPlayers().values());
             players.remove(state.getPlayers().get(state.getPlayerOrder().get(state.getTurnNumber())));
 
+            Player currentPlayer = state.getPlayers().get(state.getPlayerOrder().get(state.getTurnNumber()));
+            int amount = 0;
+            for (int i = 0; i < players.size(); i++) {
+                Player e = players.get(i);
+                if (e.getTileX() == currentPlayer.getTileX() && e.getTileY() == e.getTileY()) {
+                    amount++;
+                }
+            }
+
             buttons = new ArrayList<>();
             float cardHeight = getHeight() * 1/3f;
             float cardWidth = cardHeight * 601/376f;
-            float x = 0+(getWidth()/2)-(players.size() > 1 ? 5 : 0)-(cardWidth * players.size() * 0.5f);
+            float x = 0+(getWidth()/2)-(amount > 1 ? 5 : 0)-(cardWidth * amount * 0.5f);
             float y = 0+(getHeight()/2)-cardHeight/2f;
             for (int i = 0; i < players.size(); i++) {
                 Player e = players.get(i);
-                GiveDialogButtons b = new GiveDialogButtons(x, y, cardHeight, cardWidth, e.getPlayerName());
-                buttons.add(b);
-                addActor(b);
-                x += cardWidth+10;
-                b.addListener(new ClickListener(){
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                        Player currentPlayer = state.getPlayers().get(state.getPlayerOrder().get(state.getTurnNumber()));
-                        TreasureCard treasureCard = currentPlayer.getCardsAtHand().get(state.getTreasureCardUI().getPosition());
-                        currentPlayer.removeTreasureFromHand(state.getTreasureCardUI().getPosition());
-                        e.addTreasureToHand(treasureCard);
-                        state.setTreasureCardUI(null);
-                        observable.onFinished();
-                    }
-                });
+                if (e.getTileX() == currentPlayer.getTileX() && e.getTileY() == e.getTileY()) {
+                    GiveDialogButtons b = new GiveDialogButtons(x, y, cardHeight, cardWidth, e.getPlayerName());
+                    buttons.add(b);
+                    addActor(b);
+                    x += cardWidth+10;
+                    b.addListener(new ClickListener(){
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            Player currentPlayer = state.getPlayers().get(state.getPlayerOrder().get(state.getTurnNumber()));
+                            TreasureCard treasureCard = currentPlayer.getCardsAtHand().get(state.getTreasureCardUI().getPosition());
+                            currentPlayer.removeTreasureFromHand(state.getTreasureCardUI().getPosition());
+                            e.addTreasureToHand(treasureCard);
+                            state.setTreasureCardUI(null);
+                            observable.onFinished();
+                        }
+                    });
+                }
             }
 
             super.setBounds(positionX, positiveY, width, height);
