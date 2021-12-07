@@ -75,12 +75,10 @@ public class IslandTile extends Actor {
         this.tileName = tileName;
         this.coordinates = coordinates;
         this.state = state;
-        islandTileNormalImage = ForbiddenIsland.assetManager.get("island-tiles/" + tileName + "@2x.png", Texture.class);
-        islandTileFloodedImage = ForbiddenIsland.assetManager.get("island-tiles/" + tileName + "_flood@2x.png", Texture.class);
-        islandTileSunkenImage = ForbiddenIsland.assetManager.get("island-tiles/Sunken-Tile.png", Texture.class);
+        islandTileNormalImage = ForbiddenIsland.assetManager.get("island-tiles/" + tileName + ".png", Texture.class);
+        islandTileFloodedImage = ForbiddenIsland.assetManager.get("island-tiles/" + tileName + " Flooded.png", Texture.class);
         islandTileNormalImage.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
         islandTileFloodedImage.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
-        islandTileSunkenImage.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
         islandTileMovementImage.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
         islandTileHoverImage.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
         islandTileFocusedImage.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);

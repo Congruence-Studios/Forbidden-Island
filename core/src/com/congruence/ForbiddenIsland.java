@@ -122,6 +122,7 @@ public class ForbiddenIsland extends Game {
 
 
 			LinkedList<String> pickedIslandTiles = new LinkedList<>();
+
 			int tilesLeft = 24;
 			ArrayList<String> tempIslandTiles = new ArrayList<>(Resources.IslandTiles);
 			while (tilesLeft > 0) {

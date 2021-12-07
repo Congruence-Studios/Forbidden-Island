@@ -307,7 +307,7 @@ public class GameUI implements Screen {
                         }
                     });
                 } else if (Resources.DefaultArtifactMapPlacement.containsKey(i + "" + j)) {
-                    artifacts.put(i + "" + j, new Artifact(positionX, positionY, tileWidth, tileHeight, Resources.DefaultArtifactMapPlacement.get(i + "" + j)));
+                    artifacts.put(i + "" + j, new Artifact(positionX, positionY, tileWidth, tileHeight, Resources.DefaultArtifactMapPlacement.get(i + "" + j), gameState));
                 }
                 positionX -= 10f;
             }
@@ -381,6 +381,12 @@ public class GameUI implements Screen {
                 ((GameConfiguration.width) - (GameConfiguration.height)) / 2f
         );
         stage.addActor(collectButton);
+        collectButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                collectArtifact();
+            }
+        });
         swapButton = new GameMenuSwapButton(
                 10f + (0.33f * (2 * tileHeight + 10f) - 5f) * 8f / 5f,
                 2 * tileHeight + 30f,
@@ -756,6 +762,8 @@ public class GameUI implements Screen {
             IslandTile a = islandTiles.get(new Pair(gameState.getPlayers().get(gameState.getPlayerOrder().get(i)).getTileX(), gameState.getPlayers().get(gameState.getPlayerOrder().get(i)).getTileY()));
             a.getTilePositionOpen()[gameState.getPlayers().get(gameState.getPlayerOrder().get(i)).getTilePosition()] = false;
         }
+
+        turnChangeScreen.setOpen(true);
 
         ///////////////////////////////////////////
         ///////////////////////////////////////////
@@ -1266,6 +1274,7 @@ public class GameUI implements Screen {
     }
 
     public void checkTurn() {
+        collectButton.setEnabled(canCollectItems());
         if (gameState.isGameEnd()) {
             resultScreen.setOpen(true);
         }
@@ -1413,7 +1422,7 @@ public class GameUI implements Screen {
                 [Math.max(Math.min(p.getTileX(), 5), 0)]
                 [Math.max(Math.min(p.getTileY()-1, 5), 0)] == GameState.FLOODED_ISLAND_TILE)
             shoreUpTiles.add(islandTiles.get(new Pair(Math.max(Math.min(p.getTileX(), 5), 0),Math.max(Math.min(p.getTileY()-1, 5), 0))));
-        if (p.getAbility() == Player.EXPLORER) {
+        if (p.getAbility() == Player.ENGINEER) {
             if (gameState.getIslandTileState()
                     [Math.max(Math.min(p.getTileX() + 1, 5), 0)]
                     [Math.max(Math.min(p.getTileY() + 1, 5), 0)] == GameState.FLOODED_ISLAND_TILE)
@@ -1450,7 +1459,7 @@ public class GameUI implements Screen {
         ArrayList<Player> availablePlayers = new ArrayList<>();
         if (playerHands.get(gameState.getTurnNumber()).isFocused()) {
             for (Player p : gameState.getPlayers().values()) {
-                if (currentPlayer.getTileX() == p.getTileX() && currentPlayer.getTileY() == p.getTileY()) {
+                if ((currentPlayer.getTileX() == p.getTileX() && currentPlayer.getTileY() == p.getTileY()) || currentPlayer.getAbility() == Player.MESSENGER) {
                     availablePlayers.add(p);
                 }
             }
@@ -1590,6 +1599,58 @@ public class GameUI implements Screen {
     public void eraseSuddenDeathTiles() {
         for (IslandTile e: islandTiles.values()) {
             e.setCanSuddenDeathMove(false);
+        }
+    }
+
+    public boolean canCollectItems() {
+        Player p = gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber()));
+        IslandTile islandTile = islandTiles.get(new Pair(p.getTileX(), p.getTileY()));
+        if (Resources.CollectTiles.containsKey(islandTile.getTileName())) {
+            String artifactName = Resources.CollectTiles.get(islandTile.getTileName());
+            int amount = 0;
+            for (TreasureCard e : p.getCardsAtHand()) {
+                if (e.getName().equals(artifactName)) {
+                    amount++;
+                }
+            }
+            if (amount >= 4) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void collectArtifact() {
+        Player p = gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber()));
+        IslandTile islandTile = islandTiles.get(new Pair(p.getTileX(), p.getTileY()));
+        if (Resources.CollectTiles.containsKey(islandTile.getTileName())) {
+            String artifactName = Resources.CollectTiles.get(islandTile.getTileName());
+            int amount = 0;
+            ArrayList<Integer> indexes = new ArrayList<>();
+            for (int i = 0; i < p.getCardsAtHand().size(); i++) {
+                TreasureCard e = p.getCardsAtHand().get(i);
+                if (e.getName().equals(artifactName)) {
+                    amount++;
+                    indexes.add(i);
+                }
+            }
+            if (amount >= 4) {
+                if (Resources.ArtifactNames[0].equals(artifactName)) {
+                    gameState.getCollectedArtifacts()[0] = true;
+                }
+                else if (Resources.ArtifactNames[1].equals(artifactName)) {
+                    gameState.getCollectedArtifacts()[1] = true;
+                }
+                else if (Resources.ArtifactNames[2].equals(artifactName)) {
+                    gameState.getCollectedArtifacts()[1] = true;
+                }
+                else if (Resources.ArtifactNames[3].equals(artifactName)) {
+                    gameState.getCollectedArtifacts()[3] = true;
+                }
+                for (int e : indexes) {
+                    p.removeTreasureFromHand(e);
+                }
+            }
         }
     }
 }

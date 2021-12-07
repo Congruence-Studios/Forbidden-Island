@@ -42,6 +42,8 @@ public class Resources {
             "Whispering Garden"
     ));
 
+    public static final TreeMap<String, String> CollectTiles = new TreeMap<>();
+
     public static final TreeSet<String> DefaultTileOrdering = new TreeSet<>();
 
     public static final String[] ArtifactNames = {
@@ -83,5 +85,14 @@ public class Resources {
         DefaultArtifactMapPlacement.put("00", "The Crystal of Fire");
         DefaultArtifactMapPlacement.put("55", "The Statue of the Wind");
         DefaultArtifactMapPlacement.put("50", "The Earth Stone");
+
+        CollectTiles.put("Temple of the Moon", "The Earth Stone");
+        CollectTiles.put("Temple of the Sun", "The Earth Stone");
+        CollectTiles.put("Whispering Garden", "The Statue of the Wind");
+        CollectTiles.put("Howling Garden", "The Statue of the Wind");
+        CollectTiles.put("Cave of Embers", "The Crystal of Fire");
+        CollectTiles.put("Cave of Shadows", "The Crystal of Fire");
+        CollectTiles.put("Coral Palace", "The Ocean's Chalice");
+        CollectTiles.put("Tidal Palace", "The Ocean's Chalice");
     }
 }
