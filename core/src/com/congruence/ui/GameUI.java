@@ -204,11 +204,6 @@ public class GameUI implements Screen {
                                 }
                                 currentSuddenDeathPlayer.setTileX(islandTile.getCoordinates().x);
                                 currentSuddenDeathPlayer.setTileY(islandTile.getCoordinates().y);
-                                if (currentSuddenDeathPlayer.getAbility() == Player.PILOT && !((Math.abs(islandTile.getCoordinates().x - currentSuddenDeathPlayer.getTileX()) <= 1) &&
-                                        islandTile.getCoordinates().y - y == 0 || (Math.abs(islandTile.getCoordinates().y - currentSuddenDeathPlayer.getTileY()) <= 1) &&
-                                        islandTile.getCoordinates().x - x == 0)) {
-                                    currentSuddenDeathPlayer.setCanUseSpecialAction(false);
-                                }
                                 logger.info(currentNormalPawn + "");
                                 pawns.get(currentSuddenDeathPlayerPawn).setX(findPawnPositionX(currentSuddenDeathPlayerPawn));
                                 pawns.get(currentSuddenDeathPlayerPawn).setY(findPawnPositionY(currentSuddenDeathPlayerPawn));
@@ -1568,6 +1563,7 @@ public class GameUI implements Screen {
             movableTiles.add(new Pair(tempPlayer.getTileX()-1, tempPlayer.getTileY()+1));
             movableTiles.add(new Pair(tempPlayer.getTileX()-1, tempPlayer.getTileY()-1));
         }
+
         logger.info(movableTiles.toString());
 
         current.setPawnState(Pawn.MOVE);
