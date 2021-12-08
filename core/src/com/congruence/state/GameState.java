@@ -572,6 +572,38 @@ public class GameState {
     }
 
 
+    public ArrayList<Pair> getFireSpacesLeft() {
+        return fireSpacesLeft;
+    }
+
+    public void setFireSpacesLeft(ArrayList<Pair> fireSpacesLeft) {
+        this.fireSpacesLeft = fireSpacesLeft;
+    }
+
+    public ArrayList<Pair> getEarthSpacesLeft() {
+        return earthSpacesLeft;
+    }
+
+    public void setEarthSpacesLeft(ArrayList<Pair> earthSpacesLeft) {
+        this.earthSpacesLeft = earthSpacesLeft;
+    }
+
+    public ArrayList<Pair> getOceanSpacesLeft() {
+        return oceanSpacesLeft;
+    }
+
+    public void setOceanSpacesLeft(ArrayList<Pair> oceanSpacesLeft) {
+        this.oceanSpacesLeft = oceanSpacesLeft;
+    }
+
+    public ArrayList<Pair> getWindSpacesLeft() {
+        return windSpacesLeft;
+    }
+
+    public void setWindSpacesLeft(ArrayList<Pair> windSpacesLeft) {
+        this.windSpacesLeft = windSpacesLeft;
+    }
+
     @Override
     public String toString() {
         return "GameState{" +

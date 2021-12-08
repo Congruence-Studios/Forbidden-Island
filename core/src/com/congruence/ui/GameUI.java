@@ -1082,6 +1082,10 @@ public class GameUI implements Screen {
             pawns.get(3).setHeight(tileHeight / 3);
             logger.info(pawns.get(3).toString());
         }
+        resultScreen.setPositionX((GameConfiguration.width - (GameConfiguration.height * 15/16f))*0.5f);
+        resultScreen.setPositiveY((GameConfiguration.height - (GameConfiguration.height * 15/16f))*0.5f);
+        resultScreen.setHeight(GameConfiguration.height * 15/16f);
+        resultScreen.setWidth(GameConfiguration.height * 15/16f);
 
         camera.setToOrtho(false, GameConfiguration.width, GameConfiguration.height);
         stage.getViewport().update(GameConfiguration.width, GameConfiguration.height, true);
@@ -1424,6 +1428,56 @@ public class GameUI implements Screen {
                         }
                         else if (gameState.getIslandTileState()[i][j] == GameState.FLOODED_ISLAND_TILE) {
                             gameState.getIslandTileState()[i][j] = GameState.SUNKEN_ISLAND_TILE;
+                            logger.info("tiles sunk: " + i + " " + j + " " + gameState.getIslandTiles()[i][j]);
+                            logger.info(gameState.getFireSpacesLeft().toString());
+                            logger.info(gameState.getEarthSpacesLeft().toString());
+                            logger.info(gameState.getWindSpacesLeft().toString());
+                            logger.info(gameState.getOceanSpacesLeft().toString());
+                            for (int k = 0; k < gameState.getFireSpacesLeft().size(); k++) {
+                                if (gameState.getFireSpacesLeft().get(k).equals(new Pair(i, j))) {
+                                    gameState.getFireSpacesLeft().remove(k);
+                                    logger.info(gameState.getFireSpacesLeft().toString() + " " + gameState.getCollectedArtifacts()[GameState.CRYSTAL_OF_FIRE]);
+                                    if (gameState.getFireSpacesLeft().isEmpty() && !gameState.getCollectedArtifacts()[GameState.CRYSTAL_OF_FIRE]) {
+                                        gameState.setGameEnd(true);
+                                        gameState.setGameResult(GameState.BOTH_TREASURE_TILES_SUNK);
+                                    }
+                                }
+                            }
+                            for (int k = 0; k < gameState.getEarthSpacesLeft().size(); k++) {
+                                if (gameState.getEarthSpacesLeft().get(k).equals(new Pair(i, j))) {
+                                    gameState.getEarthSpacesLeft().remove(k);
+                                    logger.info(gameState.getEarthSpacesLeft().toString() + " " + gameState.getCollectedArtifacts()[GameState.EARTH_STONE]);
+                                    if (gameState.getEarthSpacesLeft().isEmpty() && !gameState.getCollectedArtifacts()[GameState.EARTH_STONE]) {
+                                        gameState.setGameEnd(true);
+                                        gameState.setGameResult(GameState.BOTH_TREASURE_TILES_SUNK);
+                                    }
+                                }
+                            }
+                            for (int k = 0; k < gameState.getWindSpacesLeft().size(); k++) {
+                                if (gameState.getWindSpacesLeft().get(k).equals(new Pair(i, j))) {
+                                    gameState.getWindSpacesLeft().remove(k);
+                                    logger.info(gameState.getWindSpacesLeft().toString() + " " + gameState.getCollectedArtifacts()[GameState.STATUE_OF_THE_WIND]);
+                                    if (gameState.getWindSpacesLeft().isEmpty() && !gameState.getCollectedArtifacts()[GameState.STATUE_OF_THE_WIND]) {
+                                        gameState.setGameEnd(true);
+                                        gameState.setGameResult(GameState.BOTH_TREASURE_TILES_SUNK);
+                                    }
+                                }
+                            }
+                            for (int k = 0; k < gameState.getOceanSpacesLeft().size(); k++) {
+                                if (gameState.getOceanSpacesLeft().get(k).equals(new Pair(i, j))) {
+                                    gameState.getOceanSpacesLeft().remove(k);
+                                    logger.info(gameState.getOceanSpacesLeft().toString() + " " + gameState.getCollectedArtifacts()[GameState.OCEANS_CHALICE]);
+                                    if (gameState.getOceanSpacesLeft().isEmpty() && !gameState.getCollectedArtifacts()[GameState.OCEANS_CHALICE]) {
+                                        gameState.setGameEnd(true);
+                                        gameState.setGameResult(GameState.BOTH_TREASURE_TILES_SUNK);
+                                    }
+                                }
+                            }
+                            if (gameState.getFoolsLandingCoordinates().equals(new Pair(i, j))) {
+
+                                gameState.setGameEnd(true);
+                                gameState.setGameResult(GameState.FOOLS_LANDING_SUNK);
+                            }
                         }
                     }
                 }
