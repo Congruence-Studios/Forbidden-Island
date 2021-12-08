@@ -2,8 +2,8 @@ package com.congruence;
 
 public class GameConfiguration {
 
-    public static int height;
+    public static float height;
 
-    public static int width;
+    public static float width;
 
 }

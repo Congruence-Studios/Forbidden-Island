@@ -53,13 +53,16 @@ public class PlayerHand extends Group {
 
     private ArrayList<TreasureCardUI> treasureCardUIS;
 
+    private GameUI gameUI;
+
     public PlayerHand(
             GameState state,
             float positionX,
             float positionY,
             float width,
             float height,
-            Player player
+            Player player,
+            GameUI gameUI
     ) {
         this.state = state;
         this.positionX = positionX;
@@ -67,6 +70,7 @@ public class PlayerHand extends Group {
         this.player = player;
         this.width = width;
         this.height = height;
+        this.gameUI = gameUI;
 
         COFTexture = ForbiddenIsland.assetManager.get("treasure-deck/Crystal of Fire.png", Texture.class);
         SOTWTexture = ForbiddenIsland.assetManager.get("treasure-deck/Statue of the Wind.png", Texture.class);
@@ -179,14 +183,20 @@ public class PlayerHand extends Group {
             e.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if (e.isDiscardMode()) {
-                        player.removeTreasureFromHand(e.getPosition());
-                    }
                 }
 
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    state.setTreasureCardUI(e);
+                    if (e.isDiscardMode()) {
+                        logger.info("CONFIRM DIALOG");
+                        gameUI.openDiscard(
+                                ()->player.removeTreasureFromHand(e.getPosition()),
+                                ()->e.setDiscardMode(false),
+                                player.getCardsAtHand().get(e.getPosition()));
+                    }
+                    else {
+                        state.setTreasureCardUI(e);
+                    }
                     return true;
                 }
             });

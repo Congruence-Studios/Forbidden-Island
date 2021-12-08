@@ -1,5 +1,6 @@
 package com.congruence.start;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -20,17 +21,13 @@ public class StartScreen implements Screen {
 
     private OrthographicCamera camera;
 
-    private Texture backgroundImage;
+    private Texture coverImage;
+
+    private Texture coverImageWide;
+
+    private Texture coverImageFull;
 
     private Stage stage;
-
-    private int width;
-
-    private int height;
-
-    private BitmapFont titleFont;
-
-    private BitmapFont startFont;
 
     private ArrayList<GameStartListener> gameStartListeners;
 
@@ -48,23 +45,17 @@ public class StartScreen implements Screen {
 
         ScreenViewport viewport = new ScreenViewport(camera);
 
-        backgroundImage = new Texture(Gdx.files.internal("NewWorld_Island.jpg"), true);
-        backgroundImage.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        coverImage = new Texture(Gdx.files.internal("Cover Image.png"), true);
+        coverImage.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        coverImageWide = new Texture(Gdx.files.internal("Cover Image Wide.png"), true);
+        coverImageWide.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        coverImageFull = new Texture(Gdx.files.internal("Cover Image.png"), true);
+        coverImageFull.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
 
         stage = new Stage();
         stage.setViewport(viewport);
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Plain_Germanica.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 100;
-        titleFont = generator.generateFont(parameter);
-        generator.dispose();
-
-        generator = new FreeTypeFontGenerator(Gdx.files.internal("Abel-Regular.ttf"));
-        parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 30;
-        startFont = generator.generateFont(parameter);
-        generator.dispose();
+        System.out.println(GameConfiguration.width + " " + GameConfiguration.height);
     }
 
     @Override
@@ -74,25 +65,15 @@ public class StartScreen implements Screen {
 
         stage.act();
         stage.getBatch().begin();
-        stage.getBatch().draw(backgroundImage, 0, 0, GameConfiguration.width, GameConfiguration.height);
 
-        final String titleText = "Forbidden Island";
-        final GlyphLayout titleLayout = new GlyphLayout(titleFont, titleText);
+        if (GameConfiguration.width <= 1300) {
+            stage.getBatch().draw(coverImage, 0, 0, GameConfiguration.width, GameConfiguration.height);
+        }
+        else if (GameConfiguration.width <= 2000) {
+            stage.getBatch().draw(coverImageWide, 0, 0, GameConfiguration.width, GameConfiguration.height);
+        }
 
-        float fontX = 0 + (GameConfiguration.width - titleLayout.width) / 2;
-        float fontY = 0 + (GameConfiguration.height + titleLayout.height) * 5 / 6f;
-
-        titleFont.draw(stage.getBatch(), titleText, fontX, fontY);
-
-        final String startText = "Click Anywhere or Press Enter to Start";
-        final GlyphLayout startLayout = new GlyphLayout(startFont, startText);
-
-        fontX = 0 + (GameConfiguration.width - startLayout.width) / 2;
-        fontY = 0 + (GameConfiguration.height + startLayout.height) * 1 / 6f;
-
-        startFont.draw(stage.getBatch(), startText, fontX, fontY);
         stage.getBatch().end();
-
         stage.draw();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.F) || Gdx.input.isKeyJustPressed(Input.Keys.F11)) {
@@ -120,6 +101,7 @@ public class StartScreen implements Screen {
         GameConfiguration.height = height;
         camera.setToOrtho(false, width, height);
         stage.getViewport().update(width, height);
+        System.out.println(GameConfiguration.width + " " + GameConfiguration.height);
     }
 
     @Override
@@ -140,8 +122,9 @@ public class StartScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        backgroundImage.dispose();
-        titleFont.dispose();
+        coverImage.dispose();
+        coverImageWide.dispose();
+        coverImageFull.dispose();
     }
 
     public ArrayList<GameStartListener> getGameStartListeners() {

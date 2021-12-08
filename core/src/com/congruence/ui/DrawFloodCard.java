@@ -29,7 +29,7 @@ public class DrawFloodCard extends Actor {
 
     private HashMap<String, Texture> textures;
 
-    private Observable observable;
+    private Observable observable = ()->{};
 
     public DrawFloodCard(
             float positionX,

@@ -60,7 +60,7 @@ public class DrawTreasureCard extends Group {
 
     private int cardState2;
 
-    private Observable observable;
+    private Observable observable = ()->{};
 
     public DrawTreasureCard(
             float positionX,

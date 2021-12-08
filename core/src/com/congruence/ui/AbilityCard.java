@@ -35,22 +35,35 @@ public class AbilityCard extends Actor {
 
     private Texture abilityIcon;
 
+    private Texture focusedAbilityIcon;
+
     private boolean focused;
 
     private boolean hovered;
+
+    private int player;
+
+    private GameState state;
+
+    private Texture hoverImage = ForbiddenIsland.assetManager.get("island-tiles/Tile_Hover_Icon@2x.png", Texture.class);
+
 
     public AbilityCard(
             float positionX,
             float positionY,
             float width,
             float height,
-            int ability
+            int ability,
+            int player,
+            GameState state
     ) {
         this.positionX = positionX;
         this.positionY = positionY;
         this.width = width;
         this.height = height;
         this.ability = ability;
+        this.state = state;
+        this.player = player;
         outlinedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/ability-button/Ability-Button.png", Texture.class);
         hoverButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/ability-button/Ability-Button-Hovered.png", Texture.class);
         focusedButtonTexture = ForbiddenIsland.assetManager.get("custom-ui/ability-button/Ability-Button-Focused.png", Texture.class);
@@ -59,17 +72,23 @@ public class AbilityCard extends Actor {
         focusedButtonTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         if (ability == Player.PILOT) {
-            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/Pilot Icon.png", Texture.class);
+            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/Player_Card_Pilot_Icon@2x.png", Texture.class);
+            focusedAbilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Pilot@2x.png", Texture.class);
         } else if (ability == Player.ENGINEER) {
-            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/Engineer Icon.png", Texture.class);
+            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/Player_Card_Engineer_Icon@2x.png", Texture.class);
+            focusedAbilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Engineer@2x.png", Texture.class);
         } else if (ability == Player.MESSENGER) {
-            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/Messenger Icon.png", Texture.class);
+            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/Player_Card_Messenger_Icon@2x.png", Texture.class);
+            focusedAbilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Messenger@2x.png", Texture.class);
         } else if (ability == Player.EXPLORER) {
-            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/Explorer Icon.png", Texture.class);
+            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/Player_Card_Explorer_Icon@2x.png", Texture.class);
+            focusedAbilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Explorer@2x.png", Texture.class);
         } else if (ability == Player.DIVER) {
-            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/Diver Icon.png", Texture.class);
+            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/Player_Card_Diver_Icon@2x.png", Texture.class);
+            focusedAbilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Diver@2x.png", Texture.class);
         } else if (ability == Player.NAVIGATOR) {
-            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/Navigator Icon.png", Texture.class);
+            abilityIcon = ForbiddenIsland.assetManager.get("ability-icon/Player_Card_Navigator_Icon@2x.png", Texture.class);
+            focusedAbilityIcon = ForbiddenIsland.assetManager.get("ability-icon/RoleTable_Icon_Navigator@2x.png", Texture.class);
         }
 
         abilityIcon.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
@@ -113,6 +132,9 @@ public class AbilityCard extends Actor {
         batch.end();
         batch.begin();
         batch.draw(abilityIcon, positionX, positionY, width, height);
+        if (player == state.getTurnNumber()) {
+            batch.draw(hoverImage, positionX, positionY, width, height);
+        }
     }
 
     @Override
