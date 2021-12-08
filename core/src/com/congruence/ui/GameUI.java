@@ -103,9 +103,6 @@ public class GameUI implements Screen {
 
     @Override
     public void show() {
-        //if (!Gdx.graphics.setFullscreenMode(displayMode)) {
-            // switching to full-screen mode failed
-        //}
 
         logger.info("GameUI show called.");
 
@@ -238,7 +235,7 @@ public class GameUI implements Screen {
 
                             }
                             else if (islandTile.isCanShoreUp() && mode == SHORE_UP_MODE) {
-                                if (gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber())).getAbility() == Player.EXPLORER) {
+                                if (gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber())).getAbility() == Player.ENGINEER && previousShoredUpTile != islandTile.getCoordinates()) {
                                     if (previousShoredUpTile != null) {
                                         gameState.getIslandTileState()
                                                 [islandTile.getCoordinates().x]
@@ -258,6 +255,9 @@ public class GameUI implements Screen {
                                     else {
                                         previousShoredUpTile = new Pair(islandTile.getCoordinates().x, islandTile.getCoordinates().y);
                                     }
+                                }
+                                else if (gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber())).getAbility() == Player.ENGINEER && previousShoredUpTile == islandTile.getCoordinates()) {
+
                                 }
                                 else {
                                     gameState.getIslandTileState()
@@ -354,7 +354,7 @@ public class GameUI implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (shoreUpButton.isEnabled()) {
-                    if (gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber())).getAbility() == Player.EXPLORER && previousShoredUpTile != null) {
+                    if (gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber())).getAbility() == Player.ENGINEER && previousShoredUpTile != null) {
                         gameState.getIslandTileState()
                                 [previousShoredUpTile.x]
                                 [previousShoredUpTile.y] = GameState.NORMAL_ISLAND_TILE;
@@ -765,6 +765,10 @@ public class GameUI implements Screen {
         }
 
         turnChangeScreen.setOpen(true);
+
+        if (!Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode())) {
+            logger.warn("Could Not Display In Full Screen");
+        }
 
         ///////////////////////////////////////////
         ///////////////////////////////////////////
@@ -1423,7 +1427,7 @@ public class GameUI implements Screen {
                 [Math.max(Math.min(p.getTileX(), 5), 0)]
                 [Math.max(Math.min(p.getTileY()-1, 5), 0)] == GameState.FLOODED_ISLAND_TILE)
             shoreUpTiles.add(islandTiles.get(new Pair(Math.max(Math.min(p.getTileX(), 5), 0),Math.max(Math.min(p.getTileY()-1, 5), 0))));
-        if (p.getAbility() == Player.ENGINEER) {
+        if (p.getAbility() == Player.EXPLORER) {
             if (gameState.getIslandTileState()
                     [Math.max(Math.min(p.getTileX() + 1, 5), 0)]
                     [Math.max(Math.min(p.getTileY() + 1, 5), 0)] == GameState.FLOODED_ISLAND_TILE)

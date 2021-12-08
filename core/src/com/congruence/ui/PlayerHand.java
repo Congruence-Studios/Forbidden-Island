@@ -176,9 +176,12 @@ public class PlayerHand extends Group {
                     if (e.isDiscardMode()) {
                         player.removeTreasureFromHand(e.getPosition());
                     }
-                    else {
-                        state.setTreasureCardUI(e);
-                    }
+                }
+
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    state.setTreasureCardUI(e);
+                    return true;
                 }
             });
         }
