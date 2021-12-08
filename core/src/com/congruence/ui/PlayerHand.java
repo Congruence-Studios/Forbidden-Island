@@ -279,7 +279,7 @@ public class PlayerHand extends Group {
             @Override
             public void onRemove(TreasureCard removedCard, int index) {
                 PlayerHand.super.removeActor(treasureCardUIS.get(index));
-                treasureCardUIS.remove(treasureCardUIS.get(index).getPosition());
+                treasureCardUIS.remove(index);
                 state.getTreasureCardDiscardDeck().add(removedCard);
                 float cardX = 0;
                 float cardY = 0;
