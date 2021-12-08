@@ -1101,7 +1101,7 @@ public class GameUI implements Screen {
         resultScreen.setWidth(GameConfiguration.height * 15/16f);
 
         camera.setToOrtho(false, GameConfiguration.width, GameConfiguration.height);
-        stage.getViewport().update(GameConfiguration.width, GameConfiguration.height, true);
+        stage.getViewport().update((int)GameConfiguration.width, (int)GameConfiguration.height, true);
     }
 
     @Override
