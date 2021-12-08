@@ -170,7 +170,7 @@ public class GiveCardScreen extends Group {
             float y = 0+(getHeight()/2)-cardHeight/2f;
             for (int i = 0; i < players.size(); i++) {
                 Player e = players.get(i);
-                if (e.getTileX() == currentPlayer.getTileX() && e.getTileY() == e.getTileY()) {
+                if (e.getTileX() == currentPlayer.getTileX() && e.getTileY() == e.getTileY() || currentPlayer.getAbility() == Player.MESSENGER) {
                     GiveDialogButtons b = new GiveDialogButtons(x, y, cardHeight, cardWidth, e.getPlayerName());
                     buttons.add(b);
                     addActor(b);
