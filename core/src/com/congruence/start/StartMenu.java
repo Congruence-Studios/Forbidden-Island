@@ -101,7 +101,7 @@ public class StartMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    openWebpage(new URL("https://www.google.com"));
+                    openWebpage(new URL("https://drive.google.com/file/d/1WvWkzR-j-KeFz34SLsh--BQmBY-fvOG6/view?usp=sharing"));
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
