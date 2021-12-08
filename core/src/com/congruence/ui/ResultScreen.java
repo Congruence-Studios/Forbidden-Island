@@ -79,7 +79,7 @@ public class ResultScreen extends Group {
             batch.draw(background, positionX, positiveY, width, height);
             gameOverLayout = new GlyphLayout(titleFont, "GAME OVER");
             float gameOverFontX = (GameConfiguration.width - gameOverLayout.width) / 2f;
-            float gameOverFontY = (GameConfiguration.height) / 2f + gameOverLayout.height * 3 /2f;
+            float gameOverFontY = (GameConfiguration.height) / 2f + gameOverLayout.height * 3 / 2f;
             titleFont.draw(batch, gameOverLayout, gameOverFontX, gameOverFontY);
             resultLayout = new GlyphLayout(titleFont, "");
             if (state.getGameResult() == GameState.WIN) {
