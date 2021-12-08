@@ -183,4 +183,13 @@ public class Pawn extends Actor {
     public String toString() {
         return "X: " + x + " Y: " + y + " width: " + pawnWidth + " height: " + pawnHeight;
     }
+
+
+    public int getAbility() {
+        return ability;
+    }
+
+    public void setAbility(int ability) {
+        this.ability = ability;
+    }
 }

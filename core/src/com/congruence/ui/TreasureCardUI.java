@@ -44,6 +44,8 @@ public class TreasureCardUI extends Actor {
 
     private int position;
 
+    private Player player;
+
     public TreasureCardUI(
             GameState state,
             float positionX,
@@ -52,7 +54,8 @@ public class TreasureCardUI extends Actor {
             float width,
             Texture CardTexture,
             String cardName,
-            int position
+            int position,
+            Player player
     ) {
         this.state = state;
         this.positionX = positionX;
@@ -61,6 +64,7 @@ public class TreasureCardUI extends Actor {
         this.width = width;
         this.CardTexture = CardTexture;
         this.position = position;
+        this.player = player;
 
         HoverTexture = ForbiddenIsland.assetManager.get("treasure-deck/Treasure Card Hover.png", Texture.class);
         DeleteModeTexture = ForbiddenIsland.assetManager.get("treasure-deck/Treasure Card Delete.png", Texture.class);
@@ -74,7 +78,14 @@ public class TreasureCardUI extends Actor {
         super.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+
+            }
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                logger.info("player card touched");
                 if (cardName.equals("Helicopter")) {
+                    logger.info("helicopter touched");
                     boolean isWin = true;
                     boolean[] totalTreasures = new boolean[4];
                     for (Player p : state.getPlayers().values()) {
@@ -98,12 +109,13 @@ public class TreasureCardUI extends Actor {
                         state.setGameEnd(true);
                         state.setGameResult(GameState.WIN);
                         logger.info("GAME END: WIN");
+                    } else {
+                        //regular helicopter mechanics
+                        logger.info("HELICOPTER USED");
+                        state.setHelicopterUsed(!state.isHelicopterUsed());
+                        state.setHelicopterCard(TreasureCardUI.this);
                     }
                 }
-            }
-
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 return true;
             }
 
@@ -218,5 +230,13 @@ public class TreasureCardUI extends Actor {
 
     public void setFocused(boolean focused) {
         this.focused = focused;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }

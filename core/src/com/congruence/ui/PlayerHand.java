@@ -100,7 +100,8 @@ public class PlayerHand extends Group {
                             cardWidth,
                             HelicopterCardTexture,
                             "Helicopter",
-                            i
+                            i,
+                            player
                     ));
                 }
                 else if (e.getCardType() == TreasureCard.SANDBAG_CARD) {
@@ -112,7 +113,8 @@ public class PlayerHand extends Group {
                             cardWidth,
                             SandbagCardTexture,
                             "Sandbag",
-                            i
+                            i,
+                            player
                     ));
                 }
                 else if (e.getName().equals("Ocean's Chalice")) {
@@ -124,7 +126,8 @@ public class PlayerHand extends Group {
                             cardWidth,
                             OCTexture,
                             "Ocean's Chalice",
-                            i
+                            i,
+                            player
                     ));
                 }
                 else if (e.getName().equals("Statue of the Wind")) {
@@ -136,7 +139,8 @@ public class PlayerHand extends Group {
                             cardWidth,
                             SOTWTexture,
                             "Statue of the Wind",
-                            i
+                            i,
+                            player
                     ));
                 }
                 else if (e.getName().equals("Earth Stone")) {
@@ -148,7 +152,8 @@ public class PlayerHand extends Group {
                             cardWidth,
                             ESTexture,
                             "Earth Stone",
-                            i
+                            i,
+                            player
                     ));
                 }
                 else if (e.getName().equals("Crystal of Fire")) {
@@ -160,7 +165,8 @@ public class PlayerHand extends Group {
                             cardWidth,
                             COFTexture,
                             "Crystal of Fire",
-                            i
+                            i,
+                            player
                     ));
                 }
                 cardX += cardWidth/2f;
@@ -244,7 +250,8 @@ public class PlayerHand extends Group {
                         cardWidth,
                         getTexture(treasureCard),
                         treasureCard.getName(),
-                        player.getCardsAtHand().size()-1
+                        player.getCardsAtHand().size()-1,
+                        PlayerHand.this.player
                 );
                 PlayerHand.super.addActor(treasureCardUI);
                 treasureCardUIS.add(treasureCardUI);

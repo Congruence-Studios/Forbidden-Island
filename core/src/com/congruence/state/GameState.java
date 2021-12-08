@@ -188,6 +188,10 @@ public class GameState {
 
     private TreasureCardUI treasureCardUI;
 
+    private boolean helicopterUsed = false;
+
+    private TreasureCardUI helicopterCard;
+
     public GameState(
             int difficulty,
             Map<String, Player> players,
@@ -510,6 +514,23 @@ public class GameState {
     public void setTreasureCardUI(TreasureCardUI treasureCardUI) {
         this.treasureCardUI = treasureCardUI;
     }
+
+    public boolean isHelicopterUsed() {
+        return helicopterUsed;
+    }
+
+    public void setHelicopterUsed(boolean helicopterUsed) {
+        this.helicopterUsed = helicopterUsed;
+    }
+
+    public TreasureCardUI getHelicopterCard() {
+        return helicopterCard;
+    }
+
+    public void setHelicopterCard(TreasureCardUI helicopterCard) {
+        this.helicopterCard = helicopterCard;
+    }
+
 
     @Override
     public boolean equals(Object o) {

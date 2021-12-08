@@ -97,6 +97,8 @@ public class GameUI implements Screen {
 
     private Observable suddenDeathObservable;
 
+    private ArrayList<Player> currentHelicopterPlayers = new ArrayList<>();
+
     public GameUI(GameState gameState) {
         this.gameState = gameState;
     }
@@ -272,6 +274,33 @@ public class GameUI implements Screen {
                                 }
                                 eraseShoreUpTiles();
                                 setShoreUpTiles();
+                            }
+                            else if (gameState.isHelicopterUsed()) {
+                                if (!currentHelicopterPlayers.isEmpty()) {
+                                    for (Player player : currentHelicopterPlayers) {
+                                        player.setTileX(islandTile.getCoordinates().x);
+                                        player.setTileY(islandTile.getCoordinates().y);
+                                        for (Pawn pawn : pawns) {
+                                            if (pawn.getAbility() == player.getAbility()) {
+                                                logger.info("ability found " + player.getPlayerName() + " " + player.getAbility());
+                                                logger.info(gameState.getPlayerOrder().toString());
+                                                for (int i : gameState.getPlayerOrder().keySet()) {
+                                                    logger.info("" + i + " " + gameState.getPlayerOrder().get(i));
+                                                    if (gameState.getPlayerOrder().get(i).equals(player.getPlayerName())) {
+                                                        pawn.setX(findPawnPositionX(i));
+                                                        pawn.setY(findPawnPositionY(i));
+                                                        logger.info("found x and y");
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    currentHelicopterPlayers.clear();
+                                    gameState.setHelicopterUsed(false);
+                                    cleanPawns();
+                                    gameState.getHelicopterCard().getPlayer().removeTreasureFromHand(gameState.getHelicopterCard().getPosition());
+                                    stage.getViewport().update(GameConfiguration.width, GameConfiguration.height, true);
+                                }
                             }
                             else {
                                 if (GameUI.this.currentFocusedTile.equals(islandTile.getCoordinates())) {
@@ -610,7 +639,43 @@ public class GameUI implements Screen {
             p.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if (finalI == gameState.getTurnNumber()) {
+                    if (gameState.isHelicopterUsed()) {
+                        logger.info("" + p.getAbility());
+                        if (currentHelicopterPlayers.isEmpty()) {
+                            currentHelicopterPlayers.add(gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)));
+                            logger.info("1 " + p.getAbility());
+                        } else {
+                            logger.info(currentHelicopterPlayers.get(0).getTileX() + " " + currentHelicopterPlayers.get(0).getTileY());
+                            logger.info(gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)).getTileX() + " " + gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)).getTileY());
+                            if (currentHelicopterPlayers.get(0).getTileX() != gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)).getTileX() ||
+                                    currentHelicopterPlayers.get(0).getTileY() != gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)).getTileY()) {
+                                currentHelicopterPlayers.clear();
+                                currentHelicopterPlayers.add(gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)));
+                                logger.info("2 " + p.getAbility() + " " + currentHelicopterPlayers);
+                            } else if (currentHelicopterPlayers.get(0).getTileX() == gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)).getTileX() &&
+                                    currentHelicopterPlayers.get(0).getTileY() == gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)).getTileY()) {
+                                currentHelicopterPlayers.add(gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)));
+                                logger.info("3 " + p.getAbility() + " " + currentHelicopterPlayers);
+                            }
+                        }
+                        for (Pawn pawn : pawns) {
+                            boolean isHelicopterPlayer = false;
+                            for (Player player : currentHelicopterPlayers) {
+                                if (player.getAbility() == pawn.getAbility()) {
+                                    isHelicopterPlayer = true;
+                                    break;
+                                }
+                            }
+                            if (isHelicopterPlayer) {
+                                pawn.setPawnState(Pawn.FOCUSED);
+                                logger.info("selected " + pawn.getAbility());
+                            } else {
+                                pawn.setPawnState(Pawn.NORMAL);
+                                logger.info("not selected " + pawn.getAbility());
+                            }
+                        }
+                    }
+                    else if (finalI == gameState.getTurnNumber()) {
                         if (currentPawnFocused) {
                             pawns.get(currentNormalPawn).setPawnState(Pawn.NORMAL);
                             currentPawnFocused = false;
@@ -1655,6 +1720,12 @@ public class GameUI implements Screen {
                     p.removeTreasureFromHand(e);
                 }
             }
+        }
+    }
+
+    public void cleanPawns () {
+        for (Pawn pawn : pawns) {
+            pawn.setPawnState(Pawn.NORMAL);
         }
     }
 }

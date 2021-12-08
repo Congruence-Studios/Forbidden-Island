@@ -28,7 +28,7 @@ public class Player {
     /*
      * An ArrayList containing the Treasures at Hand
      */
-    private ArrayList<String> treasuresAtHand;
+    private ArrayList<String> treasuresAtHand = new ArrayList<>();
     /**
      * The X Coordinate of the Tile
      */

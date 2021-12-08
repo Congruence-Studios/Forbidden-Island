@@ -115,7 +115,7 @@ public class IslandTile extends Actor {
         else if (canShoreUp) {
             batch.draw(islandTileShoreUpImage, positionX-2, positionY+3, islandWidth, islandHeight);
         }
-        else if (canMove) {
+        else if (canMove || state.isHelicopterUsed()) {
             batch.draw(islandTileMovementImage, positionX-2, positionY+3, islandWidth, islandHeight);
         }
         else if (canMoveSpecialAction) {
