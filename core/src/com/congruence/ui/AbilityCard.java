@@ -47,7 +47,7 @@ public class AbilityCard extends Actor {
 
     private Texture hoverImage = ForbiddenIsland.assetManager.get("island-tiles/Tile_Hover_Icon@2x.png", Texture.class);
 
-
+    private Texture specialImage = ForbiddenIsland.assetManager.get("island-tiles/Tile_Special_Movement_Icon@2x.png", Texture.class);
     public AbilityCard(
             float positionX,
             float positionY,
@@ -132,7 +132,9 @@ public class AbilityCard extends Actor {
         batch.end();
         batch.begin();
         batch.draw(abilityIcon, positionX, positionY, width, height);
-        if (player == state.getTurnNumber()) {
+        if (player == state.getTurnNumber() && ability == Player.NAVIGATOR) {
+            batch.draw(specialImage, positionX, positionY, width, height);
+        } else if (player == state.getTurnNumber()) {
             batch.draw(hoverImage, positionX, positionY, width, height);
         }
     }

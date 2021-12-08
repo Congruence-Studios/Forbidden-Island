@@ -105,6 +105,11 @@ public class StartMenu implements Screen {
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
+                try {
+                    openWebpage(new URL("https://docs.google.com/document/d/1eY6GNswP-PZIOlXUwH3FbAG0LDaCjs86Vbc8giE3TVo/edit?usp=sharing"));
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
             }
         });
         startGameButton.addListener(new ClickListener(){

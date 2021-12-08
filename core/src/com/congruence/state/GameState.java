@@ -194,6 +194,8 @@ public class GameState {
 
     private TreasureCardUI sandbagCard;
 
+    private boolean navigating;
+
     public GameState(
             int difficulty,
             Map<String, Player> players,
@@ -602,6 +604,14 @@ public class GameState {
 
     public void setWindSpacesLeft(ArrayList<Pair> windSpacesLeft) {
         this.windSpacesLeft = windSpacesLeft;
+    }
+
+    public boolean isNavigating() {
+        return navigating;
+    }
+
+    public void setNavigating(boolean navigating) {
+        this.navigating = navigating;
     }
 
     @Override

@@ -81,6 +81,8 @@ public class GameUI implements Screen {
 
     public static int ISLAND_SINK_MOVEMENT_MODE = 3;
 
+    public static int NAVIGATOR_MODE = 4;
+
     private int mode;
 
     private Pair previousShoredUpTile;
@@ -100,6 +102,10 @@ public class GameUI implements Screen {
     private ConfirmDiscardScreen confirmDiscardScreen;
 
     private ArrayList<Player> currentHelicopterPlayers = new ArrayList<>();
+
+    private Pawn currentNavigatingPawn;
+
+    private Player currentNavigatingPlayer;
 
     public GameUI(GameState gameState) {
         this.gameState = gameState;
@@ -140,7 +146,25 @@ public class GameUI implements Screen {
                     islandTile.addListener(new ClickListener() {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
-                            if (islandTile.isCanMove() && mode == MOVEMENT_MODE) {
+                            if (gameState.isNavigating()) {
+                                if (islandTile.isCanMove() && currentNavigatingPlayer != null) {
+                                    currentNavigatingPlayer.setTileX(islandTile.getCoordinates().x);
+                                    currentNavigatingPlayer.setTileY(islandTile.getCoordinates().y);
+                                    for (int i : gameState.getPlayerOrder().keySet()) {
+                                        if (gameState.getPlayerOrder().get(i).equals(currentNavigatingPlayer.getPlayerName())) {
+                                            currentNavigatingPawn.setX(findPawnPositionX(i));
+                                            currentNavigatingPawn.setY(findPawnPositionY(i));
+                                        }
+                                    }
+                                    currentNavigatingPlayer = null;
+                                    currentNavigatingPawn = null;
+                                    gameState.setNavigating(false);
+                                    registerMove();
+                                    cleanTiles();
+                                    cleanPawns();
+                                }
+                            }
+                            else if (islandTile.isCanMove() && mode == MOVEMENT_MODE) {
                                 Player tempPlayerData = gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber()));
                                 logger.info(islandTile.getCoordinates().toString());
                                 IslandTile a = islandTiles.get(new Pair(tempPlayerData.getTileX(), tempPlayerData.getTileY()));
@@ -578,6 +602,19 @@ public class GameUI implements Screen {
                 0,
                 gameState
         ));
+        abilityCards.get(0).addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                //logger.info("touchDown: X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
+                if (abilityCards.get(0).getAbility() == Player.NAVIGATOR) {
+                    gameState.setNavigating(!gameState.isNavigating());
+                    if (gameState.isNavigating()) {
+                        startNavigation();
+                    }
+                }
+                return true;
+            }
+        });
         abilityCards.add(new AbilityCard(
                 10f + ((tileHeight * 2 + 10f) / 2),
                 GameConfiguration.height - (tileHeight * 2 + 10f) - 10f,
@@ -587,6 +624,19 @@ public class GameUI implements Screen {
                 1,
                 gameState
         ));
+        abilityCards.get(1).addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                //logger.info("touchDown: X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
+                if (abilityCards.get(1).getAbility() == Player.NAVIGATOR) {
+                    gameState.setNavigating(!gameState.isNavigating());
+                    if (gameState.isNavigating()) {
+                        startNavigation();
+                    }
+                }
+                return true;
+            }
+        });
         if (gameState.getMaxTurnLoops() >= 3) {
             abilityCards.add(new AbilityCard(
                     GameConfiguration.width - ((tileHeight * 2 + 10f) / 2) - 10f - ((tileHeight * 2 + 10f) / 2),
@@ -597,6 +647,19 @@ public class GameUI implements Screen {
                     2,
                     gameState
             ));
+            abilityCards.get(2).addListener(new ClickListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    //logger.info("touchDown: X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
+                    if (abilityCards.get(2).getAbility() == Player.NAVIGATOR) {
+                        gameState.setNavigating(!gameState.isNavigating());
+                        if (gameState.isNavigating()) {
+                            startNavigation();
+                        }
+                    }
+                    return true;
+                }
+            });
         }
         if (gameState.getMaxTurnLoops() >= 4) {
             abilityCards.add(new AbilityCard(
@@ -608,6 +671,19 @@ public class GameUI implements Screen {
                     3,
                     gameState
             ));
+            abilityCards.get(3).addListener(new ClickListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    //logger.info("touchDown: X: " + String.format("%f", x) + ", Y: " + String.format("%f", y));
+                    if (abilityCards.get(3).getAbility() == Player.NAVIGATOR) {
+                        gameState.setNavigating(!gameState.isNavigating());
+                        if (gameState.isNavigating()) {
+                            startNavigation();
+                        }
+                    }
+                    return true;
+                }
+            });
         }
         for (AbilityCard ac : abilityCards) {
             stage.addActor(ac);
@@ -693,6 +769,23 @@ public class GameUI implements Screen {
                                 pawn.setPawnState(Pawn.NORMAL);
                                 logger.info("not selected " + pawn.getAbility());
                             }
+                        }
+                    }
+                    else if (gameState.isNavigating()) {
+                        if (p.getAbility() != Player.NAVIGATOR) {
+                            for (Pawn pawn: pawns) {
+                                pawn.setPawnState(Pawn.NORMAL);
+                            }
+                            p.setPawnState(Pawn.MOVE);
+                            currentNavigatingPawn = p;
+                            for (Player player : gameState.getPlayers().values()) {
+                                if (player.getAbility() == p.getAbility()) {
+                                    currentNavigatingPlayer = player;
+                                    logger.info("navigating pawn: " + player);
+                                    break;
+                                }
+                            }
+                            showNavigatingTiles();
                         }
                     }
                     else if (finalI == gameState.getTurnNumber()) {
@@ -1804,7 +1897,102 @@ public class GameUI implements Screen {
         }
     }
 
+    public void cleanTiles () {
+        for (IslandTile islandTile : islandTiles.values()) {
+            islandTile.setCanMove(false);
+        }
+    }
+
     public void openDiscard(Observable successObservable, Observable failureObservable, TreasureCard treasureCard) {
         this.confirmDiscardScreen.setOpen(true, successObservable, failureObservable, treasureCard);
+    }
+
+    public void startNavigation() {
+        for (Pawn pawn : pawns) {
+            pawn.setPawnState(Pawn.FOCUSED);
+        }
+    }
+
+    public void showNavigatingTiles() {
+        if (currentNavigatingPlayer.getTileX()+1 < 6 &&
+                gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()+1][currentNavigatingPlayer.getTileY()] != GameState.SUNKEN_ISLAND_TILE
+            && gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()+1][currentNavigatingPlayer.getTileY()] != GameState.INVALID) {
+            islandTiles.get(new Pair(currentNavigatingPlayer.getTileX()+1, currentNavigatingPlayer.getTileY())).setCanMove(true);
+            if (currentNavigatingPlayer.getTileX()+2 < 6 &&
+                    gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()+2][currentNavigatingPlayer.getTileY()] != GameState.SUNKEN_ISLAND_TILE
+                    && gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()+2][currentNavigatingPlayer.getTileY()] != GameState.INVALID) {
+                islandTiles.get(new Pair(currentNavigatingPlayer.getTileX()+2, currentNavigatingPlayer.getTileY())).setCanMove(true);
+            }
+            if (currentNavigatingPlayer.getTileX()+1 < 6 && currentNavigatingPlayer.getTileY()+1 < 6 &&
+                    gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()+1][currentNavigatingPlayer.getTileY()+1] != GameState.SUNKEN_ISLAND_TILE
+                    && gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()+1][currentNavigatingPlayer.getTileY()+1] != GameState.INVALID) {
+                islandTiles.get(new Pair(currentNavigatingPlayer.getTileX()+1, currentNavigatingPlayer.getTileY()+1)).setCanMove(true);
+            }
+            if (currentNavigatingPlayer.getTileX()+1 < 6 && currentNavigatingPlayer.getTileY()-1 > -1 &&
+                    gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()+1][currentNavigatingPlayer.getTileY()-1] != GameState.SUNKEN_ISLAND_TILE
+                    && gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()+1][currentNavigatingPlayer.getTileY()-1] != GameState.INVALID) {
+                islandTiles.get(new Pair(currentNavigatingPlayer.getTileX()+1, currentNavigatingPlayer.getTileY()-1)).setCanMove(true);
+            }
+        }
+        if (currentNavigatingPlayer.getTileX()-1 > -1 &&
+                gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()-1][currentNavigatingPlayer.getTileY()] != GameState.SUNKEN_ISLAND_TILE
+                && gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()-1][currentNavigatingPlayer.getTileY()] != GameState.INVALID) {
+            islandTiles.get(new Pair(currentNavigatingPlayer.getTileX()-1, currentNavigatingPlayer.getTileY())).setCanMove(true);
+            if (currentNavigatingPlayer.getTileX()-2 > -1 &&
+                    gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()-2][currentNavigatingPlayer.getTileY()] != GameState.SUNKEN_ISLAND_TILE
+                    && gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()-2][currentNavigatingPlayer.getTileY()] != GameState.INVALID) {
+                islandTiles.get(new Pair(currentNavigatingPlayer.getTileX()-2, currentNavigatingPlayer.getTileY())).setCanMove(true);
+            }
+            if (currentNavigatingPlayer.getTileX()-1 > -1 && currentNavigatingPlayer.getTileY()+1 < 6 &&
+                    gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()-1][currentNavigatingPlayer.getTileY()+1] != GameState.SUNKEN_ISLAND_TILE
+                    && gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()-1][currentNavigatingPlayer.getTileY()+1] != GameState.INVALID) {
+                islandTiles.get(new Pair(currentNavigatingPlayer.getTileX()-1, currentNavigatingPlayer.getTileY()+1)).setCanMove(true);
+            }
+            if (currentNavigatingPlayer.getTileX()-1 > -1 && currentNavigatingPlayer.getTileY()-1 > -1 &&
+                    gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()-1][currentNavigatingPlayer.getTileY()-1] != GameState.SUNKEN_ISLAND_TILE
+                    && gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()-1][currentNavigatingPlayer.getTileY()-1] != GameState.INVALID) {
+                islandTiles.get(new Pair(currentNavigatingPlayer.getTileX()-1, currentNavigatingPlayer.getTileY()-1)).setCanMove(true);
+            }
+        }
+        if (currentNavigatingPlayer.getTileY()+1 < 6 &&
+                gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()][currentNavigatingPlayer.getTileY()+1] != GameState.SUNKEN_ISLAND_TILE
+                && gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()][currentNavigatingPlayer.getTileY()+1] != GameState.INVALID) {
+            islandTiles.get(new Pair(currentNavigatingPlayer.getTileX(), currentNavigatingPlayer.getTileY()+1)).setCanMove(true);
+            if (currentNavigatingPlayer.getTileY()+2 < 6 &&
+                    gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()][currentNavigatingPlayer.getTileY()+2] != GameState.SUNKEN_ISLAND_TILE
+                    && gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()][currentNavigatingPlayer.getTileY()+2] != GameState.INVALID) {
+                islandTiles.get(new Pair(currentNavigatingPlayer.getTileX(), currentNavigatingPlayer.getTileY()+2)).setCanMove(true);
+            }
+            if (currentNavigatingPlayer.getTileY()+1 < 6 && currentNavigatingPlayer.getTileX()+1 < 6 &&
+                    gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()+1][currentNavigatingPlayer.getTileY()+1] != GameState.SUNKEN_ISLAND_TILE
+                    && gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()+1][currentNavigatingPlayer.getTileY()+1] != GameState.INVALID) {
+                islandTiles.get(new Pair(currentNavigatingPlayer.getTileX()+1, currentNavigatingPlayer.getTileY()+1)).setCanMove(true);
+            }
+            if (currentNavigatingPlayer.getTileY()+1 < 6 && currentNavigatingPlayer.getTileX()-1 > -1 &&
+                    gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()-1][currentNavigatingPlayer.getTileY()+1] != GameState.SUNKEN_ISLAND_TILE
+                    && gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()-1][currentNavigatingPlayer.getTileY()+1] != GameState.INVALID) {
+                islandTiles.get(new Pair(currentNavigatingPlayer.getTileX()-1, currentNavigatingPlayer.getTileY()+1)).setCanMove(true);
+            }
+        }
+        if (currentNavigatingPlayer.getTileY()-1 > -1 &&
+                gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()][currentNavigatingPlayer.getTileY()-1] != GameState.SUNKEN_ISLAND_TILE
+                && gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()][currentNavigatingPlayer.getTileY()-1] != GameState.INVALID) {
+            islandTiles.get(new Pair(currentNavigatingPlayer.getTileX(), currentNavigatingPlayer.getTileY()-1)).setCanMove(true);
+            if (currentNavigatingPlayer.getTileY()-2 > -1 &&
+                    gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()][currentNavigatingPlayer.getTileY()-2] != GameState.SUNKEN_ISLAND_TILE
+                    && gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()][currentNavigatingPlayer.getTileY()-2] != GameState.INVALID) {
+                islandTiles.get(new Pair(currentNavigatingPlayer.getTileX(), currentNavigatingPlayer.getTileY()-2)).setCanMove(true);
+            }
+            if (currentNavigatingPlayer.getTileY()-1 > -1 && currentNavigatingPlayer.getTileX()+1 < 6 &&
+                    gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()+1][currentNavigatingPlayer.getTileY()-1] != GameState.SUNKEN_ISLAND_TILE
+                    && gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()+1][currentNavigatingPlayer.getTileY()-1] != GameState.INVALID) {
+                islandTiles.get(new Pair(currentNavigatingPlayer.getTileX()+1, currentNavigatingPlayer.getTileY()-1)).setCanMove(true);
+            }
+            if (currentNavigatingPlayer.getTileY()-1 > -1 && currentNavigatingPlayer.getTileX()-1 < -1 &&
+                    gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()-1][currentNavigatingPlayer.getTileY()-1] != GameState.SUNKEN_ISLAND_TILE
+                    && gameState.getIslandTileState()[currentNavigatingPlayer.getTileX()-1][currentNavigatingPlayer.getTileY()-1] != GameState.INVALID) {
+                islandTiles.get(new Pair(currentNavigatingPlayer.getTileX()-1, currentNavigatingPlayer.getTileY()-1)).setCanMove(true);
+            }
+        }
     }
 }
