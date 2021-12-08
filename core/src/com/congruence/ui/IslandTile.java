@@ -112,7 +112,7 @@ public class IslandTile extends Actor {
         else if (canSuddenDeathMove) {
             batch.draw(islandTileDeathImage, positionX-2, positionY+3, islandWidth, islandHeight);
         }
-        else if (canShoreUp) {
+        else if (canShoreUp || (state.isSandbagUsed() && state.getIslandTileState()[getCoordinates().x][getCoordinates().y] == GameState.FLOODED_ISLAND_TILE)) {
             batch.draw(islandTileShoreUpImage, positionX-2, positionY+3, islandWidth, islandHeight);
         }
         else if (canMove || state.isHelicopterUsed()) {

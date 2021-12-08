@@ -302,6 +302,13 @@ public class GameUI implements Screen {
                                     stage.getViewport().update(GameConfiguration.width, GameConfiguration.height, true);
                                 }
                             }
+                            else if (gameState.isSandbagUsed()) {
+                                if (gameState.getIslandTileState()[islandTile.getCoordinates().x][islandTile.getCoordinates().y] == GameState.FLOODED_ISLAND_TILE) {
+                                    gameState.getIslandTileState()[islandTile.getCoordinates().x][islandTile.getCoordinates().y] = GameState.NORMAL_ISLAND_TILE;
+                                    gameState.setSandbagUsed(false);
+                                    gameState.getSandbagCard().getPlayer().removeTreasureFromHand(gameState.getSandbagCard().getPosition());
+                                }
+                            }
                             else {
                                 if (GameUI.this.currentFocusedTile.equals(islandTile.getCoordinates())) {
                                     islandTile.setFocused(false);

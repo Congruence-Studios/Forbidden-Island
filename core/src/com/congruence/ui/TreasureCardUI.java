@@ -112,8 +112,16 @@ public class TreasureCardUI extends Actor {
                     } else {
                         //regular helicopter mechanics
                         logger.info("HELICOPTER USED");
-                        state.setHelicopterUsed(!state.isHelicopterUsed());
-                        state.setHelicopterCard(TreasureCardUI.this);
+                        if (!state.isSandbagUsed()) {
+                            state.setHelicopterUsed(!state.isHelicopterUsed());
+                            state.setHelicopterCard(TreasureCardUI.this);
+                        }
+                    }
+                } else if (cardName.equals("Sandbag")) {
+                    logger.info("SANDBAG USED");
+                    if (!state.isHelicopterUsed()) {
+                        state.setSandbagUsed(!state.isSandbagUsed());
+                        state.setSandbagCard(TreasureCardUI.this);
                     }
                 }
                 return true;

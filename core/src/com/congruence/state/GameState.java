@@ -192,6 +192,8 @@ public class GameState {
 
     private TreasureCardUI helicopterCard;
 
+    private TreasureCardUI sandbagCard;
+
     public GameState(
             int difficulty,
             Map<String, Player> players,
@@ -549,6 +551,26 @@ public class GameState {
         result = 31 * result + Arrays.deepHashCode(islandTileState);
         return result;
     }
+
+
+    public boolean isSandbagUsed() {
+        return sandbagUsed;
+    }
+
+    public void setSandbagUsed(boolean sandbagUsed) {
+        this.sandbagUsed = sandbagUsed;
+    }
+
+    private boolean sandbagUsed = false;
+
+    public TreasureCardUI getSandbagCard() {
+        return sandbagCard;
+    }
+
+    public void setSandbagCard(TreasureCardUI sandbagCard) {
+        this.sandbagCard = sandbagCard;
+    }
+
 
     @Override
     public String toString() {
