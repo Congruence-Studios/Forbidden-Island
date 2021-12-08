@@ -139,7 +139,7 @@ public class GameUI implements Screen {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
                             if (islandTile.isCanMove() && mode == MOVEMENT_MODE) {
-                                Player tempPlayerData = gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber()));
+                                Player tempPlayerData = gameState.getPlayerByNo(gameState.getTurnNumber());
                                 logger.info(islandTile.getCoordinates().toString());
                                 IslandTile a = islandTiles.get(new Pair(tempPlayerData.getTileX(), tempPlayerData.getTileY()));
                                 if (tempPlayerData.getTilePosition() == 0) {
@@ -162,8 +162,8 @@ public class GameUI implements Screen {
                                 tempPlayerData.setTileX(islandTile.getCoordinates().x);
                                 tempPlayerData.setTileY(islandTile.getCoordinates().y);
                                 logger.info(currentNormalPawn + "");
-                                pawns.get(currentNormalPawn).setX(findPawnPositionX(currentNormalPawn));
-                                pawns.get(currentNormalPawn).setY(findPawnPositionY(currentNormalPawn));
+                                pawns.get(currentNormalPawn).setX(findPawnPositionX(gameState.getPlayerByNo(currentNormalPawn)));
+                                pawns.get(currentNormalPawn).setY(findPawnPositionY(gameState.getPlayerByNo(currentNormalPawn)));
                                 IslandTile e = islandTiles.get(new Pair(tempPlayerData.getTileX(), tempPlayerData.getTileY()));
                                 if (e.getTilePositionOpen()[0]) {
                                     e.getTilePositionOpen()[0] = false;
@@ -205,8 +205,8 @@ public class GameUI implements Screen {
                                 currentSuddenDeathPlayer.setTileX(islandTile.getCoordinates().x);
                                 currentSuddenDeathPlayer.setTileY(islandTile.getCoordinates().y);
                                 logger.info(currentSuddenDeathPlayerPawn + "");
-                                pawns.get(currentSuddenDeathPlayerPawn).setX(findPawnPositionX(currentSuddenDeathPlayerPawn));
-                                pawns.get(currentSuddenDeathPlayerPawn).setY(findPawnPositionY(currentSuddenDeathPlayerPawn));
+                                pawns.get(currentSuddenDeathPlayerPawn).setX(findPawnPositionX(gameState.getPlayerByNo(currentSuddenDeathPlayerPawn)));
+                                pawns.get(currentSuddenDeathPlayerPawn).setY(findPawnPositionY(gameState.getPlayerByNo(currentSuddenDeathPlayerPawn)));
                                 IslandTile e = islandTiles.get(new Pair(currentSuddenDeathPlayer.getTileX(), currentSuddenDeathPlayer.getTileY()));
                                 if (e.getTilePositionOpen()[0]) {
                                     e.getTilePositionOpen()[0] = false;
@@ -226,7 +226,7 @@ public class GameUI implements Screen {
                                 }
                                 if (!suddenDeathPlayerQueue.isEmpty()) {
                                     setSuddenDeathTiles(suddenDeathPlayerQueue.peek());
-                                    currentSuddenDeathPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(suddenDeathPlayerQueue.peek()));
+                                    currentSuddenDeathPlayer = gameState.getPlayerByNo(suddenDeathPlayerQueue.peek());
                                     setSuddenDeathTiles(suddenDeathPlayerQueue.peek());
                                     suddenDeathPlayerQueue.poll();
                                 }
@@ -237,7 +237,7 @@ public class GameUI implements Screen {
 
                             }
                             else if (islandTile.isCanShoreUp() && mode == SHORE_UP_MODE) {
-                                if (gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber())).getAbility() == Player.ENGINEER && previousShoredUpTile != islandTile.getCoordinates()) {
+                                if (gameState.getPlayerByNo(gameState.getTurnNumber()).getAbility() == Player.ENGINEER && previousShoredUpTile != islandTile.getCoordinates()) {
                                     if (previousShoredUpTile != null) {
                                         gameState.getIslandTileState()
                                                 [islandTile.getCoordinates().x]
@@ -258,7 +258,7 @@ public class GameUI implements Screen {
                                         previousShoredUpTile = new Pair(islandTile.getCoordinates().x, islandTile.getCoordinates().y);
                                     }
                                 }
-                                else if (gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber())).getAbility() == Player.ENGINEER && previousShoredUpTile == islandTile.getCoordinates()) {
+                                else if (gameState.getPlayerByNo(gameState.getTurnNumber()).getAbility() == Player.ENGINEER && previousShoredUpTile == islandTile.getCoordinates()) {
 
                                 }
                                 else {
@@ -276,31 +276,17 @@ public class GameUI implements Screen {
                                 setShoreUpTiles();
                             }
                             else if (gameState.isHelicopterUsed()) {
-                                if (!currentHelicopterPlayers.isEmpty()) {
-                                    for (Player player : currentHelicopterPlayers) {
-                                        player.setTileX(islandTile.getCoordinates().x);
-                                        player.setTileY(islandTile.getCoordinates().y);
-                                        for (Pawn pawn : pawns) {
-                                            if (pawn.getAbility() == player.getAbility()) {
-                                                logger.info("ability found " + player.getPlayerName() + " " + player.getAbility());
-                                                logger.info(gameState.getPlayerOrder().toString());
-                                                for (int i : gameState.getPlayerOrder().keySet()) {
-                                                    logger.info("" + i + " " + gameState.getPlayerOrder().get(i));
-                                                    if (gameState.getPlayerOrder().get(i).equals(player.getPlayerName())) {
-                                                        pawn.setX(findPawnPositionX(i));
-                                                        pawn.setY(findPawnPositionY(i));
-                                                        logger.info("found x and y");
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    currentHelicopterPlayers.clear();
-                                    gameState.setHelicopterUsed(false);
-                                    cleanPawns();
-                                    gameState.getHelicopterCard().getPlayer().removeTreasureFromHand(gameState.getHelicopterCard().getPosition());
-                                    stage.getViewport().update(GameConfiguration.width, GameConfiguration.height, true);
+                                for (Player player : currentHelicopterPlayers) {
+                                    player.setTileX(islandTile.getCoordinates().x);
+                                    player.setTileY(islandTile.getCoordinates().y);
+                                    player.getPawn().setX(findPawnPositionX(player));
+                                    player.getPawn().setY(findPawnPositionY(player));
                                 }
+                                currentHelicopterPlayers.clear();
+                                gameState.setHelicopterUsed(false);
+                                cleanPawns();
+                                gameState.getHelicopterCard().getPlayer().removeTreasureFromHand(gameState.getHelicopterCard().getPosition());
+                                stage.getViewport().update(GameConfiguration.width, GameConfiguration.height, true);
                             }
                             else {
                                 if (GameUI.this.currentFocusedTile.equals(islandTile.getCoordinates())) {
@@ -383,7 +369,7 @@ public class GameUI implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (shoreUpButton.isEnabled()) {
-                    if (gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber())).getAbility() == Player.ENGINEER && previousShoredUpTile != null) {
+                    if (gameState.getPlayerByNo(gameState.getTurnNumber()).getAbility() == Player.ENGINEER && previousShoredUpTile != null) {
                         gameState.getIslandTileState()
                                 [previousShoredUpTile.x]
                                 [previousShoredUpTile.y] = GameState.NORMAL_ISLAND_TILE;
@@ -431,7 +417,7 @@ public class GameUI implements Screen {
                     giveCardScreen.setOpen(true, ()->{
                         gameState.setCurrentPlayerActionsLeft(gameState.getCurrentPlayerActionsLeft()-1);
                         setCanGive();
-                        swapButton.setEnabled(gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber())).getCardsAtHand().size() > 0);
+                        swapButton.setEnabled(gameState.getPlayerByNo(gameState.getTurnNumber()).getCardsAtHand().size() > 0);
                         checkTurn();
                     });
                 }
@@ -483,7 +469,7 @@ public class GameUI implements Screen {
                 10f,
                 (tileHeight * 2 + 10f) / 2,
                 tileHeight * 2 + 10f,
-                gameState.getPlayers().get(gameState.getPlayerOrder().get(0))
+                gameState.getPlayerByNo(0)
         ));
         playerHands.get(0).addListener(new ClickListener(){
             @Override
@@ -501,7 +487,7 @@ public class GameUI implements Screen {
                 GameConfiguration.height - (tileHeight * 2 + 10f) - 10f,
                 (tileHeight * 2 + 10f) / 2,
                 tileHeight * 2 + 10f,
-                gameState.getPlayers().get(gameState.getPlayerOrder().get(1))
+                gameState.getPlayerByNo(1)
         ));
         playerHands.get(1).addListener(new ClickListener(){
             @Override
@@ -520,7 +506,7 @@ public class GameUI implements Screen {
                     GameConfiguration.height - (tileHeight * 2 + 10f) - 10f,
                     (tileHeight * 2 + 10f) / 2,
                     tileHeight * 2 + 10f,
-                    gameState.getPlayers().get(gameState.getPlayerOrder().get(2))
+                    gameState.getPlayerByNo(2)
             ));
             playerHands.get(2).addListener(new ClickListener(){
                 @Override
@@ -540,7 +526,7 @@ public class GameUI implements Screen {
                     10f,
                     (tileHeight * 2 + 10f) / 2,
                     tileHeight * 2 + 10f,
-                    gameState.getPlayers().get(gameState.getPlayerOrder().get(3))
+                    gameState.getPlayerByNo(3)
             ));
             playerHands.get(3).addListener(new ClickListener(){
                 @Override
@@ -562,14 +548,14 @@ public class GameUI implements Screen {
                 10f,
                 (tileHeight * 2 + 10f) / 2,
                 tileHeight * 2 + 10f,
-                gameState.getPlayers().get(gameState.getPlayerOrder().get(0)).getAbility()
+                gameState.getPlayerByNo(0).getAbility()
         ));
         abilityCards.add(new AbilityCard(
                 10f + ((tileHeight * 2 + 10f) / 2),
                 GameConfiguration.height - (tileHeight * 2 + 10f) - 10f,
                 (tileHeight * 2 + 10f) / 2,
                 tileHeight * 2 + 10f,
-                gameState.getPlayers().get(gameState.getPlayerOrder().get(1)).getAbility()
+                gameState.getPlayerByNo(1).getAbility()
         ));
         if (gameState.getMaxTurnLoops() >= 3) {
             abilityCards.add(new AbilityCard(
@@ -577,7 +563,7 @@ public class GameUI implements Screen {
                     GameConfiguration.height - (tileHeight * 2 + 10f) - 10f,
                     (tileHeight * 2 + 10f) / 2,
                     tileHeight * 2 + 10f,
-                    gameState.getPlayers().get(gameState.getPlayerOrder().get(2)).getAbility()
+                    gameState.getPlayerByNo(2).getAbility()
             ));
         }
         if (gameState.getMaxTurnLoops() >= 4) {
@@ -586,76 +572,52 @@ public class GameUI implements Screen {
                     10f,
                     (tileHeight * 2 + 10f) / 2,
                     tileHeight * 2 + 10f,
-                    gameState.getPlayers().get(gameState.getPlayerOrder().get(3)).getAbility()
+                    gameState.getPlayerByNo(3).getAbility()
             ));
         }
         for (AbilityCard ac : abilityCards) {
             stage.addActor(ac);
         }
-        Player tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(0));
-        logger.info(tempPlayer.toString());
-        pawns.add(new Pawn(
-                findPawnPositionX(0),
-                findPawnPositionY(0),
-                tileWidth / 4,
-                tileHeight / 3,
-                tempPlayer.getAbility()
-        ));
-        logger.info("Pawn 1: X: " + tempPlayer.getTileX() + " Y: " + tempPlayer.getTileY());
-        tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(1));
-        pawns.add(new Pawn(
-                findPawnPositionX(1),
-                findPawnPositionY(1),
-                tileWidth / 4,
-                tileHeight / 3,
-                tempPlayer.getAbility()
-        ));
-        logger.info("Pawn 2: X: " + tempPlayer.getTileX() + " Y: " + tempPlayer.getTileY());
-        if (gameState.getMaxTurnLoops() >= 3) {
-            tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(2));
-            pawns.add(new Pawn(
-                    findPawnPositionX(2),
-                    findPawnPositionY(2),
+        for (int i = 0; i < gameState.getMaxTurnLoops(); i++) {
+            Player tempPlayer = gameState.getPlayerByNo(i);
+            logger.info(tempPlayer.toString());
+            Pawn tempPawn = new Pawn(
+                    findPawnPositionX(tempPlayer),
+                    findPawnPositionY(tempPlayer),
                     tileWidth / 4,
                     tileHeight / 3,
                     tempPlayer.getAbility()
-            ));
-            logger.info("Pawn 3: X: " + tempPlayer.getTileX() + " Y: " + tempPlayer.getTileY());
+            );
+            tempPlayer.setPawn(tempPawn);
+            tempPawn.setPlayer(tempPlayer);
+            logger.info("Pawn " + i + ": X: " + tempPlayer.getTileX() + " Y: " + tempPlayer.getTileY());
+            pawns.add(tempPawn);
         }
-        if (gameState.getMaxTurnLoops() >= 4) {
-            tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(3));
-            pawns.add(new Pawn(
-                    findPawnPositionX(3),
-                    findPawnPositionY(3),
-                    tileWidth / 4,
-                    tileHeight / 3,
-                    tempPlayer.getAbility()
-            ));
-            logger.info("Pawn 4: X: " + tempPlayer.getTileX() + " Y: " + tempPlayer.getTileY());
-        }
+
         for (int i = 0; i < pawns.size(); i++) {
-            Pawn p = pawns.get(i);
+            Pawn pawn = pawns.get(i);
+            Player player = gameState.getPlayerByNo(i);
             int finalI = i;
-            p.addListener(new ClickListener() {
+            pawn.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     if (gameState.isHelicopterUsed()) {
-                        logger.info("" + p.getAbility());
+                        logger.info("" + pawn.getAbility());
                         if (currentHelicopterPlayers.isEmpty()) {
-                            currentHelicopterPlayers.add(gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)));
-                            logger.info("1 " + p.getAbility());
+                            currentHelicopterPlayers.add(player);
+                            logger.info("1 " + pawn.getAbility());
                         } else {
                             logger.info(currentHelicopterPlayers.get(0).getTileX() + " " + currentHelicopterPlayers.get(0).getTileY());
-                            logger.info(gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)).getTileX() + " " + gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)).getTileY());
-                            if (currentHelicopterPlayers.get(0).getTileX() != gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)).getTileX() ||
-                                    currentHelicopterPlayers.get(0).getTileY() != gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)).getTileY()) {
+                            logger.info(player.getTileX() + " " + player.getTileY());
+                            if (currentHelicopterPlayers.get(0).getTileX() != player.getTileX() ||
+                                    currentHelicopterPlayers.get(0).getTileY() != player.getTileY()) {
                                 currentHelicopterPlayers.clear();
-                                currentHelicopterPlayers.add(gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)));
-                                logger.info("2 " + p.getAbility() + " " + currentHelicopterPlayers);
-                            } else if (currentHelicopterPlayers.get(0).getTileX() == gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)).getTileX() &&
-                                    currentHelicopterPlayers.get(0).getTileY() == gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)).getTileY()) {
-                                currentHelicopterPlayers.add(gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)));
-                                logger.info("3 " + p.getAbility() + " " + currentHelicopterPlayers);
+                                currentHelicopterPlayers.add(player);
+                                logger.info("2 " + pawn.getAbility() + " " + currentHelicopterPlayers);
+                            } else if (currentHelicopterPlayers.get(0).getTileX() == player.getTileX() &&
+                                    currentHelicopterPlayers.get(0).getTileY() == player.getTileY()) {
+                                currentHelicopterPlayers.add(player);
+                                logger.info("3 " + pawn.getAbility() + " " + currentHelicopterPlayers);
                             }
                         }
                         for (Pawn pawn : pawns) {
@@ -693,7 +655,7 @@ public class GameUI implements Screen {
                         }
                     }
                     //Navigator is Able to Move Other People
-                    else if (gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber())).getAbility() == Player.NAVIGATOR) {
+                    else if (gameState.getPlayerByNo(gameState.getTurnNumber()).getAbility() == Player.NAVIGATOR) {
 
                     }
                 }
@@ -706,8 +668,8 @@ public class GameUI implements Screen {
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 }
             });
-            logger.info("Pawn " + i + ": " + p.toString());
-            stage.addActor(p);
+            logger.info("Pawn " + i + ": " + pawn.toString());
+            stage.addActor(pawn);
         }
 
         waterMeterScreen = new WaterMeterScreen(
@@ -825,8 +787,8 @@ public class GameUI implements Screen {
         shoreUpButton.setEnabled(canShoreUp());
 
         for (int i = 0; i < pawns.size(); i++) {
-            IslandTile a = islandTiles.get(new Pair(gameState.getPlayers().get(gameState.getPlayerOrder().get(i)).getTileX(), gameState.getPlayers().get(gameState.getPlayerOrder().get(i)).getTileY()));
-            a.getTilePositionOpen()[gameState.getPlayers().get(gameState.getPlayerOrder().get(i)).getTilePosition()] = false;
+            IslandTile a = islandTiles.get(new Pair(gameState.getPlayerByNo(i).getTileX(), gameState.getPlayerByNo(i).getTileY()));
+            a.getTilePositionOpen()[gameState.getPlayerByNo(i).getTilePosition()] = false;
         }
 
         turnChangeScreen.setOpen(true);
@@ -1047,20 +1009,20 @@ public class GameUI implements Screen {
             abilityCards.get(3).setWidth(tileWidth);
             logger.info(3 + " " + abilityCards.get(3).getPositionX() + " " + abilityCards.get(3).getPositionY());
         }
-        Player tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(0));
+        Player tempPlayer = gameState.getPlayerByNo(0);
         pawns.get(0).setX(findInitialsPawnPositionX(0));
         pawns.get(0).setY(findInitialsPawnPositionY(0));
         pawns.get(0).setWidth(tileWidth / 4);
         pawns.get(0).setHeight(tileHeight / 3);
         logger.info(pawns.get(0).toString());
-        tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(1));
+        tempPlayer = gameState.getPlayerByNo(1);
         pawns.get(1).setX(findInitialsPawnPositionX(1));
         pawns.get(1).setY(findInitialsPawnPositionY(1));
         pawns.get(1).setWidth(tileWidth / 4);
         pawns.get(1).setHeight(tileHeight / 3);
         logger.info(pawns.get(1).toString());
         if (gameState.getMaxTurnLoops() >= 3) {
-            tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(2));
+            tempPlayer = gameState.getPlayerByNo(2);
             pawns.get(2).setX(findInitialsPawnPositionX(2));
             pawns.get(2).setY(findInitialsPawnPositionY(2));
             pawns.get(2).setWidth(tileWidth / 4);
@@ -1068,7 +1030,7 @@ public class GameUI implements Screen {
             logger.info(pawns.get(2).toString());
         }
         if (gameState.getMaxTurnLoops() >= 4) {
-            tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(3));
+            tempPlayer = gameState.getPlayerByNo(3);
             pawns.get(3).setX(findInitialsPawnPositionX(3));
             pawns.get(3).setY(findInitialsPawnPositionY(3));
             pawns.get(3).setWidth(tileWidth / 4);
@@ -1101,23 +1063,24 @@ public class GameUI implements Screen {
     }
 
     public void enableShoreUpButton(IslandTile e) {
+        Player currentPlayer = getCurrentPlayer();
         int x = e.getCoordinates().x;
         int y = e.getCoordinates().y;
         logger.info("enableShoreUpButton: x: " + x + " y: " + y + "player x: " +
-                gameState.getPlayers().get(gameState.getCurrentPlayerTurn()).getTileX() + " y: " +
-                gameState.getPlayers().get(gameState.getCurrentPlayerTurn()).getTileY() + " " +
+                currentPlayer.getTileX() + " y: " +
+                currentPlayer.getTileY() + " " +
                 gameState.getIslandTileState()[x][y]);
         if (gameState.getIslandTileState()[x][y] == GameState.FLOODED_ISLAND_TILE &&
-                gameState.getPlayers().get(gameState.getCurrentPlayerTurn()).getAbility() == Player.EXPLORER &&
-                Math.abs(gameState.getPlayers().get(gameState.getCurrentPlayerTurn()).getTileX() - x) <= 1 &&
-                Math.abs(gameState.getPlayers().get(gameState.getCurrentPlayerTurn()).getTileY() - y) <= 1) {
+                currentPlayer.getAbility() == Player.EXPLORER &&
+                Math.abs(currentPlayer.getTileX() - x) <= 1 &&
+                Math.abs(currentPlayer.getTileY() - y) <= 1) {
             shoreUpButton.setEnabled(true);
             logger.info("1");
         } else if (gameState.getIslandTileState()[x][y] == GameState.FLOODED_ISLAND_TILE &&
-                ((Math.abs(gameState.getPlayers().get(gameState.getCurrentPlayerTurn()).getTileX() - x) <= 1 &&
-                        gameState.getPlayers().get(gameState.getCurrentPlayerTurn()).getTileY() == y) ||
-                (Math.abs(gameState.getPlayers().get(gameState.getCurrentPlayerTurn()).getTileY() - y) <= 1 &&
-                        gameState.getPlayers().get(gameState.getCurrentPlayerTurn()).getTileX() == x))) {
+                ((Math.abs(currentPlayer.getTileX() - x) <= 1 &&
+                        currentPlayer.getTileY() == y) ||
+                (Math.abs(currentPlayer.getTileY() - y) <= 1 &&
+                        currentPlayer.getTileX() == x))) {
             shoreUpButton.setEnabled(true);
             logger.info("2");
         }
@@ -1142,6 +1105,11 @@ public class GameUI implements Screen {
         }
     }
 
+
+    public Player getCurrentPlayer() {
+        return gameState.getPlayers().get(gameState.getCurrentPlayerTurn());
+    }
+
     public String getCurrentPlayerName() {
         String pName = gameState.getPlayerOrder().get(gameState.getTurnNumber());
         if (pName == null) {
@@ -1150,9 +1118,7 @@ public class GameUI implements Screen {
         else return pName;
     }
 
-    public float findPawnPositionX( int player ) {
-        Player tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(player));
-
+    public float findPawnPositionX( Player tempPlayer ) {
         float tileHeight = (GameConfiguration.height - 70f) / 6f;
         float tileWidth = (GameConfiguration.height - 70f) / 6f;
         IslandTile e = islandTiles.get(new Pair(tempPlayer.getTileX(), tempPlayer.getTileY()));
@@ -1171,8 +1137,7 @@ public class GameUI implements Screen {
         }
     }
 
-    public float findPawnPositionY( int player ) {
-        Player tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(player));
+    public float findPawnPositionY( Player tempPlayer ) {
 
         float tileHeight = (GameConfiguration.height - 70f) / 6f - 15f;
         float tileWidth = (GameConfiguration.height - 70f) / 6f;
@@ -1192,7 +1157,7 @@ public class GameUI implements Screen {
     }
 
     public float findInitialsPawnPositionX( int player ) {
-        Player tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(player));
+        Player tempPlayer = gameState.getPlayerByNo(player);
 
         float tileHeight = (GameConfiguration.height - 70f) / 6f;
         float tileWidth = (GameConfiguration.height - 70f) / 6f;
@@ -1213,7 +1178,7 @@ public class GameUI implements Screen {
     }
 
     public float findInitialsPawnPositionY( int player ) {
-        Player tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(player));
+        Player tempPlayer = gameState.getPlayerByNo(player);
 
         float tileHeight = (GameConfiguration.height - 70f) / 6f - 15f;
         float tileWidth = (GameConfiguration.height - 70f) / 6f;
@@ -1238,7 +1203,7 @@ public class GameUI implements Screen {
         eraseShoreUpTiles();
 
         Pawn current = pawns.get(player);
-        Player tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(player));
+        Player tempPlayer = gameState.getPlayerByNo(player);
         ArrayList<Pair> movableTiles = new ArrayList<>();
         movableTiles.add(new Pair(tempPlayer.getTileX()+1, tempPlayer.getTileY()));
         movableTiles.add(new Pair(tempPlayer.getTileX()-1, tempPlayer.getTileY()));
@@ -1337,7 +1302,7 @@ public class GameUI implements Screen {
     }
 
     public void registerMove() {
-        Player e = gameState.getPlayers().get(gameState.getPlayerOrder().get(currentNormalPawn));
+        Player e = gameState.getPlayerByNo(currentNormalPawn);
         gameState.setCurrentPlayerActionsLeft(gameState.getCurrentPlayerActionsLeft() - 1);
         shoreUpButton.setEnabled(canShoreUp());
         checkTurn();
@@ -1357,7 +1322,7 @@ public class GameUI implements Screen {
     }
 
     public void registerTurnChange() {
-        gameState.getPlayers().get(gameState.getCurrentPlayerTurn()).setCanUseSpecialAction(true);
+        getCurrentPlayer().setCanUseSpecialAction(true);
         gameState.setTurnNumber( gameState.getTurnNumber() + 1 );
         if (gameState.getTurnNumber() >= gameState.getMaxTurnLoops()) {
             gameState.setTurnNumber( 0 );
@@ -1425,7 +1390,7 @@ public class GameUI implements Screen {
     }
 
     public boolean canShoreUp() {
-        Player p = gameState.getPlayers().get(gameState.getCurrentPlayerTurn());
+        Player p = getCurrentPlayer();
         logger.info(currentFocusedTile.toString());
         if (gameState.getIslandTileState()
                 [Math.max(Math.min(p.getTileX(), 5), 0)]
@@ -1469,7 +1434,7 @@ public class GameUI implements Screen {
     }
 
     public void setShoreUpTiles() {
-        Player p = gameState.getPlayers().get(gameState.getCurrentPlayerTurn());
+        Player p = getCurrentPlayer();
         logger.info(currentFocusedTile.toString());
         LinkedList<IslandTile> shoreUpTiles = new LinkedList<>();
         if (gameState.getIslandTileState()
@@ -1525,7 +1490,7 @@ public class GameUI implements Screen {
         for (PlayerHand p : playerHands) {
             logger.info("" + playerHands.get(gameState.getTurnNumber()).isFocused());
         }
-        Player currentPlayer = gameState.getPlayers().get(gameState.getCurrentPlayerTurn());
+        Player currentPlayer = getCurrentPlayer();
         ArrayList<Player> availablePlayers = new ArrayList<>();
         if (playerHands.get(gameState.getTurnNumber()).isFocused()) {
             for (Player p : gameState.getPlayers().values()) {
@@ -1550,14 +1515,14 @@ public class GameUI implements Screen {
         suddenDeathPlayerQueue = new LinkedList<>();
         pawns.get(currentNormalPawn).setPawnState(Pawn.NORMAL);
         for (int i = 0; i < gameState.getPlayers().size(); i++) {
-            Player e = gameState.getPlayers().get(gameState.getPlayerOrder().get(i));
+            Player e = gameState.getPlayerByNo(i);
             if (gameState.getIslandTileState()[e.getTileX()][e.getTileY()] == GameState.SUNKEN_ISLAND_TILE) {
                 suddenDeathPlayerQueue.add(i);
             }
         }
         if (!suddenDeathPlayerQueue.isEmpty()) {
             setSuddenDeathTiles(suddenDeathPlayerQueue.peek());
-            currentSuddenDeathPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(suddenDeathPlayerQueue.peek()));
+            currentSuddenDeathPlayer = gameState.getPlayerByNo(suddenDeathPlayerQueue.peek());
             setSuddenDeathTiles(suddenDeathPlayerQueue.peek());
             currentSuddenDeathPlayerPawn = suddenDeathPlayerQueue.peek();
             suddenDeathPlayerQueue.poll();
@@ -1573,7 +1538,7 @@ public class GameUI implements Screen {
         eraseShoreUpTiles();
 
         Pawn current = pawns.get(player);
-        Player tempPlayer = gameState.getPlayers().get(gameState.getPlayerOrder().get(player));
+        Player tempPlayer = gameState.getPlayerByNo(player);
         ArrayList<Pair> movableTiles = new ArrayList<>();
         movableTiles.add(new Pair(tempPlayer.getTileX()+1, tempPlayer.getTileY()));
         movableTiles.add(new Pair(tempPlayer.getTileX()-1, tempPlayer.getTileY()));
@@ -1672,7 +1637,7 @@ public class GameUI implements Screen {
     }
 
     public boolean canCollectItems() {
-        Player p = gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber()));
+        Player p = gameState.getPlayerByNo(gameState.getTurnNumber());
         IslandTile islandTile = islandTiles.get(new Pair(p.getTileX(), p.getTileY()));
         if (Resources.CollectTiles.containsKey(islandTile.getTileName())) {
             String artifactName = Resources.CollectTiles.get(islandTile.getTileName());
@@ -1690,7 +1655,7 @@ public class GameUI implements Screen {
     }
 
     public void collectArtifact() {
-        Player p = gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber()));
+        Player p = gameState.getPlayerByNo(gameState.getTurnNumber());
         IslandTile islandTile = islandTiles.get(new Pair(p.getTileX(), p.getTileY()));
         if (Resources.CollectTiles.containsKey(islandTile.getTileName())) {
             String artifactName = Resources.CollectTiles.get(islandTile.getTileName());

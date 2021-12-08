@@ -1,5 +1,6 @@
 package com.congruence.state;
 
+import com.congruence.ui.Pawn;
 import com.congruence.ui.TreasureCardUI;
 
 import java.util.ArrayList;
@@ -47,6 +48,16 @@ public class Player {
     private boolean canUseSpecialAction;
 
     private ArrayList<CardHandListener> cardHandListeners = new ArrayList<>();
+
+    public Pawn getPawn() {
+        return pawn;
+    }
+
+    public void setPawn(Pawn pawn) {
+        this.pawn = pawn;
+    }
+
+    private Pawn pawn;
 
     public Player(String playerName, String rName, ArrayList<TreasureCard> cardsAtHand,
                   int tileX, int tileY) {

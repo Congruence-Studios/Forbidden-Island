@@ -531,6 +531,10 @@ public class GameState {
         this.helicopterCard = helicopterCard;
     }
 
+    public Player getPlayerByNo(Integer no) {
+        return getPlayers().get(getPlayerOrder().get(no));
+    }
+
 
     @Override
     public boolean equals(Object o) {

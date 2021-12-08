@@ -42,6 +42,16 @@ public class Pawn extends Actor {
 
     private Texture focusedTexture;
 
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    private Player player;
+
     public Pawn(
             float x,
             float y,
