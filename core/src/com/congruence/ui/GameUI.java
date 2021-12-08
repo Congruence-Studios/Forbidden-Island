@@ -237,6 +237,40 @@ public class GameUI implements Screen {
                                 }
 
                             }
+                            else if (gameState.isHelicopterUsed()) {
+                                if (!currentHelicopterPlayers.isEmpty()) {
+                                    for (Player player : currentHelicopterPlayers) {
+                                        player.setTileX(islandTile.getCoordinates().x);
+                                        player.setTileY(islandTile.getCoordinates().y);
+                                        for (Pawn pawn : pawns) {
+                                            if (pawn.getAbility() == player.getAbility()) {
+                                                logger.info("ability found " + player.getPlayerName() + " " + player.getAbility());
+                                                logger.info(gameState.getPlayerOrder().toString());
+                                                for (int i : gameState.getPlayerOrder().keySet()) {
+                                                    logger.info("" + i + " " + gameState.getPlayerOrder().get(i));
+                                                    if (gameState.getPlayerOrder().get(i).equals(player.getPlayerName())) {
+                                                        pawn.setX(findPawnPositionX(i));
+                                                        pawn.setY(findPawnPositionY(i));
+                                                        logger.info("found x and y");
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    currentHelicopterPlayers.clear();
+                                    gameState.setHelicopterUsed(false);
+                                    cleanPawns();
+                                    gameState.getHelicopterCard().getPlayer().removeTreasureFromHand(gameState.getHelicopterCard().getPosition());
+                                    stage.getViewport().update(GameConfiguration.width, GameConfiguration.height, true);
+                                }
+                            }
+                            else if (gameState.isSandbagUsed()) {
+                                if (gameState.getIslandTileState()[islandTile.getCoordinates().x][islandTile.getCoordinates().y] == GameState.FLOODED_ISLAND_TILE) {
+                                    gameState.getIslandTileState()[islandTile.getCoordinates().x][islandTile.getCoordinates().y] = GameState.NORMAL_ISLAND_TILE;
+                                    gameState.setSandbagUsed(false);
+                                    gameState.getSandbagCard().getPlayer().removeTreasureFromHand(gameState.getSandbagCard().getPosition());
+                                }
+                            }
                             else if (islandTile.isCanShoreUp() && mode == SHORE_UP_MODE) {
                                 if (gameState.getPlayers().get(gameState.getPlayerOrder().get(gameState.getTurnNumber())).getAbility() == Player.ENGINEER && previousShoredUpTile != islandTile.getCoordinates()) {
                                     if (previousShoredUpTile != null) {
@@ -457,7 +491,8 @@ public class GameUI implements Screen {
                 10f,
                 (tileHeight * 2 + 10f) / 2,
                 tileHeight * 2 + 10f,
-                gameState.getPlayers().get(gameState.getPlayerOrder().get(0))
+                gameState.getPlayers().get(gameState.getPlayerOrder().get(0)),
+                this
         ));
         playerHands.get(0).addListener(new ClickListener(){
             @Override
@@ -475,7 +510,8 @@ public class GameUI implements Screen {
                 GameConfiguration.height - (tileHeight * 2 + 10f) - 10f,
                 (tileHeight * 2 + 10f) / 2,
                 tileHeight * 2 + 10f,
-                gameState.getPlayers().get(gameState.getPlayerOrder().get(1))
+                gameState.getPlayers().get(gameState.getPlayerOrder().get(1)),
+                this
         ));
         playerHands.get(1).addListener(new ClickListener(){
             @Override
@@ -494,7 +530,8 @@ public class GameUI implements Screen {
                     GameConfiguration.height - (tileHeight * 2 + 10f) - 10f,
                     (tileHeight * 2 + 10f) / 2,
                     tileHeight * 2 + 10f,
-                    gameState.getPlayers().get(gameState.getPlayerOrder().get(2))
+                    gameState.getPlayers().get(gameState.getPlayerOrder().get(2)),
+                    this
             ));
             playerHands.get(2).addListener(new ClickListener(){
                 @Override
@@ -514,7 +551,8 @@ public class GameUI implements Screen {
                     10f,
                     (tileHeight * 2 + 10f) / 2,
                     tileHeight * 2 + 10f,
-                    gameState.getPlayers().get(gameState.getPlayerOrder().get(3))
+                    gameState.getPlayers().get(gameState.getPlayerOrder().get(3)),
+                    this
             ));
             playerHands.get(3).addListener(new ClickListener(){
                 @Override
@@ -536,14 +574,18 @@ public class GameUI implements Screen {
                 10f,
                 (tileHeight * 2 + 10f) / 2,
                 tileHeight * 2 + 10f,
-                gameState.getPlayers().get(gameState.getPlayerOrder().get(0)).getAbility()
+                gameState.getPlayers().get(gameState.getPlayerOrder().get(0)).getAbility(),
+                0,
+                gameState
         ));
         abilityCards.add(new AbilityCard(
                 10f + ((tileHeight * 2 + 10f) / 2),
                 GameConfiguration.height - (tileHeight * 2 + 10f) - 10f,
                 (tileHeight * 2 + 10f) / 2,
                 tileHeight * 2 + 10f,
-                gameState.getPlayers().get(gameState.getPlayerOrder().get(1)).getAbility()
+                gameState.getPlayers().get(gameState.getPlayerOrder().get(1)).getAbility(),
+                1,
+                gameState
         ));
         if (gameState.getMaxTurnLoops() >= 3) {
             abilityCards.add(new AbilityCard(
@@ -551,7 +593,9 @@ public class GameUI implements Screen {
                     GameConfiguration.height - (tileHeight * 2 + 10f) - 10f,
                     (tileHeight * 2 + 10f) / 2,
                     tileHeight * 2 + 10f,
-                    gameState.getPlayers().get(gameState.getPlayerOrder().get(2)).getAbility()
+                    gameState.getPlayers().get(gameState.getPlayerOrder().get(2)).getAbility(),
+                    2,
+                    gameState
             ));
         }
         if (gameState.getMaxTurnLoops() >= 4) {
@@ -560,7 +604,9 @@ public class GameUI implements Screen {
                     10f,
                     (tileHeight * 2 + 10f) / 2,
                     tileHeight * 2 + 10f,
-                    gameState.getPlayers().get(gameState.getPlayerOrder().get(3)).getAbility()
+                    gameState.getPlayers().get(gameState.getPlayerOrder().get(3)).getAbility(),
+                    3,
+                    gameState
             ));
         }
         for (AbilityCard ac : abilityCards) {
@@ -613,7 +659,43 @@ public class GameUI implements Screen {
             p.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if (finalI == gameState.getTurnNumber()) {
+                    if (gameState.isHelicopterUsed()) {
+                        logger.info("" + p.getAbility());
+                        if (currentHelicopterPlayers.isEmpty()) {
+                            currentHelicopterPlayers.add(gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)));
+                            logger.info("1 " + p.getAbility());
+                        } else {
+                            logger.info(currentHelicopterPlayers.get(0).getTileX() + " " + currentHelicopterPlayers.get(0).getTileY());
+                            logger.info(gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)).getTileX() + " " + gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)).getTileY());
+                            if (currentHelicopterPlayers.get(0).getTileX() != gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)).getTileX() ||
+                                    currentHelicopterPlayers.get(0).getTileY() != gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)).getTileY()) {
+                                currentHelicopterPlayers.clear();
+                                currentHelicopterPlayers.add(gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)));
+                                logger.info("2 " + p.getAbility() + " " + currentHelicopterPlayers);
+                            } else if (currentHelicopterPlayers.get(0).getTileX() == gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)).getTileX() &&
+                                    currentHelicopterPlayers.get(0).getTileY() == gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)).getTileY()) {
+                                currentHelicopterPlayers.add(gameState.getPlayers().get(gameState.getPlayerOrder().get(finalI)));
+                                logger.info("3 " + p.getAbility() + " " + currentHelicopterPlayers);
+                            }
+                        }
+                        for (Pawn pawn : pawns) {
+                            boolean isHelicopterPlayer = false;
+                            for (Player player : currentHelicopterPlayers) {
+                                if (player.getAbility() == pawn.getAbility()) {
+                                    isHelicopterPlayer = true;
+                                    break;
+                                }
+                            }
+                            if (isHelicopterPlayer) {
+                                pawn.setPawnState(Pawn.FOCUSED);
+                                logger.info("selected " + pawn.getAbility());
+                            } else {
+                                pawn.setPawnState(Pawn.NORMAL);
+                                logger.info("not selected " + pawn.getAbility());
+                            }
+                        }
+                    }
+                    else if (finalI == gameState.getTurnNumber()) {
                         if (currentPawnFocused) {
                             pawns.get(currentNormalPawn).setPawnState(Pawn.NORMAL);
                             currentPawnFocused = false;
@@ -1013,6 +1095,10 @@ public class GameUI implements Screen {
             pawns.get(3).setHeight(tileHeight / 3);
             logger.info(pawns.get(3).toString());
         }
+        resultScreen.setPositionX((GameConfiguration.width - (GameConfiguration.height * 15/16f))*0.5f);
+        resultScreen.setPositiveY((GameConfiguration.height - (GameConfiguration.height * 15/16f))*0.5f);
+        resultScreen.setHeight(GameConfiguration.height * 15/16f);
+        resultScreen.setWidth(GameConfiguration.height * 15/16f);
 
         camera.setToOrtho(false, GameConfiguration.width, GameConfiguration.height);
         stage.getViewport().update(GameConfiguration.width, GameConfiguration.height, true);
@@ -1355,6 +1441,56 @@ public class GameUI implements Screen {
                         }
                         else if (gameState.getIslandTileState()[i][j] == GameState.FLOODED_ISLAND_TILE) {
                             gameState.getIslandTileState()[i][j] = GameState.SUNKEN_ISLAND_TILE;
+                            logger.info("tiles sunk: " + i + " " + j + " " + gameState.getIslandTiles()[i][j]);
+                            logger.info(gameState.getFireSpacesLeft().toString());
+                            logger.info(gameState.getEarthSpacesLeft().toString());
+                            logger.info(gameState.getWindSpacesLeft().toString());
+                            logger.info(gameState.getOceanSpacesLeft().toString());
+                            for (int k = 0; k < gameState.getFireSpacesLeft().size(); k++) {
+                                if (gameState.getFireSpacesLeft().get(k).equals(new Pair(i, j))) {
+                                    gameState.getFireSpacesLeft().remove(k);
+                                    logger.info(gameState.getFireSpacesLeft().toString() + " " + gameState.getCollectedArtifacts()[GameState.CRYSTAL_OF_FIRE]);
+                                    if (gameState.getFireSpacesLeft().isEmpty() && !gameState.getCollectedArtifacts()[GameState.CRYSTAL_OF_FIRE]) {
+                                        gameState.setGameEnd(true);
+                                        gameState.setGameResult(GameState.BOTH_TREASURE_TILES_SUNK);
+                                    }
+                                }
+                            }
+                            for (int k = 0; k < gameState.getEarthSpacesLeft().size(); k++) {
+                                if (gameState.getEarthSpacesLeft().get(k).equals(new Pair(i, j))) {
+                                    gameState.getEarthSpacesLeft().remove(k);
+                                    logger.info(gameState.getEarthSpacesLeft().toString() + " " + gameState.getCollectedArtifacts()[GameState.EARTH_STONE]);
+                                    if (gameState.getEarthSpacesLeft().isEmpty() && !gameState.getCollectedArtifacts()[GameState.EARTH_STONE]) {
+                                        gameState.setGameEnd(true);
+                                        gameState.setGameResult(GameState.BOTH_TREASURE_TILES_SUNK);
+                                    }
+                                }
+                            }
+                            for (int k = 0; k < gameState.getWindSpacesLeft().size(); k++) {
+                                if (gameState.getWindSpacesLeft().get(k).equals(new Pair(i, j))) {
+                                    gameState.getWindSpacesLeft().remove(k);
+                                    logger.info(gameState.getWindSpacesLeft().toString() + " " + gameState.getCollectedArtifacts()[GameState.STATUE_OF_THE_WIND]);
+                                    if (gameState.getWindSpacesLeft().isEmpty() && !gameState.getCollectedArtifacts()[GameState.STATUE_OF_THE_WIND]) {
+                                        gameState.setGameEnd(true);
+                                        gameState.setGameResult(GameState.BOTH_TREASURE_TILES_SUNK);
+                                    }
+                                }
+                            }
+                            for (int k = 0; k < gameState.getOceanSpacesLeft().size(); k++) {
+                                if (gameState.getOceanSpacesLeft().get(k).equals(new Pair(i, j))) {
+                                    gameState.getOceanSpacesLeft().remove(k);
+                                    logger.info(gameState.getOceanSpacesLeft().toString() + " " + gameState.getCollectedArtifacts()[GameState.OCEANS_CHALICE]);
+                                    if (gameState.getOceanSpacesLeft().isEmpty() && !gameState.getCollectedArtifacts()[GameState.OCEANS_CHALICE]) {
+                                        gameState.setGameEnd(true);
+                                        gameState.setGameResult(GameState.BOTH_TREASURE_TILES_SUNK);
+                                    }
+                                }
+                            }
+                            if (gameState.getFoolsLandingCoordinates().equals(new Pair(i, j))) {
+
+                                gameState.setGameEnd(true);
+                                gameState.setGameResult(GameState.FOOLS_LANDING_SUNK);
+                            }
                         }
                     }
                 }
