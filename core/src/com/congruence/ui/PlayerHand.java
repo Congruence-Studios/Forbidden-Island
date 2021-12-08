@@ -293,8 +293,6 @@ public class PlayerHand extends Group {
                         e.setPositionX(cardX);
                         e.setPositiveY(cardY);
                         cardX += cardWidth/2f;
-                        if (e.equals(selectedCard)) {
-                        }
                         e.setPosition(i);
                     }
                 }

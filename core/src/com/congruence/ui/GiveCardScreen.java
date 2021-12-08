@@ -206,4 +206,5 @@ public class GiveCardScreen extends Group {
     public void setObservable(Observable observable) {
         this.observable = observable;
     }
+
 }

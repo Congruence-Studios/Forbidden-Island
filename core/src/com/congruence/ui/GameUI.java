@@ -916,6 +916,14 @@ public class GameUI implements Screen {
                 gameState
         );
         stage.addActor(resultScreen);
+        confirmDiscardScreen = new ConfirmDiscardScreen(
+                (GameConfiguration.width - (GameConfiguration.height * 15/16f))*0.5f,
+                (GameConfiguration.height - (GameConfiguration.height * 15/16f))*0.5f,
+                GameConfiguration.height * 15/16f * (750/1600f),
+                GameConfiguration.height * 15/16f,
+                gameState
+        );
+        stage.addActor(confirmDiscardScreen);
 
         floodDeckPile.setEnabled(true);
         treasureDeckPile.setEnabled(true);
@@ -1132,6 +1140,11 @@ public class GameUI implements Screen {
         giveCardScreen.setPositiveY((GameConfiguration.height - (GameConfiguration.height * 15/16f * 750f/1600f))*0.5f);
         giveCardScreen.setHeight(GameConfiguration.height * 15/16f * (750/1600f));
         giveCardScreen.setWidth(GameConfiguration.height * 15/16f);
+
+        confirmDiscardScreen.setPositionX((GameConfiguration.width - (GameConfiguration.height * 15/16f))*0.5f);
+        confirmDiscardScreen.setPositiveY((GameConfiguration.height - (GameConfiguration.height * 15/16f * 750f/1600f))*0.5f);
+        confirmDiscardScreen.setHeight(GameConfiguration.height * 15/16f * (750/1600f));
+        confirmDiscardScreen.setWidth(GameConfiguration.height * 15/16f);
 
         abilityCards.get(0).setPositionX(10f);
         abilityCards.get(0).setPositionY(GameConfiguration.height - (tileHeight * 2 + 10f) - 10f);
@@ -1904,6 +1917,7 @@ public class GameUI implements Screen {
     }
 
     public void openDiscard(Observable successObservable, Observable failureObservable, TreasureCard treasureCard) {
+        logger.info("Confirm Discard Screen");
         this.confirmDiscardScreen.setOpen(true, successObservable, failureObservable, treasureCard);
     }
 

@@ -55,10 +55,11 @@ public class ConfirmDiscardScreen extends Group {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        batch.end();
-        batch.begin();
 
         if (isOpen) {
+            batch.end();
+            batch.begin();
+
             batch.draw(Background, positionX, positiveY, width, height);
             super.draw(batch, parentAlpha);
         }
@@ -122,11 +123,13 @@ public class ConfirmDiscardScreen extends Group {
     }
 
     public void setOpen(boolean open, Observable successObservable, Observable failureObservable, TreasureCard treasureCard) {
-        isOpen = open;
+        this.isOpen = open;
         this.failureObservable = failureObservable;
         this.successObservable = successObservable;
+        System.out.println("Confirm Discard Screen");
         if (isOpen) {
             super.setBounds(positionX, positiveY, width, height);
+            System.out.println("Confirm Is Open Screen");
 
             float x = 0+(getWidth()/2) - 80f;
             float y = 0+(getHeight()*1/2) - 25;
